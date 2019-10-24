@@ -1,4 +1,4 @@
-package com.baylor.se.lms;
+package com.baylor.se.lms.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name="Student")
-public class Student extends User implements Serializable {
+@Table(name="Librarian")
+public class Librarian extends User implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
@@ -19,14 +19,14 @@ public class Student extends User implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o){
         if (this == o) {
             return true;
         }
-        if(!(o instanceof Student)) {
+        if(!(o instanceof Librarian)) {
             return false;
         }
-        Student that = (Student) o;
+        Librarian that = (Librarian) o;
         return (this.getId().equals(that.getId()) &&
                 this.getUsername().equals(that.getUsername()));
     }

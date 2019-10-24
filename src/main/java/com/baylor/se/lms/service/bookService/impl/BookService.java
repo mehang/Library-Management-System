@@ -1,6 +1,6 @@
 package com.baylor.se.lms.service.bookService.impl;
 
-import com.baylor.se.lms.Book;
+import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.data.BookRepository;
 import com.baylor.se.lms.service.bookService.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;

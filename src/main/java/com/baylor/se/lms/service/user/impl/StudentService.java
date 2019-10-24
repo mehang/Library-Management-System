@@ -1,7 +1,7 @@
 package com.baylor.se.lms.service.user.impl;
 
-import com.baylor.se.lms.Student;
-import com.baylor.se.lms.User;
+import com.baylor.se.lms.model.Student;
+import com.baylor.se.lms.model.User;
 import com.baylor.se.lms.data.StudentRepository;
 import com.baylor.se.lms.exception.NotFoundException;
 import com.baylor.se.lms.service.user.IUserService;

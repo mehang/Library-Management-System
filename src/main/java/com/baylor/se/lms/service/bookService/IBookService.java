@@ -1,6 +1,6 @@
 package com.baylor.se.lms.service.bookService;
 
-import com.baylor.se.lms.Book;
+import com.baylor.se.lms.model.Book;
 
 public interface IBookService {
     public void registerBook(Book book);
