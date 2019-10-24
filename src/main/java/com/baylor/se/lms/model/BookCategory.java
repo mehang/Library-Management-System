@@ -1,12 +1,14 @@
-package com.baylor.se.lms;
+package com.baylor.se.lms.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Table(name="Author")
-public class Author implements Serializable {
+@Table(name="Book_Category")
+public class BookCategory implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
@@ -14,12 +16,15 @@ public class Author implements Serializable {
     @Column(unique = true)
     private String name;
 
-    public Long getId(){
-        return this.id;
+    @ManyToMany
+    private Set<BookSpecification> bookSpecificationSet = new HashSet<>();
+
+    public Long getId() {
+        return id;
     }
 
-    public String getName(){
-        return this.name;
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -27,10 +32,10 @@ public class Author implements Serializable {
         if (this == o) {
             return true;
         }
-        if(!(o instanceof Author)) {
+        if(!(o instanceof BookCategory)) {
             return false;
         }
-        Author that = (Author) o;
+        BookCategory that = (BookCategory) o;
         return (this.getId().equals(that.getId()) &&
                 this.getName().equals(that.getName()));
     }

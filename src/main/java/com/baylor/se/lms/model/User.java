@@ -1,4 +1,4 @@
-package com.baylor.se.lms;
+package com.baylor.se.lms.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
