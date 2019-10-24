@@ -1,6 +1,7 @@
 package com.baylor.se.lms.controller;
 
-import com.baylor.se.lms.Book;
+
+import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.service.bookService.impl.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
