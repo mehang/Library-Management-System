@@ -2,6 +2,7 @@ package com.baylor.se.lms.service.bookService.impl;
 
 import com.baylor.se.lms.Book;
 import com.baylor.se.lms.data.BookRepository;
+import com.baylor.se.lms.exception.NotFoundException;
 import com.baylor.se.lms.service.bookService.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,13 +13,14 @@ public class BookService implements IBookService {
     BookRepository bookRepository;
 
     @Override
-    public void registerBook(Book book){
-        bookRepository.save(book);
+    public Book registerBook(Book book){
+        return bookRepository.save(book);
     }
 
     @Override
     public Book getBook(Long id){
-        return bookRepository.findById(id);
+        Book book =  bookRepository.findById(id).orElseThrow(NotFoundException::new);
+        return book;
     }
 
     @Override
