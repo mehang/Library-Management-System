@@ -14,6 +14,16 @@ public class Author implements Serializable {
     @Column(unique = true)
     private String name;
 
+    @Column
+    private boolean deleteFlag;
+
+    public boolean isDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
     public Long getId(){
         return this.id;
     }
@@ -21,6 +31,9 @@ public class Author implements Serializable {
     public String getName(){
         return this.name;
     }
+
+
+
 
     @Override
     public boolean equals(Object o){

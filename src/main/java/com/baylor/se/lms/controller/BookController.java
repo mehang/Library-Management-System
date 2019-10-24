@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 public class BookController {
-    Book book = new Book();
+
 
     @Autowired
     BookService bookService;

@@ -25,6 +25,18 @@ public class Book implements Serializable {
     @ManyToOne
     private BookSpecification specification;
 
+
+    @Column
+    private boolean deleteFlag;
+
+    public boolean isDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
+
     public Book(){}
     public Book(BookStatus status){
         this.status = status;

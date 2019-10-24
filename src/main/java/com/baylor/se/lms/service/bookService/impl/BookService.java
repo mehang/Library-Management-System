@@ -28,6 +28,7 @@ public class BookService implements IBookService {
     @Override
     public List<Book> getBooks(){
         List<Book> books = (List<Book>) bookRepository.findAll();
+        books.removeIf(Book::isDeleteFlag);
         return books;
     }
 

@@ -26,7 +26,16 @@ public class BookLog implements Serializable {
 
     @ManyToOne
     private Book book;
+    @Column
+    private boolean deleteFlag;
 
+    public boolean isDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
     public Long getId() {
         return id;
     }
