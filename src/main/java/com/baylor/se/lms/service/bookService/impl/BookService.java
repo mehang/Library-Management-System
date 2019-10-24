@@ -7,6 +7,8 @@ import com.baylor.se.lms.service.bookService.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookService implements IBookService {
     @Autowired
@@ -21,6 +23,12 @@ public class BookService implements IBookService {
     public Book getBook(Long id){
         Book book =  bookRepository.findById(id).orElseThrow(NotFoundException::new);
         return book;
+    }
+
+    @Override
+    public List<Book> getBooks(){
+        List<Book> books = (List<Book>) bookRepository.findAll();
+        return books;
     }
 
     @Override
