@@ -1,4 +1,7 @@
 package com.baylor.se.lms.data;
 
-public class BookRepository {
+import com.baylor.se.lms.Book;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+public interface BookRepository extends PagingAndSortingRepository<Book,Long> {
 }
