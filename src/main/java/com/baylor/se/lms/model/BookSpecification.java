@@ -20,8 +20,64 @@ public class BookSpecification implements Serializable {
     private String edition;
     private String language;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPublication() {
+        return publication;
+    }
+
+    public void setPublication(String publication) {
+        this.publication = publication;
+    }
+
+    public String getEdition() {
+        return edition;
+    }
+
+    public void setEdition(String edition) {
+        this.edition = edition;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public Set<BookCategory> getBookCategorySet() {
+        return bookCategorySet;
+    }
+
+    public void setBookCategorySet(Set<BookCategory> bookCategorySet) {
+        this.bookCategorySet = bookCategorySet;
+    }
+
     @Column(unique = true)
-    private String ISBN;
+    private String isbn;
 
     @ManyToOne
     private Author author;
@@ -43,10 +99,6 @@ public class BookSpecification implements Serializable {
         return id;
     }
 
-    public String getISBN(){
-        return this.ISBN;
-    }
-
     @Override
     public boolean equals(Object o){
         if (this == o) {
@@ -57,12 +109,12 @@ public class BookSpecification implements Serializable {
         }
         BookSpecification that = (BookSpecification) o;
         return (this.getId().equals(that.getId()) &&
-                this.getISBN().equals(that.getISBN()));
+                this.getIsbn().equals(that.getIsbn()));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.getId(), this.getISBN());
+        return Objects.hash(this.getId(), this.getIsbn());
     }
 
 }

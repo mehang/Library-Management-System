@@ -24,6 +24,7 @@ public class Author implements Serializable {
     public void setDeleteFlag(boolean deleteFlag) {
         this.deleteFlag = deleteFlag;
     }
+
     public Long getId(){
         return this.id;
     }
@@ -31,8 +32,6 @@ public class Author implements Serializable {
     public String getName(){
         return this.name;
     }
-
-
 
 
     @Override
