@@ -1,4 +1,4 @@
-package com.baylor.se.lms.service.bookLoanService;
+package com.baylor.se.lms.service;
 
 import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.model.BookLoan;

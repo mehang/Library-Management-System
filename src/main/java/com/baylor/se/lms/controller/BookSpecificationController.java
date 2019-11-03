@@ -1,6 +1,6 @@
 package com.baylor.se.lms.controller;
 import com.baylor.se.lms.model.BookSpecification;
-import com.baylor.se.lms.service.bookSpecificationService.impl.BookSpecificationService;
+import com.baylor.se.lms.service.impl.BookSpecificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

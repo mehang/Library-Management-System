@@ -1,4 +1,4 @@
-package com.baylor.se.lms.service.authorService;
+package com.baylor.se.lms.service;
 
 import com.baylor.se.lms.model.Author;
 

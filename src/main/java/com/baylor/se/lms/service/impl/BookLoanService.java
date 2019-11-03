@@ -1,10 +1,9 @@
-package com.baylor.se.lms.service.bookLoanService.impl;
+package com.baylor.se.lms.service.impl;
 
 import com.baylor.se.lms.data.BookLoanRepository;
 import com.baylor.se.lms.exception.NotFoundException;
-import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.model.BookLoan;
-import com.baylor.se.lms.service.bookLoanService.IBookLoanService;
+import com.baylor.se.lms.service.IBookLoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
