@@ -1,4 +1,4 @@
-package com.baylor.se.lms.service.authorService.impl;
+package com.baylor.se.lms.service.impl;
 
 import com.baylor.se.lms.data.AuthorRepository;
 import com.baylor.se.lms.exception.NotFoundException;

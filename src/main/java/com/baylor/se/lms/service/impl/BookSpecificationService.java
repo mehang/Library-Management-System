@@ -1,10 +1,9 @@
-package com.baylor.se.lms.service.bookSpecificationService.impl;
+package com.baylor.se.lms.service.impl;
 
 import com.baylor.se.lms.data.BookSpecificationRepository;
 import com.baylor.se.lms.exception.NotFoundException;
-import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.model.BookSpecification;
-import com.baylor.se.lms.service.bookSpecificationService.IBookSpecificationService;
+import com.baylor.se.lms.service.IBookSpecificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

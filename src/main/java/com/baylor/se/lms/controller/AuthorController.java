@@ -1,8 +1,7 @@
 package com.baylor.se.lms.controller;
 
 import com.baylor.se.lms.model.Author;
-import com.baylor.se.lms.model.Book;
-import com.baylor.se.lms.service.authorService.impl.AuthorService;
+import com.baylor.se.lms.service.impl.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

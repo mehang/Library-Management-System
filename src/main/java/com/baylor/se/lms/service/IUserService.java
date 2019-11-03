@@ -1,4 +1,4 @@
-package com.baylor.se.lms.service.user;
+package com.baylor.se.lms.service;
 
 import com.baylor.se.lms.model.User;
 

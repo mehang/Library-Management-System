@@ -1,10 +1,10 @@
-package com.baylor.se.lms.service.user.impl;
+package com.baylor.se.lms.service.impl;
 
 import com.baylor.se.lms.model.Librarian;
 import com.baylor.se.lms.model.User;
 import com.baylor.se.lms.data.LibrarianRepository;
 import com.baylor.se.lms.exception.NotFoundException;
-import com.baylor.se.lms.service.user.IUserService;
+import com.baylor.se.lms.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

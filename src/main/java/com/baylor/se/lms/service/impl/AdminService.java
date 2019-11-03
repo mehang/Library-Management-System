@@ -1,10 +1,10 @@
-package com.baylor.se.lms.service.user.impl;
+package com.baylor.se.lms.service.impl;
 
-import com.baylor.se.lms.model.Admin;
-import com.baylor.se.lms.model.User;
 import com.baylor.se.lms.data.AdminRepository;
 import com.baylor.se.lms.exception.NotFoundException;
-import com.baylor.se.lms.service.user.IUserService;
+import com.baylor.se.lms.model.Admin;
+import com.baylor.se.lms.model.User;
+import com.baylor.se.lms.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class AdminService implements IUserService {
 
     @Override
     public User getUser(Long id){
-        Admin admin =   adminRepository.findById(id).orElseThrow(NotFoundException::new);
+        Admin admin =   adminRepository.findAdminById(id);
         return admin;
     }
 
