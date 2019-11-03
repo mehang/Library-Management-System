@@ -39,5 +39,4 @@ public class BookSpecificationController {
         bookSpecService.updateBookSpec(bookSpecification);
         return ResponseEntity.ok().body(bookSpecification);
     }
-
 }

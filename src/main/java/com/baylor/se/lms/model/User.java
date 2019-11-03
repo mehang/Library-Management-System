@@ -4,18 +4,25 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@MappedSuperclass
+@Entity
+@Table(name = "User")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "DISCRIMINATOR", discriminatorType = DiscriminatorType.STRING)
 public class User {
-    @Column(unique=true, nullable = false)
-    @NotBlank(message="Username is required")
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    @NotBlank(message = "Username is required")
     private String username;
 
     @Column(nullable = false)
-    @NotBlank(message="Name is required")
+    @NotBlank(message = "Name is required")
     private String name;
 
     @Column(unique = true)
-    @Pattern(regexp="(d{3})d{3}-d{4}")
+    @Pattern(regexp = "(d{3})d{3}-d{4}")
     private String phoneNumber;
 
     private String password;
@@ -25,6 +32,10 @@ public class User {
     private String email;
 
     private boolean deleteFlag;
+
+    public Long getId() {
+        return id;
+    }
 
     public String getUsername() {
         return username;

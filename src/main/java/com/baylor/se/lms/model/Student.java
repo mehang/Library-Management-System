@@ -6,14 +6,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name="Student")
+@DiscriminatorValue("STUDENT")
 public class Student extends User implements Serializable {
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    public Long getId() {
-        return id;
-    }
 
     @Override
     public boolean equals(Object o) {

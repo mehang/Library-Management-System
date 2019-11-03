@@ -3,7 +3,7 @@ package com.baylor.se.lms.service.impl;
 import com.baylor.se.lms.data.AuthorRepository;
 import com.baylor.se.lms.exception.NotFoundException;
 import com.baylor.se.lms.model.Author;
-import com.baylor.se.lms.service.authorService.IAuthorService;
+import com.baylor.se.lms.service.IAuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

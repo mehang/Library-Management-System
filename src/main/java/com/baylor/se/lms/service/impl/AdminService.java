@@ -21,7 +21,7 @@ public class AdminService implements IUserService {
 
     @Override
     public User getUser(Long id){
-        Admin admin =   adminRepository.findAdminById(id);
+        Admin admin =   adminRepository.findAdminById(id).orElseThrow(NotFoundException::new);
         return admin;
     }
 
