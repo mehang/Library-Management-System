@@ -19,6 +19,8 @@ public class BookSpecification implements Serializable {
     private String publication;
     private String edition;
     private String language;
+    @Column(columnDefinition = "BOOLEAN")
+    private boolean deleteFlag = false;
 
     public String getName() {
         return name;
@@ -85,8 +87,7 @@ public class BookSpecification implements Serializable {
     @ManyToMany
     private Set<BookCategory> bookCategorySet = new HashSet<>();
 
-    @Column
-    private boolean deleteFlag;
+
 
     public boolean isDeleteFlag() {
         return deleteFlag;

@@ -21,13 +21,13 @@ public class AuthorService implements IAuthorService {
 
     @Override
     public Author getAuthor(Long id) {
-        return authorRepository.findById(id).orElseThrow(NotFoundException::new);
+        return authorRepository.findAuthorById(id).orElseThrow(NotFoundException::new);
     }
 
     @Override
     public List<Author> getAuthors() {
-        List <Author> authors = (List<Author>) authorRepository.findAll();
-        authors.removeIf(Author::isDeleteFlag);
+        List <Author> authors = (List<Author>) authorRepository.findAllByDeleteFlagFalse();
+
         return authors;
     }
 

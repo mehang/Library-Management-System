@@ -14,14 +14,17 @@ public class Author implements Serializable {
     @Column(unique = true)
     private String name;
 
-    @Column
-    private boolean deleteFlag;
+    @Column(columnDefinition = "BOOLEAN")
+    private Boolean deleteFlag = false;
+
+
+
 
     public boolean isDeleteFlag() {
         return deleteFlag;
     }
 
-    public void setDeleteFlag(boolean deleteFlag) {
+    public void setDeleteFlag(Boolean deleteFlag) {
         this.deleteFlag = deleteFlag;
     }
 

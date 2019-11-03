@@ -41,8 +41,8 @@ public class BookLoan implements Serializable {
 
     @OneToOne
     private BookLog log;
-    @Column
-    private boolean deleteFlag;
+    @Column(columnDefinition = "BOOLEAN")
+    private boolean deleteFlag = false;
 
     public boolean isDeleteFlag() {
         return deleteFlag;

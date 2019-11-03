@@ -30,8 +30,8 @@ public class User {
     @Column(unique = true)
     @Pattern(regexp = "[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}")
     private String email;
-
-    private boolean deleteFlag;
+    @Column(columnDefinition = "BOOLEAN")
+    private boolean deleteFlag = false;
 
     public Long getId() {
         return id;

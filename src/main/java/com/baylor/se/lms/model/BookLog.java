@@ -26,8 +26,8 @@ public class BookLog implements Serializable {
 
     @ManyToOne
     private Book book;
-    @Column
-    private boolean deleteFlag;
+    @Column(columnDefinition = "BOOLEAN")
+    private boolean deleteFlag = false;
 
     public boolean isDeleteFlag() {
         return deleteFlag;

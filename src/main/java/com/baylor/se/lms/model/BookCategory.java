@@ -19,8 +19,8 @@ public class BookCategory implements Serializable {
     @ManyToMany
     private Set<BookSpecification> bookSpecificationSet = new HashSet<>();
 
-    @Column
-    private boolean deleteFlag;
+    @Column(columnDefinition = "BOOLEAN")
+    private boolean deleteFlag = false;
 
     public boolean isDeleteFlag() {
         return deleteFlag;

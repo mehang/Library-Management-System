@@ -26,8 +26,8 @@ public class Book implements Serializable {
     private BookSpecification specification;
 
 
-    @Column
-    private boolean deleteFlag;
+    @Column(columnDefinition = "BOOLEAN")
+    private boolean deleteFlag = false;
 
     public boolean isDeleteFlag() {
         return deleteFlag;
