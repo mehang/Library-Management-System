@@ -8,24 +8,31 @@ import com.baylor.se.lms.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StudentService implements IUserService {
     @Autowired
     StudentRepository studentRepository;
 
     @Override
-    public void registerUser(User user){
-        studentRepository.save((Student) user);
+    public User registerUser(User user){
+       return studentRepository.save((Student) user);
     }
 
     @Override
     public User getUser(Long id){
-        Student librarian =   studentRepository.findById(id).orElseThrow(NotFoundException::new);
-        return librarian;
+        Student student =   studentRepository.findById(id).orElseThrow(NotFoundException::new);
+        return student;
+    }
+
+    public List<Student> getAll(){
+        List<Student> students =(List<Student>) studentRepository.findAll();
+        return students;
     }
 
     @Override
-    public void updateUser(User user){studentRepository.save((Student) user);};
+    public User updateUser(User user){ return studentRepository.save((Student) user);};
 
     @Override
     public void deleteUser(Long id){

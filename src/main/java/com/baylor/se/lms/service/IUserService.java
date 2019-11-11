@@ -2,9 +2,11 @@ package com.baylor.se.lms.service;
 
 import com.baylor.se.lms.model.User;
 
+import java.util.List;
+
 public interface IUserService {
-    public void registerUser(User user);
+    public User registerUser(User user);
     public User getUser(Long id);
-    public void updateUser(User user);
+    public User updateUser(User user);
     public void deleteUser(Long id);
 }

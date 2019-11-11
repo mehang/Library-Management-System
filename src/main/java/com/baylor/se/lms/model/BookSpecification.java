@@ -13,6 +13,7 @@ public class BookSpecification implements Serializable {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
 
@@ -21,6 +22,15 @@ public class BookSpecification implements Serializable {
     private String language;
     @Column(columnDefinition = "BOOLEAN")
     private boolean deleteFlag = false;
+
+    @Column(unique = true, nullable = false)
+    private String isbn;
+
+    @ManyToOne
+    private Author author;
+
+    @ManyToMany
+    private Set<BookCategory> bookCategorySet = new HashSet<>();
 
     public String getName() {
         return name;
@@ -77,17 +87,6 @@ public class BookSpecification implements Serializable {
     public void setBookCategorySet(Set<BookCategory> bookCategorySet) {
         this.bookCategorySet = bookCategorySet;
     }
-
-    @Column(unique = true)
-    private String isbn;
-
-    @ManyToOne
-    private Author author;
-
-    @ManyToMany
-    private Set<BookCategory> bookCategorySet = new HashSet<>();
-
-
 
     public boolean isDeleteFlag() {
         return deleteFlag;

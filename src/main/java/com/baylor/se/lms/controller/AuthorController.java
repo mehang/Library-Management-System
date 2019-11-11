@@ -22,20 +22,20 @@ public class AuthorController {
         return ResponseEntity.ok().body(authors);
     }
     @GetMapping(path="/authors/{id:[0-9][0-9]*}", produces="application/json")
-    public ResponseEntity<Author> getBook(@PathVariable Long id) {
+    public ResponseEntity<Author> getAuthor(@PathVariable Long id) {
         Author author = authorService.getAuthor(id);
         return ResponseEntity.ok().body(author);
     }
     @PostMapping(path="/authors/",consumes = "application/json", produces="application/json")
     @ResponseBody
-    public ResponseEntity<Author> addBook(@RequestBody Author author) {
+    public ResponseEntity<Author> addAuthor(@RequestBody Author author) {
         Author registeredAuthor = authorService.registerAuthor(author);
         return ResponseEntity.ok().body(registeredAuthor);
     }
 
     @PutMapping(path="/authors/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<Author> updateBook(@RequestBody Author author) {
+    public ResponseEntity<Author> updateAuthor(@RequestBody Author author) {
         authorService.updateAuthor(author);
         return ResponseEntity.ok().body(author);
     }
