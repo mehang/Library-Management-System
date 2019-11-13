@@ -26,6 +26,7 @@ public class AuthorController {
         Author author = authorService.getAuthor(id);
         return ResponseEntity.ok().body(author);
     }
+
     @PostMapping(path="/authors/",consumes = "application/json", produces="application/json")
     @ResponseBody
     public ResponseEntity<Author> addAuthor(@RequestBody Author author) {
@@ -35,7 +36,7 @@ public class AuthorController {
 
     @PutMapping(path="/authors/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<Author> updateAuthor(@RequestBody Author author) {
+    public ResponseEntity<Author> updateAuthor(@RequestBody Author author, @PathVariable Long id) {
         authorService.updateAuthor(author);
         return ResponseEntity.ok().body(author);
     }

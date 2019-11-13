@@ -1,5 +1,7 @@
 package com.baylor.se.lms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -21,14 +23,16 @@ public class User {
     @NotBlank(message = "Name is required")
     private String name;
 
+    //todo: add pattern according to frontend
     @Column(unique = true)
-    @Pattern(regexp = "(d{3})d{3}-d{4}")
+//    @Pattern(regexp = "(d{3})d{3}-d{4}")
     private String phoneNumber;
 
+    @JsonIgnore
     private String password;
 
     @Column(unique = true)
-    @Pattern(regexp = "[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}")
+//    @Pattern(regexp = "[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}")
     private String email;
     @Column(columnDefinition = "BOOLEAN")
     private boolean deleteFlag = false;
@@ -84,4 +88,5 @@ public class User {
     public void setDeleteFlag(boolean deleteFlag) {
         this.deleteFlag = deleteFlag;
     }
+
 }

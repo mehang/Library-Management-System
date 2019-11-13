@@ -8,31 +8,37 @@ import com.baylor.se.lms.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LibrarianService implements IUserService {
     @Autowired
     LibrarianRepository librarianRepository;
 
     @Override
-    public void registerUser(User user)
-    {
-        librarianRepository.save((Librarian)user);
+    public User registerUser(User user) {
+        return librarianRepository.save((Librarian) user);
     }
 
     @Override
-    public User getUser(Long id){
-        Librarian librarian =   librarianRepository.findById(id).orElseThrow(NotFoundException::new);
+    public User getUser(Long id) {
+        Librarian librarian = librarianRepository.findById(id).orElseThrow(NotFoundException::new);
         return librarian;
     }
 
-    @Override
-    public void updateUser(User user){
-        librarianRepository.save((Librarian) user);
+    public List<Librarian> getAll() {
+        List<Librarian> librarians = (List<Librarian>) librarianRepository.findAll();
+        return librarians;
     }
 
     @Override
-    public void deleteUser(Long id){
-        Librarian librarian =   librarianRepository.findById(id).orElseThrow(NotFoundException::new);
+    public User updateUser(User user) {
+        return librarianRepository.save((Librarian) user);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        Librarian librarian = librarianRepository.findById(id).orElseThrow(NotFoundException::new);
         librarian.setDeleteFlag(true);
         librarianRepository.save(librarian);
     }

@@ -8,15 +8,17 @@ import com.baylor.se.lms.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AdminService implements IUserService {
     @Autowired
     AdminRepository adminRepository;
 
     @Override
-    public void registerUser(User user)
+    public User registerUser(User user)
     {
-        adminRepository.save((Admin)user);
+       return adminRepository.save((Admin)user);
     }
 
     @Override
@@ -25,9 +27,14 @@ public class AdminService implements IUserService {
         return admin;
     }
 
+    public List<Admin> getAll(){
+        List<Admin> admins = (List<Admin>) adminRepository.findAll();
+        return admins;
+    }
+
     @Override
-    public void updateUser(User user){
-        adminRepository.save((Admin) user);
+    public User updateUser(User user){
+        return adminRepository.save((Admin) user);
     }
 
     @Override
