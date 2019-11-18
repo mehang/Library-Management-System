@@ -8,7 +8,7 @@ import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "User")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "DISCRIMINATOR", discriminatorType = DiscriminatorType.STRING)
 public class User {
     @Id
@@ -24,18 +24,23 @@ public class User {
     private String name;
 
     //todo: add pattern according to frontend
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
 //    @Pattern(regexp = "(d{3})d{3}-d{4}")
     private String phoneNumber;
 
     @JsonIgnore
+    @Column(nullable = false)
     private String password;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
 //    @Pattern(regexp = "[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}")
     private String email;
     @Column(columnDefinition = "BOOLEAN")
     private boolean deleteFlag = false;
+
+// discriminator value for using as role
+//    @Column(name = "DISCRIMINATOR", insertable = false, updatable = false)
+//    private String role;
 
     public Long getId() {
         return id;
