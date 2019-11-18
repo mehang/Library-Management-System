@@ -26,17 +26,18 @@ public class UserController {
     @Autowired
     AdminService adminService;
 
-    @GetMapping(path="/users", produces = "application/json")
-    public ResponseEntity<User> getUserByUsername(){
-        User user = userService.getUserByUsername("abc");
-        return ResponseEntity.ok().body(user);
-    }
-
-    @GetMapping(path="/users/{id:[0-9][0-9]*}", produces = "application/json")
-    public ResponseEntity<User> getUserById(@PathVariable Long id){
-        User user = userService.getUserByUsername("abc");
-        return ResponseEntity.ok().body(user);
-    }
+//    @GetMapping(path="/users", produces = "application/json")
+//    public ResponseEntity<User> getUserByUsername(){
+//        //todo: check this all
+////        User user = userService.getUserByUsername("abc");
+//        return ResponseEntity.ok().body(user);
+//    }
+//
+//    @GetMapping(path="/users/{id:[0-9][0-9]*}", produces = "application/json")
+//    public ResponseEntity<User> getUserById(@PathVariable Long id){
+////        User user = userService.getUserByUsername("abc");
+//        return ResponseEntity.ok().body(user);
+//    }
 
     @GetMapping(path = "/users/students", produces="application/json")
     public ResponseEntity<List<Student>>getStudents(){

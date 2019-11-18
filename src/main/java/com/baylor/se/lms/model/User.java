@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.Set;
 
 @Entity
 @Table(name = "User")
@@ -41,6 +42,25 @@ public class User {
 // discriminator value for using as role
 //    @Column(name = "DISCRIMINATOR", insertable = false, updatable = false)
 //    private String role;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
+    public User() {
+
+    }
+
+public User(User user){
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
+        this.deleteFlag = user.isDeleteFlag();
+        this.roles = user.getRoles();
+}
 
     public Long getId() {
         return id;
@@ -94,4 +114,11 @@ public class User {
         this.deleteFlag = deleteFlag;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }

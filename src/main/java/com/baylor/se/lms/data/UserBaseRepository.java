@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @NoRepositoryBean
 public interface UserBaseRepository<T> extends Repository<T, Long> {
-    T findByUsername(String username);
+    Optional<T> findByUsername(String username);
 }
