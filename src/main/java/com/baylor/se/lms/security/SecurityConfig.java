@@ -28,13 +28,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable();
         //todo: check here future
         http.authorizeRequests()
-                .antMatchers("/user/**").authenticated()
-                .anyRequest().permitAll();
-//                .and()
-//                .formLogin().permitAll();
+                .antMatchers("/users/students/").authenticated()
+                .and()
+                .authorizeRequests().antMatchers("/console/**").permitAll()
+                .anyRequest().permitAll()
+//        .and().httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
+//                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .formLogin().permitAll();
+        http.csrf().disable();
+        //used for h2 console
+        http.headers().frameOptions().disable();
     }
 
     private PasswordEncoder getPasswordEncoder() {

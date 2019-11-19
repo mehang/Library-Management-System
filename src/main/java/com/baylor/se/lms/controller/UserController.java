@@ -1,5 +1,6 @@
 package com.baylor.se.lms.controller;
 
+import com.baylor.se.lms.dto.UserDTO;
 import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.service.impl.AdminService;
 import com.baylor.se.lms.service.impl.LibrarianService;
@@ -7,9 +8,14 @@ import com.baylor.se.lms.service.impl.StudentService;
 import com.baylor.se.lms.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @CrossOrigin(origins="http://localhost:3000")
 @RestController
@@ -39,6 +45,8 @@ public class UserController {
 //        return ResponseEntity.ok().body(user);
 //    }
 
+    //todo: look for this
+    @PreAuthorize("hasAnyRole('STUDENT')")
     @GetMapping(path = "/users/students", produces="application/json")
     public ResponseEntity<List<Student>>getStudents(){
         List<Student> students = studentService.getAll();
@@ -53,10 +61,32 @@ public class UserController {
 
     @PostMapping(path="/users/students",consumes = "application/json", produces="application/json")
     @ResponseBody
-    public ResponseEntity<User> addStudent(@RequestBody Student student) {
+    public ResponseEntity<User> addStudent(@RequestBody UserDTO userDTO) {
+        Student student = new Student();
+        student.setUsername(userDTO.getUsername());
+        student.setEmail(userDTO.getEmail());
+        student.setPassword(userDTO.getPassword());
+        student.setName(userDTO.getName());
+        student.setPhoneNumber(userDTO.getPhoneNumber());
+        Role role = new Role();
+        role.setRole("ROLE_STUDENT");
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        student.setRoles(roles);
         User registeredStudent = studentService.registerUser(student);
         return ResponseEntity.ok().body(registeredStudent);
     }
+
+//    @GetMapping("/login")
+//    public String login(Model model, String error, String logout) {
+//        if (error != null)
+//            model.addAttribute("error", "Your username and password is invalid.");
+//
+//        if (logout != null)
+//            model.addAttribute("message", "You have been logged out successfully.");
+//
+//        return "login";
+//    }
 
     @PutMapping(path="/users/students/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
