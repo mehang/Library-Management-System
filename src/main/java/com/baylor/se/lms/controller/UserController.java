@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UserController {
     @Autowired
@@ -45,20 +45,20 @@ public class UserController {
 //        return ResponseEntity.ok().body(user);
 //    }
 
-//    @PreAuthorize("hasAnyRole('STUDENT','ROLE_STUDENT')")
-    @GetMapping(path = "/users/students", produces="application/json")
-    public ResponseEntity<List<Student>>getStudents(){
+    //    @PreAuthorize("hasAnyRole('STUDENT','ROLE_STUDENT')")
+    @GetMapping(path = "/users/students", produces = "application/json")
+    public ResponseEntity<List<Student>> getStudents() {
         List<Student> students = studentService.getAll();
         return ResponseEntity.ok().body(students);
     }
 
-    @GetMapping(path="/users/students/{id:[0-9][0-9]*}", produces="application/json")
+    @GetMapping(path = "/users/students/{id:[0-9][0-9]*}", produces = "application/json")
     public ResponseEntity<User> getStudentById(@PathVariable Long id) {
         User student = studentService.getUser(id);
         return ResponseEntity.ok().body(student);
     }
 
-    @PostMapping(path="/users/students",consumes = "application/json", produces="application/json")
+    @PostMapping(path = "/users/students/", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity<User> addStudent(@RequestBody UserDTO userDTO) {
         Student student = new Student();
@@ -67,7 +67,7 @@ public class UserController {
         student.setPassword(userDTO.getPassword());
         student.setName(userDTO.getName());
         student.setPhoneNumber(userDTO.getPhoneNumber());
-                User registeredStudent = studentService.registerUser(student);
+        User registeredStudent = studentService.registerUser(student);
         return ResponseEntity.ok().body(registeredStudent);
     }
 
@@ -82,7 +82,7 @@ public class UserController {
 //        return "login";
 //    }
 
-    @PutMapping(path="/users/students/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
+    @PutMapping(path = "/users/students/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity<User> updateStudent(@RequestBody Student student, @PathVariable Long id) {
         User updatedStudent = studentService.updateUser(student);
@@ -91,25 +91,32 @@ public class UserController {
 
     //todo: delete
 
-    @GetMapping(path = "/users/librarians", produces="application/json")
-    public ResponseEntity<List<Librarian>>getLibrarians(){
+    @GetMapping(path = "/users/librarians", produces = "application/json")
+    public ResponseEntity<List<Librarian>> getLibrarians() {
         List<Librarian> librarians = librarianService.getAll();
         return ResponseEntity.ok().body(librarians);
     }
 
-    @GetMapping(path="/users/librarians/{id:[0-9][0-9]*}", produces="application/json")
+    @GetMapping(path = "/users/librarians/{id:[0-9][0-9]*}", produces = "application/json")
     public ResponseEntity<User> getLibrarianById(@PathVariable Long id) {
         User librarian = librarianService.getUser(id);
         return ResponseEntity.ok().body(librarian);
     }
-    @PostMapping(path="/users/librarians",consumes = "application/json", produces="application/json")
+
+    @PostMapping(path = "/users/librarians", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<User> addLibrarian(@RequestBody Librarian librarian) {
+    public ResponseEntity<User> addLibrarian(@RequestBody UserDTO userDTO) {
+        Librarian librarian = new Librarian();
+        librarian.setUsername(userDTO.getUsername());
+        librarian.setEmail(userDTO.getEmail());
+        librarian.setPassword(userDTO.getPassword());
+        librarian.setName(userDTO.getName());
+        librarian.setPhoneNumber(userDTO.getPhoneNumber());
         User registeredLibrarian = librarianService.registerUser(librarian);
         return ResponseEntity.ok().body(registeredLibrarian);
     }
 
-    @PutMapping(path="/users/librarians/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
+    @PutMapping(path = "/users/librarians/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity<User> updateLibrarian(@RequestBody Librarian librarian, @PathVariable Long id) {
         User updatedLibrarian = studentService.updateUser(librarian);
@@ -118,25 +125,32 @@ public class UserController {
 
     //todo: add delete
 
-    @GetMapping(path = "/users/admins", produces="application/json")
-    public ResponseEntity<List<Admin>>getAdmins(){
+    @GetMapping(path = "/users/admins", produces = "application/json")
+    public ResponseEntity<List<Admin>> getAdmins() {
         List<Admin> admins = adminService.getAll();
         return ResponseEntity.ok().body(admins);
     }
 
-    @GetMapping(path="/users/admins/{id:[0-9][0-9]*}", produces="application/json")
+    @GetMapping(path = "/users/admins/{id:[0-9][0-9]*}", produces = "application/json")
     public ResponseEntity<User> getAdminById(@PathVariable Long id) {
         User librarian = librarianService.getUser(id);
         return ResponseEntity.ok().body(librarian);
     }
-    @PostMapping(path="/users/admins",consumes = "application/json", produces="application/json")
+
+    @PostMapping(path = "/users/admins", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<User> addAdmin(@RequestBody Admin admin) {
+    public ResponseEntity<User> addAdmin(@RequestBody UserDTO userDTO) {
+        Admin admin = new Admin();
+        admin.setUsername(userDTO.getUsername());
+        admin.setEmail(userDTO.getEmail());
+        admin.setPassword(userDTO.getPassword());
+        admin.setName(userDTO.getName());
+        admin.setPhoneNumber(userDTO.getPhoneNumber());
         User registeredAdmin = adminService.registerUser(admin);
         return ResponseEntity.ok().body(registeredAdmin);
     }
 
-    @PutMapping(path="/users/admins/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
+    @PutMapping(path = "/users/admins/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity<User> updateAdmin(@RequestBody Admin admin, @PathVariable Long id) {
         User updatedAdmin = studentService.updateUser(admin);
