@@ -45,8 +45,7 @@ public class UserController {
 //        return ResponseEntity.ok().body(user);
 //    }
 
-    //todo: look for this
-    @PreAuthorize("hasAnyRole('STUDENT')")
+//    @PreAuthorize("hasAnyRole('STUDENT','ROLE_STUDENT')")
     @GetMapping(path = "/users/students", produces="application/json")
     public ResponseEntity<List<Student>>getStudents(){
         List<Student> students = studentService.getAll();
@@ -68,12 +67,7 @@ public class UserController {
         student.setPassword(userDTO.getPassword());
         student.setName(userDTO.getName());
         student.setPhoneNumber(userDTO.getPhoneNumber());
-        Role role = new Role();
-        role.setRole("ROLE_STUDENT");
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        student.setRoles(roles);
-        User registeredStudent = studentService.registerUser(student);
+                User registeredStudent = studentService.registerUser(student);
         return ResponseEntity.ok().body(registeredStudent);
     }
 
