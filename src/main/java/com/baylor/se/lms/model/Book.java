@@ -1,5 +1,7 @@
 package com.baylor.se.lms.model;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -18,6 +20,8 @@ public class Book implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private BookStatus status;
+
+    private String serialNo;
 
     @ManyToOne
     private Librarian updatedBy;
@@ -74,4 +78,31 @@ public BookStatus getStatus() {
         return Objects.hash(this.getId(), this.getStatus());
     }
 
+    public void setStatus(BookStatus status) {
+        this.status = status;
+    }
+
+    public String getSerialNo() {
+        return serialNo;
+    }
+
+    public void setSerialNo(String serialNo) {
+        this.serialNo = serialNo;
+    }
+
+    public Librarian getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Librarian updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public BookSpecification getSpecification() {
+        return specification;
+    }
+
+    public void setSpecification(BookSpecification specification) {
+        this.specification = specification;
+    }
 }

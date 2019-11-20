@@ -1,6 +1,8 @@
 package com.baylor.se.lms.controller;
 
 
+import com.baylor.se.lms.dto.BookAddDTO;
+import com.baylor.se.lms.dto.BookDTO;
 import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.service.impl.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,7 @@ public class BookController {
 
     @PostMapping(path="/books/",consumes = "application/json", produces="application/json")
     @ResponseBody
-    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+    public ResponseEntity<Book> addBook(@RequestBody BookDTO book) {
         Book registeredBook = bookService.registerBook(book);
         return ResponseEntity.ok().body(registeredBook);
     }
@@ -41,4 +43,12 @@ public class BookController {
         bookService.updateBook(book);
         return ResponseEntity.ok().body(book);
     }
+
+    @PostMapping(path = "/book/increase",consumes = "application/json",produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<Book> increaseBook(@RequestBody BookAddDTO bookAddDTO){
+        Book book = bookService.increaseBook(bookAddDTO.getIsbn(),bookAddDTO.getUserId());
+        return  ResponseEntity.ok().body(book);
+    }
+
 }

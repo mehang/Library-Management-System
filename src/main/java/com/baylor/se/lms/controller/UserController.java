@@ -62,12 +62,7 @@ public class UserController {
     @PostMapping(path="/users/students",consumes = "application/json", produces="application/json")
     @ResponseBody
     public ResponseEntity<User> addStudent(@RequestBody UserDTO userDTO) {
-        Student student = new Student();
-        student.setUsername(userDTO.getUsername());
-        student.setEmail(userDTO.getEmail());
-        student.setPassword(userDTO.getPassword());
-        student.setName(userDTO.getName());
-        student.setPhoneNumber(userDTO.getPhoneNumber());
+        Student student = (Student)convertDTOtoUser(userDTO,new Student());
         Role role = new Role();
         role.setRole("ROLE_STUDENT");
         Set<Role> roles = new HashSet<>();
@@ -110,9 +105,16 @@ public class UserController {
     }
     @PostMapping(path="/users/librarians",consumes = "application/json", produces="application/json")
     @ResponseBody
-    public ResponseEntity<User> addLibrarian(@RequestBody Librarian librarian) {
-        User registeredLibrarian = librarianService.registerUser(librarian);
-        return ResponseEntity.ok().body(registeredLibrarian);
+    public ResponseEntity<User> addLibrarian(@RequestBody UserDTO userDTO) {
+        Librarian librarian =  new Librarian();
+        convertDTOtoUser(userDTO, librarian);
+        Role role = new Role();
+        role.setRole("ROLE_LIBRARIAN");
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        librarian.setRoles(roles);
+        librarianService.registerUser(librarian);
+        return ResponseEntity.ok().body(librarian);
     }
 
     @PutMapping(path="/users/librarians/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
@@ -150,4 +152,13 @@ public class UserController {
     }
 
 //todo: add delete
+
+    private User convertDTOtoUser(UserDTO userDTO, User user){
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(userDTO.getPassword());
+        user.setName(userDTO.getName());
+        user.setPhoneNumber(userDTO.getPhoneNumber());
+        return  user;
+    }
 }

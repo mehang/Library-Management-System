@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface AuthorRepository extends PagingAndSortingRepository<Author, Long> {
     @Query("select  A from Author A where A.id = ?1 and A.deleteFlag = false")
-    Optional<Author> findAuthorById(double id);
+    Optional<Author> findAuthorById(long id);
 
      List<Author> findAllByDeleteFlagFalse();
 
