@@ -1,22 +1,16 @@
 package com.baylor.se.lms.service.impl;
 
-import com.baylor.se.lms.data.AuthorRepository;
-import com.baylor.se.lms.data.BookCategoryRepository;
-import com.baylor.se.lms.data.LibrarianRepository;
+import com.baylor.se.lms.data.*;
 import com.baylor.se.lms.dto.BookDTO;
-import com.baylor.se.lms.model.Book;
-import com.baylor.se.lms.data.BookRepository;
+import com.baylor.se.lms.dto.BookRequestDTO;
+import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.exception.NotFoundException;
-import com.baylor.se.lms.model.BookCategory;
-import com.baylor.se.lms.model.BookSpecification;
-import com.baylor.se.lms.model.Librarian;
 import com.baylor.se.lms.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 public class BookService implements IBookService {
@@ -36,7 +30,15 @@ public class BookService implements IBookService {
 
     @Autowired
     LibrarianService librarianService;
+
+    @Autowired
+    StudentService studentService;
+
+    @Autowired
+    BookLoanRepository bookLoanRepository;
+
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Book registerBook(BookDTO book){
 
         BookSpecification bookSpecification =  new BookSpecification();
@@ -53,6 +55,7 @@ public class BookService implements IBookService {
         String serialNumber= book.getIsbn().concat("Book1");
         newBook.setSerialNo(serialNumber);
         newBook.setSpecification(bookSpecification);
+        newBook.setStatus(Book.BookStatus.AVAILABLE);
         newBook.setUpdatedBy((Librarian) librarianService.getUser(book.getLibrarianId()));
         return bookRepository.save(newBook);
     }
@@ -76,7 +79,7 @@ public class BookService implements IBookService {
     }
 
 
-
+    @Override
     public Book increaseBook(String isbn, long librarianId){
 
         List<Book> bookList = bookRepository.findBooksBySerialNoContaining(isbn);
@@ -87,10 +90,45 @@ public class BookService implements IBookService {
         newBook.setStatus(Book.BookStatus.AVAILABLE);
         Librarian librarian = (Librarian) librarianService.getUser(librarianId);
         newBook.setUpdatedBy(librarian);
+
         newBook.setSpecification(bookList.get(0).getSpecification());
         bookRepository.save(newBook);
         return  newBook;
     }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public BookLoan requestForBook(BookRequestDTO bookRequestDTO) {
+        Book requestBook = bookRepository.findBookById(bookRequestDTO.getBookId()).orElseThrow(NotFoundException::new);
+        Student student  = (Student) studentService.getUser(bookRequestDTO.getUserId());
+
+        Calendar date = Calendar.getInstance();
+        date.setTimeZone(TimeZone.getTimeZone("CST"));
+
+        BookLoan bookLoan =  new BookLoan();
+        bookLoan.setStatus(BookLoan.LoanStatus.REQUESTED);
+        bookLoan.setRequestedBy(student);
+        bookLoan.setDateOfRequest(new Date());
+        bookLoan.setBook(requestBook);
+        bookLoan.setDateOfRequest(date.getTime());
+        date.add(Calendar.MONTH,3);
+        bookLoan.setDateOfReturn(date.getTime());
+
+        //Creating Booklog
+        BookLog bookLog = new BookLog();
+        bookLog.setAction(BookLog.Action.REQUEST);
+        bookLog.setTimeStamp(date.getTime());
+        bookLog.setBookLoan(bookLoan);
+        Set<BookLog> bookLogSet =  new HashSet<>();
+        bookLogSet.add(bookLog);
+        bookLoan.setLog(bookLogSet);
+
+        return  bookLoanRepository.save(bookLoan);
+
+
+    }
+
+
     private String generateNewSerial(String isbn, int counter){
         String serialNumber = isbn.concat("Book");
         return  serialNumber.concat(String.valueOf(counter));

@@ -23,10 +23,10 @@ public class Book implements Serializable {
 
     private String serialNo;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private Librarian updatedBy;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH,fetch = FetchType.EAGER)
     private BookSpecification specification;
 
 
