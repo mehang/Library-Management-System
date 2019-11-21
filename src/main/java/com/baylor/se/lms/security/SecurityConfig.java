@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         //todo: check here future
         http.authorizeRequests()
-                .antMatchers("/users/students/").authenticated()
+              //  .antMatchers("/users/students/").authenticated()
                 .and()
                 .authorizeRequests().antMatchers("/console/**").permitAll()
                 .anyRequest().permitAll()

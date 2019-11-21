@@ -35,13 +35,13 @@ public class BookLoan implements Serializable {
     @ManyToOne
     private Book book;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Student requestedBy;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Librarian issuedBy;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<BookLog> log = new HashSet<>();
 
 

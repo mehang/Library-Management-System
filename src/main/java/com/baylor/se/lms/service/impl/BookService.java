@@ -62,7 +62,7 @@ public class BookService implements IBookService {
 
     @Override
     public Book getBook(Long id){
-        Book book =  bookRepository.findById(id).orElseThrow(NotFoundException::new);
+        Book book =  bookRepository.findBookById(id).orElseThrow(NotFoundException::new);
         return book;
     }
 
@@ -99,7 +99,7 @@ public class BookService implements IBookService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public BookLoan requestForBook(BookRequestDTO bookRequestDTO) {
-        Book requestBook = bookRepository.findBookById(bookRequestDTO.getBookId()).orElseThrow(NotFoundException::new);
+        Book requestBook = getBook(bookRequestDTO.getBookId());
         Student student  = (Student) studentService.getUser(bookRequestDTO.getUserId());
 
         Calendar date = Calendar.getInstance();
@@ -123,8 +123,8 @@ public class BookService implements IBookService {
         bookLogSet.add(bookLog);
         bookLoan.setLog(bookLogSet);
 
-        return  bookLoanRepository.save(bookLoan);
-
+         bookLoanRepository.save(bookLoan);
+         return bookLoan;
 
     }
 

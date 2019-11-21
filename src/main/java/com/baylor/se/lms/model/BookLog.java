@@ -1,5 +1,7 @@
 package com.baylor.se.lms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -23,6 +25,7 @@ public class BookLog implements Serializable {
     private Date timeStamp;
 
     @OneToOne
+    @JsonIgnore
     private BookLoan bookLoan;
 
 

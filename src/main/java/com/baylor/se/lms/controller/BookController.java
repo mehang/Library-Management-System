@@ -3,7 +3,9 @@ package com.baylor.se.lms.controller;
 
 import com.baylor.se.lms.dto.BookAddDTO;
 import com.baylor.se.lms.dto.BookDTO;
+import com.baylor.se.lms.dto.BookRequestDTO;
 import com.baylor.se.lms.model.Book;
+import com.baylor.se.lms.model.BookLoan;
 import com.baylor.se.lms.service.impl.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,11 +46,18 @@ public class BookController {
         return ResponseEntity.ok().body(book);
     }
 
-    @PostMapping(path = "/book/increase",consumes = "application/json",produces = "application/json")
+    @PostMapping(path = "/books/increase",consumes = "application/json",produces = "application/json")
     @ResponseBody
     public ResponseEntity<Book> increaseBook(@RequestBody BookAddDTO bookAddDTO){
         Book book = bookService.increaseBook(bookAddDTO.getIsbn(),bookAddDTO.getUserId());
         return  ResponseEntity.ok().body(book);
+    }
+
+    @PostMapping(path = "/books/request",consumes = "application/json",produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<BookLoan> requestBook(@RequestBody BookRequestDTO bookRequestDTO){
+        BookLoan bookLoan = bookService.requestForBook(bookRequestDTO);
+        return  ResponseEntity.ok().body(bookLoan);
     }
 
 }
