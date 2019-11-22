@@ -12,6 +12,7 @@ import java.util.Set;
 public class BookLoan implements Serializable {
     public enum LoanStatus {
         REQUESTED,
+        ISSUED,
         GRANTED,
     }
 
@@ -35,13 +36,13 @@ public class BookLoan implements Serializable {
     @ManyToOne
     private Book book;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Student requestedBy;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Librarian issuedBy;
 
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<BookLog> log = new HashSet<>();
 
 

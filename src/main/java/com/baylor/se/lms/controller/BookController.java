@@ -3,6 +3,7 @@ package com.baylor.se.lms.controller;
 
 import com.baylor.se.lms.dto.BookAddDTO;
 import com.baylor.se.lms.dto.BookDTO;
+import com.baylor.se.lms.dto.BookIssueDTO;
 import com.baylor.se.lms.dto.BookRequestDTO;
 import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.model.BookLoan;
@@ -60,11 +61,18 @@ public class BookController {
         return  ResponseEntity.ok().body(bookLoan);
     }
 
-    @GetMapping(path = "book/search",produces = "application/json")
+    @GetMapping(path = "books/search",produces = "application/json")
     @ResponseBody
     public ResponseEntity<List<Book>> searchBooks(@RequestParam(required = true) String q){
         List<Book> bookList = bookService.searchBooks(q);
         return ResponseEntity.ok().body(bookList);
+    }
+
+    @PostMapping(path = "books/issue",consumes = "application/json",produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<BookLoan> issueBook(@RequestBody BookIssueDTO bookIssueDTO){
+        BookLoan bookLoan =  bookService.issueBook(bookIssueDTO);
+        return ResponseEntity.ok().body(bookLoan);
     }
 
 

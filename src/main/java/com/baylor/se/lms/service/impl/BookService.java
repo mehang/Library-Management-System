@@ -2,7 +2,9 @@ package com.baylor.se.lms.service.impl;
 
 import com.baylor.se.lms.data.*;
 import com.baylor.se.lms.dto.BookDTO;
+import com.baylor.se.lms.dto.BookIssueDTO;
 import com.baylor.se.lms.dto.BookRequestDTO;
+import com.baylor.se.lms.exception.BadRequestException;
 import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.exception.NotFoundException;
 import com.baylor.se.lms.service.IBookService;
@@ -115,10 +117,9 @@ public class BookService implements IBookService {
         bookLoan.setDateOfReturn(date.getTime());
 
         //Creating Booklog
-        BookLog bookLog = new BookLog();
-        bookLog.setAction(BookLog.Action.REQUEST);
-        bookLog.setTimeStamp(date.getTime());
-        bookLog.setBookLoan(bookLoan);
+
+        //Setting BookLoan
+        BookLog bookLog = createBookLog(BookLog.Action.REQUEST,bookLoan);
         Set<BookLog> bookLogSet =  new HashSet<>();
         bookLogSet.add(bookLog);
         bookLoan.setLog(bookLogSet);
@@ -132,7 +133,43 @@ public class BookService implements IBookService {
         return bookRepository.findBooksBySpecificationNameContaining(bookName);
     }
 
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public BookLoan issueBook(BookIssueDTO bookIssueDTO){
+        Book issueBook =  getBook(bookIssueDTO.getBookId());
 
+        BookLoan bookLoan = bookLoanRepository.findByBook(issueBook);
+        if (bookLoan == null){
+            throw new NotFoundException();
+        }
+        else if (bookLoan.getIssuedBy() != null) {
+            throw new BadRequestException();
+        }
+
+        Librarian librarian= (Librarian) librarianService.getUser(bookIssueDTO.getUserId());
+        bookLoan.setIssuedBy(librarian);
+        bookLoan.setStatus(BookLoan.LoanStatus.ISSUED);
+        BookLog bookLog =createBookLog(BookLog.Action.ISSUED,bookLoan);
+        Set<BookLog> bookLogSet =  bookLoan.getLog();
+        bookLogSet.add(bookLog);
+        bookLoan.setLog(bookLogSet);
+        bookLoanRepository.save(bookLoan);
+        return bookLoan;
+    }
+
+
+
+
+    private BookLog createBookLog(BookLog.Action bookStatus, BookLoan bookLoan){
+        Calendar date = Calendar.getInstance();
+        date.setTimeZone(TimeZone.getTimeZone("CST"));
+        BookLog bookLog = new BookLog();
+        bookLog.setAction(bookStatus);
+        bookLog.setTimeStamp(date.getTime());
+        bookLog.setBookLoan(bookLoan);
+        return bookLog;
+
+    }
     private String generateNewSerial(String isbn, int counter){
         String serialNumber = isbn.concat("Book");
         return  serialNumber.concat(String.valueOf(counter));
