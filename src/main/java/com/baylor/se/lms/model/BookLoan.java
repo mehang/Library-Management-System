@@ -13,7 +13,7 @@ public class BookLoan implements Serializable {
     public enum LoanStatus {
         REQUESTED,
         ISSUED,
-        GRANTED,
+        RETURNED,
     }
 
     @Id

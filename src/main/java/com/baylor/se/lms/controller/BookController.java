@@ -1,10 +1,7 @@
 package com.baylor.se.lms.controller;
 
 
-import com.baylor.se.lms.dto.BookAddDTO;
-import com.baylor.se.lms.dto.BookDTO;
-import com.baylor.se.lms.dto.BookIssueDTO;
-import com.baylor.se.lms.dto.BookRequestDTO;
+import com.baylor.se.lms.dto.*;
 import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.model.BookLoan;
 import com.baylor.se.lms.service.impl.BookService;
@@ -74,6 +71,13 @@ public class BookController {
         BookLoan bookLoan =  bookService.issueBook(bookIssueDTO);
         return ResponseEntity.ok().body(bookLoan);
     }
+    @PostMapping(path = "books/return",consumes = "application/json",produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<BookLoan> issueBook(@RequestBody BookReturnDTO bookReturnDTO){
+        BookLoan bookLoan =  bookService.returnBook(bookReturnDTO);
+        return ResponseEntity.ok().body(bookLoan);
+    }
+
 
 
 

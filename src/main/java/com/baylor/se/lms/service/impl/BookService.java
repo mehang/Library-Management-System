@@ -4,6 +4,7 @@ import com.baylor.se.lms.data.*;
 import com.baylor.se.lms.dto.BookDTO;
 import com.baylor.se.lms.dto.BookIssueDTO;
 import com.baylor.se.lms.dto.BookRequestDTO;
+import com.baylor.se.lms.dto.BookReturnDTO;
 import com.baylor.se.lms.exception.BadRequestException;
 import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.exception.NotFoundException;
@@ -102,6 +103,12 @@ public class BookService implements IBookService {
     @Transactional(rollbackOn = Exception.class)
     public BookLoan requestForBook(BookRequestDTO bookRequestDTO) {
         Book requestBook = getBook(bookRequestDTO.getBookId());
+
+        if (requestBook.getStatus() == Book.BookStatus.NOT_AVAILABLE){
+            throw new BadRequestException();
+        }
+        requestBook.setStatus(Book.BookStatus.NOT_AVAILABLE);
+        updateBook(requestBook);
         Student student  = (Student) studentService.getUser(bookRequestDTO.getUserId());
 
         Calendar date = Calendar.getInstance();
@@ -116,15 +123,13 @@ public class BookService implements IBookService {
         date.add(Calendar.MONTH,3);
         bookLoan.setDateOfReturn(date.getTime());
 
-        //Creating Booklog
-
-        //Setting BookLoan
         BookLog bookLog = createBookLog(BookLog.Action.REQUEST,bookLoan);
         Set<BookLog> bookLogSet =  new HashSet<>();
         bookLogSet.add(bookLog);
         bookLoan.setLog(bookLogSet);
 
         bookLoanRepository.save(bookLoan);
+
         return bookLoan;
 
     }
@@ -137,7 +142,9 @@ public class BookService implements IBookService {
     @Transactional(rollbackOn = Exception.class)
     public BookLoan issueBook(BookIssueDTO bookIssueDTO){
         Book issueBook =  getBook(bookIssueDTO.getBookId());
-
+        if (issueBook == null){
+            throw new NotFoundException();
+        }
         BookLoan bookLoan = bookLoanRepository.findByBook(issueBook);
         if (bookLoan == null){
             throw new NotFoundException();
@@ -157,6 +164,34 @@ public class BookService implements IBookService {
         return bookLoan;
     }
 
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public BookLoan returnBook(BookReturnDTO bookReturnDTO){
+        Book returnBook =getBook(bookReturnDTO.getBookId());
+        BookLoan bookLoan = bookLoanRepository.findByBook(returnBook);
+        if (bookLoan == null){
+            throw new NotFoundException();
+        }
+        else if (bookLoan.getIssuedBy() == null) {
+            throw new BadRequestException();
+        }
+
+        bookLoan.setStatus(BookLoan.LoanStatus.RETURNED);
+        Calendar date = Calendar.getInstance();
+        date.setTimeZone(TimeZone.getTimeZone("CST"));
+        bookLoan.setActualDateOfReturn(date.getTime());
+
+
+        // CREATE BOOK LOG
+        BookLog bookLog =createBookLog(BookLog.Action.RETURN,bookLoan);
+        Set<BookLog> bookLogSet =  bookLoan.getLog();
+        bookLogSet.add(bookLog);
+        bookLoan.setLog(bookLogSet);
+        bookLoanRepository.save(bookLoan);
+        returnBook.setStatus(Book.BookStatus.AVAILABLE);
+        updateBook(returnBook);
+        return bookLoan;
+    }
 
 
 
