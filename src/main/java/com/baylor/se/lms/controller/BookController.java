@@ -60,4 +60,13 @@ public class BookController {
         return  ResponseEntity.ok().body(bookLoan);
     }
 
+    @GetMapping(path = "book/search",produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<List<Book>> searchBooks(@RequestParam(required = true) String q){
+        List<Book> bookList = bookService.searchBooks(q);
+        return ResponseEntity.ok().body(bookList);
+    }
+
+
+
 }

@@ -14,5 +14,6 @@ public interface IBookService {
     public void updateBook(Book book);
     public Book increaseBook(String isbn, long librarianId);
     public BookLoan requestForBook(BookRequestDTO bookRequestDTO);
+    public List<Book> searchBooks(String bookName);
 
 }

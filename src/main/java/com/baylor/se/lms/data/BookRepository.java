@@ -13,5 +13,6 @@ public interface BookRepository extends PagingAndSortingRepository<Book,Long> {
     Optional<Book> findBookById(long id);
 
     List<Book> findBooksBySerialNoContaining(String isbn);
+    List<Book> findBooksBySpecificationNameContaining(String name);
 
 }

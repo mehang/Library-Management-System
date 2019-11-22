@@ -123,9 +123,13 @@ public class BookService implements IBookService {
         bookLogSet.add(bookLog);
         bookLoan.setLog(bookLogSet);
 
-         bookLoanRepository.save(bookLoan);
-         return bookLoan;
+        bookLoanRepository.save(bookLoan);
+        return bookLoan;
 
+    }
+    @Override
+    public List<Book> searchBooks(String bookName){
+        return bookRepository.findBooksBySpecificationNameContaining(bookName);
     }
 
 
