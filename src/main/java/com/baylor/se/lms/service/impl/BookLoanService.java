@@ -1,21 +1,26 @@
 package com.baylor.se.lms.service.impl;
 
 import com.baylor.se.lms.data.BookLoanRepository;
+import com.baylor.se.lms.data.BookRepository;
+import com.baylor.se.lms.data.UserRepository;
+import com.baylor.se.lms.exception.BadRequestException;
 import com.baylor.se.lms.exception.NotFoundException;
 import com.baylor.se.lms.model.BookLoan;
+import com.baylor.se.lms.model.Student;
+import com.baylor.se.lms.model.User;
 import com.baylor.se.lms.service.IBookLoanService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class BookLoanService implements IBookLoanService {
 
     @Autowired
     BookLoanRepository bookLoanRepository;
-    @Override
-    public BookLoan saveBookLoan(BookLoan bookLoan) {
-        return bookLoanRepository.save(bookLoan);
-    }
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public BookLoan getBookLoan(Long id) {
@@ -25,14 +30,16 @@ public class BookLoanService implements IBookLoanService {
     }
 
     @Override
-    public List<BookLoan> getBooks() {
-        List<BookLoan>  bookLoans = (List<BookLoan>)bookLoanRepository.findAll();
-        bookLoans.removeIf(BookLoan::isDeleteFlag);
-        return bookLoans;
+    public List<BookLoan> getBookLoanByUser(String username){
+        User student =  userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new);
+        if (!student.getDecriminatorValue().equals("student")){
+            throw new BadRequestException();
+        }
+        return bookLoanRepository.findAllByRequestedBy(student);
     }
 
     @Override
-    public void updateBook(BookLoan bookLoan) {
-        bookLoanRepository.save(bookLoan);
+    public List<BookLoan> getBookLoanByBook(long bookId) {
+        return null;
     }
 }

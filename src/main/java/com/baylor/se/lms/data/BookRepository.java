@@ -12,6 +12,8 @@ public interface BookRepository extends PagingAndSortingRepository<Book,Long> {
     @Query("select  B from Book B where B.id = ?1 and B.deleteFlag = false")
     Optional<Book> findBookById(long id);
 
+
+
     List<Book> findBooksBySerialNoContaining(String isbn);
     List<Book> findBooksBySpecificationNameContaining(String name);
 

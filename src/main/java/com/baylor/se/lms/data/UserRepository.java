@@ -10,4 +10,11 @@ import java.util.Optional;
 
 @Transactional
 public interface UserRepository extends UserBaseRepository<User>{
+    @Query("select  U from User U where U.id = ?1 and U.deleteFlag = false")
+    Optional<User> findUserById(Long id );
+
+    @Query("select  U from User U where U.username = ?1 and U.deleteFlag = false")
+    Optional<User> findUserByUsername(String username );
+
+
 }

@@ -6,8 +6,8 @@ import com.baylor.se.lms.model.BookLoan;
 import java.util.List;
 
 public interface IBookLoanService {
-    public BookLoan saveBookLoan(BookLoan bookLoan);
-    public BookLoan getBookLoan(Long id);
-    public List<BookLoan> getBooks();
-    public void updateBook(BookLoan bookLoan);
+   public List<BookLoan> getBookLoanByUser(String username);
+   public List<BookLoan> getBookLoanByBook(long bookId);
+   public BookLoan getBookLoan(Long id);
+
 }

@@ -2,10 +2,7 @@ package com.baylor.se.lms.controller;
 
 import com.baylor.se.lms.dto.UserDTO;
 import com.baylor.se.lms.model.*;
-import com.baylor.se.lms.service.impl.AdminService;
-import com.baylor.se.lms.service.impl.LibrarianService;
-import com.baylor.se.lms.service.impl.StudentService;
-import com.baylor.se.lms.service.impl.UserService;
+import com.baylor.se.lms.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,6 +28,8 @@ public class UserController {
 
     @Autowired
     AdminService adminService;
+    @Autowired
+    BookLoanService bookLoanService;
 
 //    @GetMapping(path="/users", produces = "application/json")
 //    public ResponseEntity<User> getUserByUsername(){
@@ -153,12 +152,23 @@ public class UserController {
 
 //todo: add delete
 
-    private User convertDTOtoUser(UserDTO userDTO, User user){
+    /**
+     * Get BookLoan services according to user
+     *
+     */
+    @GetMapping(path = "/users/{username}/bookloans", produces="application/json")
+    @ResponseBody
+    public ResponseEntity<List<BookLoan>>getBookLoans(@PathVariable String username){
+        List<BookLoan> bookLoans = bookLoanService.getBookLoanByUser(username);
+        return ResponseEntity.ok().body(bookLoans);
+    }
+
+     private User convertDTOtoUser(UserDTO userDTO, User user){
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
         user.setName(userDTO.getName());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         return  user;
-    }
+     }
 }
