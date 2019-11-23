@@ -145,7 +145,7 @@ public class BookService implements IBookService {
         if (issueBook == null){
             throw new NotFoundException();
         }
-        BookLoan bookLoan = bookLoanRepository.findByBook(issueBook);
+        BookLoan bookLoan = bookLoanRepository.findByBookAndStatus(issueBook,BookLoan.LoanStatus.REQUESTED);
         if (bookLoan == null){
             throw new NotFoundException();
         }
@@ -168,7 +168,7 @@ public class BookService implements IBookService {
     @Transactional(rollbackOn = Exception.class)
     public BookLoan returnBook(BookReturnDTO bookReturnDTO){
         Book returnBook =getBook(bookReturnDTO.getBookId());
-        BookLoan bookLoan = bookLoanRepository.findByBook(returnBook);
+        BookLoan bookLoan = bookLoanRepository.findByBookAndStatus(returnBook, BookLoan.LoanStatus.ISSUED);
         if (bookLoan == null){
             throw new NotFoundException();
         }

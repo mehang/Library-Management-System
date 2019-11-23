@@ -49,11 +49,6 @@ public class User {
 
 
 
-    @Transient
-    public String getDecriminatorValue() {
-        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
-    }
-
 
 
     public User() {
@@ -130,4 +125,10 @@ public User(User user){
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    public String getDecriminatorValue() {
+        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
+    }
+
+
 }

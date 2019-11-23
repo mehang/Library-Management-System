@@ -4,6 +4,7 @@ package com.baylor.se.lms.controller;
 import com.baylor.se.lms.dto.*;
 import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.model.BookLoan;
+import com.baylor.se.lms.service.impl.BookLoanService;
 import com.baylor.se.lms.service.impl.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ public class BookController {
 
     @Autowired
     BookService bookService;
+
+    @Autowired
+    BookLoanService bookLoanService;
 
     @GetMapping(path="/books", produces="application/json")
     public ResponseEntity<List<Book>> getBooks(){
@@ -73,11 +77,17 @@ public class BookController {
     }
     @PostMapping(path = "books/return",consumes = "application/json",produces = "application/json")
     @ResponseBody
-    public ResponseEntity<BookLoan> issueBook(@RequestBody BookReturnDTO bookReturnDTO){
+    public ResponseEntity<BookLoan> returnBook(@RequestBody BookReturnDTO bookReturnDTO){
         BookLoan bookLoan =  bookService.returnBook(bookReturnDTO);
         return ResponseEntity.ok().body(bookLoan);
     }
 
+    @GetMapping(path = "books/{id:[0-9][0-9]*}/bookloans",produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<List<BookLoan>> searchBooks(@PathVariable Long id){
+        List<BookLoan> bookList = bookLoanService.getBookLoanByBook(id);
+        return ResponseEntity.ok().body(bookList);
+    }
 
 
 

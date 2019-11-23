@@ -5,6 +5,7 @@ import com.baylor.se.lms.data.BookRepository;
 import com.baylor.se.lms.data.UserRepository;
 import com.baylor.se.lms.exception.BadRequestException;
 import com.baylor.se.lms.exception.NotFoundException;
+import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.model.BookLoan;
 import com.baylor.se.lms.model.Student;
 import com.baylor.se.lms.model.User;
@@ -22,6 +23,9 @@ public class BookLoanService implements IBookLoanService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    BookRepository bookRepo;
+
     @Override
     public BookLoan getBookLoan(Long id) {
 
@@ -32,7 +36,7 @@ public class BookLoanService implements IBookLoanService {
     @Override
     public List<BookLoan> getBookLoanByUser(String username){
         User student =  userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new);
-        if (!student.getDecriminatorValue().equals("student")){
+        if (!student.getDecriminatorValue().equalsIgnoreCase("student")){
             throw new BadRequestException();
         }
         return bookLoanRepository.findAllByRequestedBy(student);
@@ -40,6 +44,8 @@ public class BookLoanService implements IBookLoanService {
 
     @Override
     public List<BookLoan> getBookLoanByBook(long bookId) {
-        return null;
+        Book book = bookRepo.findBookById(bookId).orElseThrow(NotFoundException::new);
+        List<BookLoan> bookLoans = bookLoanRepository.findAllByBook(book);
+        return bookLoans;
     }
 }

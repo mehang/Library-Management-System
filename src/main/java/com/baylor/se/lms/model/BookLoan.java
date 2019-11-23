@@ -42,7 +42,7 @@ public class BookLoan implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Librarian issuedBy;
 
-    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<BookLog> log = new HashSet<>();
 
 
