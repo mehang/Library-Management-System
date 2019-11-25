@@ -56,4 +56,10 @@ public class AdminService implements IUserService {
         admin.setDeleteFlag(true);
         adminRepository.save(admin);
     }
+
+    public void changePassword(long id, String newPassword){
+        Admin admin = adminRepository.findById(id).orElseThrow(NotFoundException::new);
+        admin.setPassword(bcryptEncoder.encode(newPassword));
+        adminRepository.save(admin);
+    }
 }

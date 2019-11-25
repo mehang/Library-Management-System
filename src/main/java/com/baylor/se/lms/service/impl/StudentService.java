@@ -45,12 +45,20 @@ public class StudentService implements IUserService {
     }
 
     @Override
-    public User updateUser(User user){ return studentRepository.save((Student) user);};
+    public User updateUser(User user){
+        return studentRepository.save((Student) user);
+    }
 
     @Override
     public void deleteUser(Long id){
         Student student =   studentRepository.findById(id).orElseThrow(NotFoundException::new);
         student.setDeleteFlag(true);
+        studentRepository.save(student);
+    }
+
+    public void changePassword(long id, String newPassword){
+        Student student = studentRepository.findById(id).orElseThrow(NotFoundException::new);
+        student.setPassword(bcryptEncoder.encode(newPassword));
         studentRepository.save(student);
     }
 }

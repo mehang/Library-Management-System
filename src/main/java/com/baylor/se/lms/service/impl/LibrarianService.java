@@ -56,4 +56,10 @@ public class LibrarianService implements IUserService {
         librarian.setDeleteFlag(true);
         librarianRepository.save(librarian);
     }
+
+    public void changePassword(long id, String newPassword){
+        Librarian librarian = librarianRepository.findById(id).orElseThrow(NotFoundException::new);
+        librarian.setPassword(bcryptEncoder.encode(newPassword));
+        librarianRepository.save(librarian);
+    }
 }

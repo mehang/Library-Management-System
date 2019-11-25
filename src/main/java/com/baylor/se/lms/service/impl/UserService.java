@@ -45,6 +45,10 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(userObj.getUsername(), userObj.getPassword(), getAuthority(userObj));
     }
 
+    public Optional<User> findByUsername(String username){
+        return userRepository.findByUsername(username);
+    }
+
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         user.getRoles().forEach(role -> {
