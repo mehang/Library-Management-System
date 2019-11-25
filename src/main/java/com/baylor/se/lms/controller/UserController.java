@@ -4,10 +4,7 @@ import com.baylor.se.lms.dto.PasswordChangeDTO;
 import com.baylor.se.lms.dto.UserDTO;
 import com.baylor.se.lms.dto.UserUpdateDTO;
 import com.baylor.se.lms.model.*;
-import com.baylor.se.lms.service.impl.AdminService;
-import com.baylor.se.lms.service.impl.LibrarianService;
-import com.baylor.se.lms.service.impl.StudentService;
-import com.baylor.se.lms.service.impl.UserService;
+import com.baylor.se.lms.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +31,8 @@ public class UserController {
 
     @Autowired
     AdminService adminService;
+    @Autowired
+    BookLoanService bookLoanService;
 
 //    @GetMapping(path="/users", produces = "application/json")
 //    public ResponseEntity<User> getUserByUsername(){
@@ -48,22 +47,22 @@ public class UserController {
 //        return ResponseEntity.ok().body(user);
 //    }
 
-    @PostMapping(path="/users/change-password", consumes = "application/json", produces = "application/json")
-    public ResponseEntity changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO){
+    @PostMapping(path = "/users/change-password", consumes = "application/json", produces = "application/json")
+    public ResponseEntity changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO) {
         Long id = passwordChangeDTO.getId();
         String newPassword = passwordChangeDTO.getPassword1();
         String userType = passwordChangeDTO.getUserType();
-        if (!passwordChangeDTO.getPassword1().equals(passwordChangeDTO.getPassword2())){
+        if (!passwordChangeDTO.getPassword1().equals(passwordChangeDTO.getPassword2())) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Password1 and password2 don't match with each other.");
         }
-        if (userType.equals("STUDENT")){
-            studentService.changePassword(id,newPassword);
-        } else if(userType.equals("LIBRARIAN")){
-            librarianService.changePassword(id,newPassword);
+        if (userType.equals("STUDENT")) {
+            studentService.changePassword(id, newPassword);
+        } else if (userType.equals("LIBRARIAN")) {
+            librarianService.changePassword(id, newPassword);
         } else {
-            adminService.changePassword(id,newPassword);
+            adminService.changePassword(id, newPassword);
         }
         return ResponseEntity.ok().body(true);
     }
@@ -84,18 +83,12 @@ public class UserController {
     @PostMapping(path = "/users/students", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity addStudent(@RequestBody UserDTO userDTO) {
-        if (!userDTO.getPassword1().equals(userDTO.getPassword2())){
+        if (!userDTO.getPassword1().equals(userDTO.getPassword2())) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Password1 and password2 don't match with each other.");
         }
-
-        Student student = new Student();
-        student.setUsername(userDTO.getUsername());
-        student.setEmail(userDTO.getEmail());
-        student.setPassword(userDTO.getPassword1());
-        student.setName(userDTO.getName());
-        student.setPhoneNumber(userDTO.getPhoneNumber());
+        Student student = (Student) convertDTOtoUser(userDTO, new Student());
         User registeredStudent = studentService.registerUser(student);
         return ResponseEntity.ok().body(registeredStudent);
     }
@@ -103,7 +96,7 @@ public class UserController {
     @PutMapping(path = "/users/students/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity updateStudent(@RequestBody UserUpdateDTO userUpdateDTO, @PathVariable Long id) {
-        Student student = (Student)studentService.getUser(userUpdateDTO.getId());
+        Student student = (Student) studentService.getUser(userUpdateDTO.getId());
         student.setUsername(userUpdateDTO.getUsername());
         student.setEmail(userUpdateDTO.getEmail());
         student.setName(userUpdateDTO.getName());
@@ -129,25 +122,20 @@ public class UserController {
     @PostMapping(path = "/users/librarians", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity addLibrarian(@RequestBody UserDTO userDTO) {
-        if (!userDTO.getPassword1().equals(userDTO.getPassword2())){
+        if (!userDTO.getPassword1().equals(userDTO.getPassword2())) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Password1 and password2 don't match with each other.");
         }
-        Librarian librarian = new Librarian();
-        librarian.setUsername(userDTO.getUsername());
-        librarian.setEmail(userDTO.getEmail());
-        librarian.setPassword(userDTO.getPassword1());
-        librarian.setName(userDTO.getName());
-        librarian.setPhoneNumber(userDTO.getPhoneNumber());
-        User registeredLibrarian = librarianService.registerUser(librarian);
-        return ResponseEntity.ok().body(registeredLibrarian);
+        Librarian librarian = (Librarian) convertDTOtoUser(userDTO, new Librarian());
+        librarianService.registerUser(librarian);
+        return ResponseEntity.ok().body(librarian);
     }
 
     @PutMapping(path = "/users/librarians/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity updateLibrarian(@RequestBody UserUpdateDTO userUpdateDTO, @PathVariable Long id) {
-        Librarian librarian = (Librarian)librarianService.getUser(userUpdateDTO.getId());
+        Librarian librarian = (Librarian) librarianService.getUser(userUpdateDTO.getId());
         librarian.setUsername(userUpdateDTO.getUsername());
         librarian.setEmail(userUpdateDTO.getEmail());
         librarian.setName(userUpdateDTO.getName());
@@ -173,17 +161,12 @@ public class UserController {
     @PostMapping(path = "/users/admins", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity addAdmin(@RequestBody UserDTO userDTO) {
-        if (!userDTO.getPassword1().equals(userDTO.getPassword2())){
+        if (!userDTO.getPassword1().equals(userDTO.getPassword2())) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Password1 and password2 don't match with each other.");
         }
-        Admin admin = new Admin();
-        admin.setUsername(userDTO.getUsername());
-        admin.setEmail(userDTO.getEmail());
-        admin.setPassword(userDTO.getPassword1 ());
-        admin.setName(userDTO.getName());
-        admin.setPhoneNumber(userDTO.getPhoneNumber());
+        Admin admin = (Admin) convertDTOtoUser(userDTO, new Admin());
         User registeredAdmin = adminService.registerUser(admin);
         return ResponseEntity.ok().body(registeredAdmin);
     }
@@ -201,4 +184,23 @@ public class UserController {
     }
 
 //todo: add delete
+
+    /**
+     * Get BookLoan services according to user
+     */
+    @GetMapping(path = "/users/{username}/bookloans", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<List<BookLoan>> getBookLoans(@PathVariable String username) {
+        List<BookLoan> bookLoans = bookLoanService.getBookLoanByUser(username);
+        return ResponseEntity.ok().body(bookLoans);
+    }
+
+    private User convertDTOtoUser(UserDTO userDTO, User user) {
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(userDTO.getPassword1());
+        user.setName(userDTO.getName());
+        user.setPhoneNumber(userDTO.getPhoneNumber());
+        return user;
+    }
 }

@@ -40,8 +40,8 @@ public class User {
     private boolean deleteFlag = false;
 
 // discriminator value for using as role
-    @Column(name = "DISCRIMINATOR", insertable = false, updatable = false)
-    private String type;
+//    @Column(name = "DISCRIMINATOR", insertable = false, updatable = false)
+//    private String type;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -120,7 +120,13 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-    public String getType() {
-        return type;
+
+//    public String getType() {
+//        return type;
+//    }
+
+    public String getDiscriminatorValue() {
+        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
     }
+
 }

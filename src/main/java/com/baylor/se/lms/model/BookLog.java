@@ -1,5 +1,7 @@
 package com.baylor.se.lms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -10,7 +12,8 @@ import java.util.Objects;
 public class BookLog implements Serializable {
     public enum Action{
         RETURN,
-        BORROW
+        ISSUED,
+        REQUEST
     }
     @Id
     @GeneratedValue
@@ -22,10 +25,10 @@ public class BookLog implements Serializable {
     private Date timeStamp;
 
     @OneToOne
+    @JsonIgnore
     private BookLoan bookLoan;
 
-    @ManyToOne
-    private Book book;
+
     @Column(columnDefinition = "BOOLEAN")
     private boolean deleteFlag = false;
 
@@ -60,5 +63,25 @@ public class BookLog implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(this.getId(), this.getTimeStamp());
+    }
+
+    public Action getAction() {
+        return action;
+    }
+
+    public void setAction(Action action) {
+        this.action = action;
+    }
+
+    public void setTimeStamp(Date timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public BookLoan getBookLoan() {
+        return bookLoan;
+    }
+
+    public void setBookLoan(BookLoan bookLoan) {
+        this.bookLoan = bookLoan;
     }
 }

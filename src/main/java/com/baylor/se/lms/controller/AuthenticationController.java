@@ -52,7 +52,7 @@ public class AuthenticationController {
             authModel.put("token", token);
             authModel.put("username", loggedUser.getUsername());
             authModel.put("userPK", loggedUser.getId());
-            authModel.put("type", loggedUser.getType());
+            authModel.put("type", loggedUser.getDiscriminatorValue());
         }
         return ResponseEntity.ok(authModel);
     }

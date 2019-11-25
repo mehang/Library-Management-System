@@ -26,10 +26,10 @@ public class BookSpecification implements Serializable {
     @Column(unique = true, nullable = false)
     private String isbn;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     private Author author;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REFRESH)
     private Set<BookCategory> bookCategorySet = new HashSet<>();
 
     public String getName() {

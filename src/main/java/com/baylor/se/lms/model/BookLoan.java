@@ -3,14 +3,17 @@ package com.baylor.se.lms.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name="Book_Loan")
 public class BookLoan implements Serializable {
     public enum LoanStatus {
         REQUESTED,
-        GRANTED,
+        ISSUED,
+        RETURNED,
     }
 
     @Id
@@ -33,14 +36,16 @@ public class BookLoan implements Serializable {
     @ManyToOne
     private Book book;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Student requestedBy;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Librarian issuedBy;
 
-    @OneToOne
-    private BookLog log;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<BookLog> log = new HashSet<>();
+
+
     @Column(columnDefinition = "BOOLEAN")
     private boolean deleteFlag = false;
 
@@ -78,5 +83,65 @@ public class BookLoan implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(this.getId(), this.getDateOfRequest());
+    }
+
+    public void setDateOfRequest(Date dateOfRequest) {
+        this.dateOfRequest = dateOfRequest;
+    }
+
+    public Date getDateOfReturn() {
+        return dateOfReturn;
+    }
+
+    public void setDateOfReturn(Date dateOfReturn) {
+        this.dateOfReturn = dateOfReturn;
+    }
+
+    public LoanStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LoanStatus status) {
+        this.status = status;
+    }
+
+    public Date getActualDateOfReturn() {
+        return actualDateOfReturn;
+    }
+
+    public void setActualDateOfReturn(Date actualDateOfReturn) {
+        this.actualDateOfReturn = actualDateOfReturn;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public Student getRequestedBy() {
+        return requestedBy;
+    }
+
+    public void setRequestedBy(Student requestedBy) {
+        this.requestedBy = requestedBy;
+    }
+
+    public Librarian getIssuedBy() {
+        return issuedBy;
+    }
+
+    public void setIssuedBy(Librarian issuedBy) {
+        this.issuedBy = issuedBy;
+    }
+
+    public Set<BookLog> getLog() {
+        return log;
+    }
+
+    public void setLog(Set<BookLog> log) {
+        this.log = log;
     }
 }
