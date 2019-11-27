@@ -8,5 +8,5 @@ public interface IAuthorService {
     public Author registerAuthor(Author author);
     public Author getAuthor(Long id);
     public List<Author> getAuthors();
-    public void updateAuthor(Author author);
+    public Author updateAuthor(Author author);
 }

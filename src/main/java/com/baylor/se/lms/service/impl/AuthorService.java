@@ -32,7 +32,7 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public void updateAuthor(Author author) {
-        authorRepository.save(author);
+    public Author updateAuthor(Author author) {
+        return authorRepository.save(author);
     }
 }

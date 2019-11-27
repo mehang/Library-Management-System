@@ -9,5 +9,5 @@ public interface IBookSpecificationService {
     public BookSpecification saveBookSpec(BookSpecification bookSpecification);
     public BookSpecification getBookSpec(Long id);
     public List<BookSpecification> getBookspec();
-    public void updateBookSpec(BookSpecification book);
+    public BookSpecification updateBookSpec(BookSpecification book);
 }

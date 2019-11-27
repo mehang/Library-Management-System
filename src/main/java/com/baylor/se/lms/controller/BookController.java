@@ -3,7 +3,9 @@ package com.baylor.se.lms.controller;
 
 import com.baylor.se.lms.dto.*;
 import com.baylor.se.lms.model.Book;
+import com.baylor.se.lms.model.BookCategory;
 import com.baylor.se.lms.model.BookLoan;
+import com.baylor.se.lms.service.impl.BookCategoryService;
 import com.baylor.se.lms.service.impl.BookLoanService;
 import com.baylor.se.lms.service.impl.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class BookController {
 
     @Autowired
     BookLoanService bookLoanService;
+
+    @Autowired
+    BookCategoryService bookCategoryService;
 
     @GetMapping(path="/books", produces="application/json")
     public ResponseEntity<List<Book>> getBooks(){
@@ -44,8 +49,8 @@ public class BookController {
     @PutMapping(path="/books/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity<Book> updateBook(@RequestBody Book book) {
-        bookService.updateBook(book);
-        return ResponseEntity.ok().body(book);
+        Book updatedBook = bookService.updateBook(book);
+        return ResponseEntity.ok().body(updatedBook);
     }
 
     @PostMapping(path = "/books/increase",consumes = "application/json",produces = "application/json")
@@ -89,6 +94,29 @@ public class BookController {
         return ResponseEntity.ok().body(bookList);
     }
 
+    @GetMapping(path = "/books/categories", produces="application/json")
+    public ResponseEntity getCategories(){
+        List<BookCategory> categories = bookCategoryService.getBookCategories();
+        return ResponseEntity.ok().body(categories);
+    }
+    @GetMapping(path="/books/categories/{id:[0-9][0-9]*}", produces="application/json")
+    public ResponseEntity getCategory(@PathVariable Long id) {
+        BookCategory category = bookCategoryService.getBookCategory(id);
+        return ResponseEntity.ok().body(category);
+    }
 
+    @PostMapping(path="/books/categories",consumes = "application/json", produces="application/json")
+    @ResponseBody
+    public ResponseEntity addCategory(@RequestBody BookCategory bookCategory) {
+        BookCategory registeredCategory = bookCategoryService.registerBookCategory(bookCategory);
+        return ResponseEntity.ok().body(registeredCategory);
+    }
+
+    @PutMapping(path="/authors/categories/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity updateCategory(@RequestBody BookCategory bookCategory, @PathVariable Long id) {
+        BookCategory updatedBookCategory = bookCategoryService.updateBookCategory(bookCategory);
+        return ResponseEntity.ok().body(updatedBookCategory);
+    }
 
 }

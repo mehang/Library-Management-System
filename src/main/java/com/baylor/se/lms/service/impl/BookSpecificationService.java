@@ -33,8 +33,8 @@ public class BookSpecificationService implements IBookSpecificationService {
     }
 
     @Override
-    public void updateBookSpec(BookSpecification book) {
-        bookSpecificationRepository.save(book);
+    public BookSpecification updateBookSpec(BookSpecification book)  {
+        return bookSpecificationRepository.save(book);
     }
 
 

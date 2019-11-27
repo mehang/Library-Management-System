@@ -13,7 +13,7 @@ public interface IBookService {
      Book registerBook(BookDTO book);
      Book getBook(Long id);
      List<Book> getBooks();
-     void updateBook(Book book);
+     Book updateBook(Book book);
      Book increaseBook(String isbn, long librarianId);
      BookLoan requestForBook(BookRequestDTO bookRequestDTO);
      List<Book> searchBooks(String bookName);

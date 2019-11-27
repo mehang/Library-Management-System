@@ -37,8 +37,8 @@ public class AuthorController {
     @PutMapping(path="/authors/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity<Author> updateAuthor(@RequestBody Author author, @PathVariable Long id) {
-        authorService.updateAuthor(author);
-        return ResponseEntity.ok().body(author);
+        Author updatedAuthor = authorService.updateAuthor(author);
+        return ResponseEntity.ok().body(updatedAuthor);
     }
 
 }
