@@ -1,5 +1,7 @@
 package com.baylor.se.lms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -14,6 +16,7 @@ public class Author implements Serializable {
     @Column(unique = true)
     private String name;
 
+    @JsonIgnore
     @Column(columnDefinition = "BOOLEAN")
     private Boolean deleteFlag = false;
 

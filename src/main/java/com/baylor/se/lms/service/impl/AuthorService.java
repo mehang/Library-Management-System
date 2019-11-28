@@ -35,4 +35,11 @@ public class AuthorService implements IAuthorService {
     public Author updateAuthor(Author author) {
         return authorRepository.save(author);
     }
+
+    @Override
+    public void deleteAuthor(Long id) {
+        Author author = getAuthor(id);
+        author.setDeleteFlag(true);
+        updateAuthor(author);
+    }
 }

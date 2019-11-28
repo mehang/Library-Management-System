@@ -9,4 +9,5 @@ public interface IAuthorService {
     public Author getAuthor(Long id);
     public List<Author> getAuthors();
     public Author updateAuthor(Author author);
+    public void deleteAuthor(Long id);
 }

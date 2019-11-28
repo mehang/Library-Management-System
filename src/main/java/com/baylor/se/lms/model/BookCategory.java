@@ -1,5 +1,7 @@
 package com.baylor.se.lms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -19,6 +21,7 @@ public class BookCategory implements Serializable {
     @ManyToMany
     private Set<BookSpecification> bookSpecificationSet = new HashSet<>();
 
+    @JsonIgnore
     @Column(columnDefinition = "BOOLEAN")
     private boolean deleteFlag = false;
 

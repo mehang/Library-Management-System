@@ -34,4 +34,11 @@ public class BookCategoryService implements IBookCategoryService {
     public BookCategory updateBookCategory(BookCategory category) {
         return bookCategoryRepository.save(category);
     }
+
+    @Override
+    public void deleteBookCategory(Long id){
+        BookCategory category = getBookCategory(id);
+        category.setDeleteFlag(true);
+        updateBookCategory(category);
+    }
 }

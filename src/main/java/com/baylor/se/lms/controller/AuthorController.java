@@ -3,6 +3,7 @@ package com.baylor.se.lms.controller;
 import com.baylor.se.lms.model.Author;
 import com.baylor.se.lms.service.impl.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,12 @@ public class AuthorController {
     public ResponseEntity<Author> updateAuthor(@RequestBody Author author, @PathVariable Long id) {
         Author updatedAuthor = authorService.updateAuthor(author);
         return ResponseEntity.ok().body(updatedAuthor);
+    }
+
+    @DeleteMapping(path="/authors/{id:[0-9][0-9]*}")
+    public ResponseEntity deleteAuthor(@PathVariable Long id){
+        authorService.deleteAuthor(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }

@@ -9,6 +9,7 @@ import com.baylor.se.lms.service.impl.BookCategoryService;
 import com.baylor.se.lms.service.impl.BookLoanService;
 import com.baylor.se.lms.service.impl.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -112,11 +113,17 @@ public class BookController {
         return ResponseEntity.ok().body(registeredCategory);
     }
 
-    @PutMapping(path="/authors/categories/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
+    @PutMapping(path="/books/categories/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity updateCategory(@RequestBody BookCategory bookCategory, @PathVariable Long id) {
         BookCategory updatedBookCategory = bookCategoryService.updateBookCategory(bookCategory);
         return ResponseEntity.ok().body(updatedBookCategory);
+    }
+
+    @DeleteMapping(path="/books/categories/{id:[0-9][0-9]*}")
+    public ResponseEntity deleteCategory(@PathVariable Long id){
+        bookCategoryService.deleteBookCategory(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }

@@ -9,4 +9,5 @@ public interface IBookCategoryService {
     public BookCategory getBookCategory(Long id);
     public List<BookCategory> getBookCategories();
     public BookCategory updateBookCategory(BookCategory category);
+    public void deleteBookCategory(Long id);
 }
