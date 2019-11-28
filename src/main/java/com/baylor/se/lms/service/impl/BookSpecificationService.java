@@ -37,5 +37,7 @@ public class BookSpecificationService implements IBookSpecificationService {
         return bookSpecificationRepository.save(book);
     }
 
-
+    public List<BookSpecification> searchByBookName(String bookName){
+        return bookSpecificationRepository.findAllByNameContaining(bookName);
+    }
 }

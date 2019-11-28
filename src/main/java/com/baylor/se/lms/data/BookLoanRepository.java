@@ -15,4 +15,6 @@ public interface BookLoanRepository extends PagingAndSortingRepository<BookLoan,
     BookLoan findByBookAndIssuedBy(Book book, Librarian librarian);
     List<BookLoan> findAllByBook(Book book);
     List<BookLoan> findAllByRequestedBy(User user);
+    List<BookLoan> findAllByRequestedByAndActualDateOfReturnIsNull(User user);
+
 }

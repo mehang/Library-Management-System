@@ -1,6 +1,7 @@
 package com.baylor.se.lms.data;
 
 import com.baylor.se.lms.model.Book;
+import com.baylor.se.lms.model.BookSpecification;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -15,6 +16,6 @@ public interface BookRepository extends PagingAndSortingRepository<Book,Long> {
 
 
     List<Book> findBooksBySerialNoContaining(String isbn);
-    List<Book> findBooksBySpecificationNameContaining(String name);
+    List<Book> findBooksBySpecificationAndStatusAndDeleteFlagFalse(BookSpecification bookSpec, Book.BookStatus status);
 
 }

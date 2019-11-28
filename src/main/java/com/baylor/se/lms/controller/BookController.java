@@ -70,8 +70,8 @@ public class BookController {
 
     @GetMapping(path = "books/search",produces = "application/json")
     @ResponseBody
-    public ResponseEntity<List<Book>> searchBooks(@RequestParam(required = true) String q){
-        List<Book> bookList = bookService.searchBooks(q);
+    public ResponseEntity<List<SearchDTO>> searchBooks(@RequestParam(required = true) String q){
+        List<SearchDTO> bookList = bookService.searchBooks(q);
         return ResponseEntity.ok().body(bookList);
     }
 

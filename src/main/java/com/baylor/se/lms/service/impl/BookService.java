@@ -1,10 +1,7 @@
 package com.baylor.se.lms.service.impl;
 
 import com.baylor.se.lms.data.*;
-import com.baylor.se.lms.dto.BookDTO;
-import com.baylor.se.lms.dto.BookIssueDTO;
-import com.baylor.se.lms.dto.BookRequestDTO;
-import com.baylor.se.lms.dto.BookReturnDTO;
+import com.baylor.se.lms.dto.*;
 import com.baylor.se.lms.exception.BadRequestException;
 import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.exception.NotFoundException;
@@ -49,6 +46,7 @@ public class BookService implements IBookService {
         bookSpecification.setPublication(book.getPublication());
         bookSpecification.setIsbn(book.getIsbn());
         bookSpecification.setLanguage(book.getLanguage());
+        bookSpecification.setEdition(book.getEdition());
         bookSpecification.setAuthor(authorRepo.findAuthorById(book.getAuthorId()).orElseThrow(NotFoundException::new));
         Set<BookCategory> bookCategorySet =  new HashSet<>();
         book.getBookCategory().forEach( s -> bookCategorySet.add(bookCategoryRepo.findById(s).orElseThrow(NotFoundException::new)));
@@ -110,7 +108,11 @@ public class BookService implements IBookService {
         requestBook.setStatus(Book.BookStatus.NOT_AVAILABLE);
         updateBook(requestBook);
         Student student  = (Student) studentService.getUser(bookRequestDTO.getUserId());
+        int requestedBookCount = totalBookCount(student);
 
+        if (requestedBookCount >= 10){
+            throw  new BadRequestException();
+        }
         Calendar date = Calendar.getInstance();
         date.setTimeZone(TimeZone.getTimeZone("CST"));
 
@@ -134,8 +136,11 @@ public class BookService implements IBookService {
 
     }
     @Override
-    public List<Book> searchBooks(String bookName){
-        return bookRepository.findBooksBySpecificationNameContaining(bookName);
+    public List<SearchDTO> searchBooks(String bookName){
+        List<BookSpecification> bookSpecList = bookSpecificationService.searchByBookName(bookName);
+        List <SearchDTO>  searchDTOS = convertSpecificationToSearchDTO(bookSpecList);
+        return  searchDTOS;
+
     }
 
     @Override
@@ -209,5 +214,29 @@ public class BookService implements IBookService {
         String serialNumber = isbn.concat("Book");
         return  serialNumber.concat(String.valueOf(counter));
 
+    }
+    private int totalBookCount(User user){
+        List<BookLoan> bookLoans = bookLoanRepository.findAllByRequestedByAndActualDateOfReturnIsNull(user);
+        return  bookLoans.size();
+
+    }
+
+    private List<SearchDTO> convertSpecificationToSearchDTO(List<BookSpecification> bookSpecList){
+        List<SearchDTO> searchDTOS = new ArrayList<>();
+        for( BookSpecification bookSpec : bookSpecList){
+            SearchDTO searchDTO = new SearchDTO();
+            List<Book> bookList = bookRepository.findBooksBySpecificationAndStatusAndDeleteFlagFalse(bookSpec, Book.BookStatus.AVAILABLE);
+            searchDTO.setId(bookSpec.getId());
+            searchDTO.setAuthor(bookSpec.getAuthor());
+            searchDTO.setBookCategorySet(bookSpec.getBookCategorySet());
+            searchDTO.setEdition(bookSpec.getEdition());
+            searchDTO.setLanguage(bookSpec.getLanguage());
+            searchDTO.setPublication(bookSpec.getPublication());
+            searchDTO.setName(bookSpec.getName());
+            searchDTO.setIsbn(bookSpec.getIsbn());
+            bookList.forEach( book -> searchDTO.getBookIds().add(book.getId()));
+            searchDTOS.add(searchDTO);
+        }
+        return searchDTOS;
     }
 }

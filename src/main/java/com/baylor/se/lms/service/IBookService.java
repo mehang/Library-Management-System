@@ -1,9 +1,6 @@
 package com.baylor.se.lms.service;
 
-import com.baylor.se.lms.dto.BookDTO;
-import com.baylor.se.lms.dto.BookIssueDTO;
-import com.baylor.se.lms.dto.BookRequestDTO;
-import com.baylor.se.lms.dto.BookReturnDTO;
+import com.baylor.se.lms.dto.*;
 import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.model.BookLoan;
 
@@ -16,7 +13,7 @@ public interface IBookService {
      Book updateBook(Book book);
      Book increaseBook(String isbn, long librarianId);
      BookLoan requestForBook(BookRequestDTO bookRequestDTO);
-     List<Book> searchBooks(String bookName);
+     List<SearchDTO> searchBooks(String bookName);
      BookLoan issueBook(BookIssueDTO bookIssueDTO);
      BookLoan returnBook(BookReturnDTO bookReturnDTO);
 
