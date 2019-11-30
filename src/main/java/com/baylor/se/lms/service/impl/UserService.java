@@ -3,6 +3,7 @@ package com.baylor.se.lms.service.impl;
 import com.baylor.se.lms.data.UserRepository;
 import com.baylor.se.lms.model.CustomUserDetails;
 import com.baylor.se.lms.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class UserService implements UserDetailsService {
 
     @Autowired
@@ -37,6 +39,7 @@ public class UserService implements UserDetailsService {
 //    }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("Get user by username " + username);
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Invalid username or password.");
@@ -50,6 +53,7 @@ public class UserService implements UserDetailsService {
     }
 
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
+        log.info("Role Authority of " + user.getUsername());
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         user.getRoles().forEach(role -> {
             //authorities.add(new SimpleGrantedAuthority(role.getName()));
