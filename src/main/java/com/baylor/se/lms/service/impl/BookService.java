@@ -6,6 +6,7 @@ import com.baylor.se.lms.exception.BadRequestException;
 import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.exception.NotFoundException;
 import com.baylor.se.lms.service.IBookService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
+@Slf4j
 public class BookService implements IBookService {
     @Autowired
     BookRepository bookRepository;
@@ -40,7 +42,7 @@ public class BookService implements IBookService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public Book registerBook(BookDTO book){
-
+        log.info("Creating new  Book ");
         BookSpecification bookSpecification =  new BookSpecification();
         bookSpecification.setName(book.getName());
         bookSpecification.setPublication(book.getPublication());
@@ -53,6 +55,8 @@ public class BookService implements IBookService {
         bookSpecification.setBookCategorySet(bookCategorySet);
         bookSpecification = bookSpecificationService.saveBookSpec(bookSpecification);
         Book newBook =  new Book();
+        log.info("Book Name : " +  bookSpecification.getName());
+        log.info("Book ISBN : " +  bookSpecification.getIsbn());
         String serialNumber= book.getIsbn().concat("Book1");
         newBook.setSerialNo(serialNumber);
         newBook.setSpecification(bookSpecification);
@@ -63,12 +67,14 @@ public class BookService implements IBookService {
 
     @Override
     public Book getBook(Long id){
+        log.info("Retrieving book by id " + id);
         Book book =  bookRepository.findBookById(id).orElseThrow(NotFoundException::new);
         return book;
     }
 
     @Override
     public List<Book> getBooks(){
+        log.info("All Book Id");
         List<Book> books = (List<Book>) bookRepository.findAll();
         books.removeIf(Book::isDeleteFlag);
         return books;
@@ -76,20 +82,23 @@ public class BookService implements IBookService {
 
     @Override
     public Book updateBook(Book book){
+        log.info("Update book  records:" + book.getSpecification().getName());
         return bookRepository.save(book);
     }
 
 
     @Override
     public Book increaseBook(String isbn, long librarianId){
-
+        log.info("Increasing Book .... ");
         List<Book> bookList = bookRepository.findBooksBySerialNoContaining(isbn);
         int bookCounter = bookList.size() + 1;
         Book newBook =  new Book();
         String newSerialNumber = generateNewSerial(isbn,bookCounter);
+        log.info("Book Serial Number : " + newSerialNumber);
         newBook.setSerialNo(newSerialNumber);
         newBook.setStatus(Book.BookStatus.AVAILABLE);
         Librarian librarian = (Librarian) librarianService.getUser(librarianId);
+        log.info("Updated by: " + librarian.getUsername());
         newBook.setUpdatedBy(librarian);
 
         newBook.setSpecification(bookList.get(0).getSpecification());
@@ -100,8 +109,9 @@ public class BookService implements IBookService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public BookLoan requestForBook(BookRequestDTO bookRequestDTO) {
+        log.info("Book Request");
         Book requestBook = getBook(bookRequestDTO.getBookId());
-
+        log.info("Book requested: " + requestBook.getSpecification().getName());
         if (requestBook.getStatus() == Book.BookStatus.NOT_AVAILABLE){
             throw new BadRequestException();
         }
@@ -124,7 +134,7 @@ public class BookService implements IBookService {
         bookLoan.setDateOfRequest(date.getTime());
         date.add(Calendar.MONTH,3);
         bookLoan.setDateOfReturn(date.getTime());
-
+        log.info("Book Requested by " + student.getUsername());
         BookLog bookLog = createBookLog(BookLog.Action.REQUEST,bookLoan);
         Set<BookLog> bookLogSet =  new HashSet<>();
         bookLogSet.add(bookLog);
@@ -137,6 +147,7 @@ public class BookService implements IBookService {
     }
     @Override
     public List<SearchDTO> searchBooks(String bookName){
+        log.info("Searching Book by name ->  " + bookName);
         List<BookSpecification> bookSpecList = bookSpecificationService.searchByBookName(bookName);
         List <SearchDTO>  searchDTOS = convertSpecificationToSearchDTO(bookSpecList);
         return  searchDTOS;
@@ -147,14 +158,19 @@ public class BookService implements IBookService {
     @Transactional(rollbackOn = Exception.class)
     public BookLoan issueBook(BookIssueDTO bookIssueDTO){
         Book issueBook =  getBook(bookIssueDTO.getBookId());
+        log.info("Issuing book for -> " + issueBook.getId());
+
         if (issueBook == null){
+            log.info("Issue Book not found");
             throw new NotFoundException();
         }
         BookLoan bookLoan = bookLoanRepository.findByBookAndStatus(issueBook,BookLoan.LoanStatus.REQUESTED);
         if (bookLoan == null){
+            log.info("No Record Found for this book");
             throw new NotFoundException();
         }
         else if (bookLoan.getIssuedBy() != null) {
+            log.info("Already Issued ");
             throw new BadRequestException();
         }
 
@@ -166,6 +182,7 @@ public class BookService implements IBookService {
         bookLogSet.add(bookLog);
         bookLoan.setLog(bookLogSet);
         bookLoanRepository.save(bookLoan);
+
         return bookLoan;
     }
 
