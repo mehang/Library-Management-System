@@ -48,6 +48,7 @@ public class BookService implements IBookService {
         bookSpecification.setName(book.getName());
         bookSpecification.setPublication(book.getPublication());
         bookSpecification.setIsbn(book.getIsbn());
+        bookSpecification.setEdition(book.getEdition());
         bookSpecification.setLanguage(book.getLanguage());
         bookSpecification.setAuthor(authorRepo.findAuthorById(book.getAuthorId()).orElseThrow(NotFoundException::new));
         Set<BookCategory> bookCategorySet =  new HashSet<>();
@@ -69,6 +70,11 @@ public class BookService implements IBookService {
         return book;
     }
 
+    public Book getBookBySerialNumber(String serialNo){
+        Book book = bookRepository.findBookBySerialNo(serialNo).orElseThrow(NotFoundException::new);
+        return book;
+    }
+
     @Override
     public List<Book> getBooks(){
         List<Book> books = (List<Book>) bookRepository.findAll();
@@ -80,7 +86,6 @@ public class BookService implements IBookService {
     public Book updateBook(Book book){
         return bookRepository.save(book);
     }
-
 
     @Override
     public Book increaseBook(String isbn, long librarianId){
@@ -167,7 +172,7 @@ public class BookService implements IBookService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public BookLoan returnBook(BookReturnDTO bookReturnDTO){
-        Book returnBook =getBook(bookReturnDTO.getBookId());
+        Book returnBook =getBookBySerialNumber(bookReturnDTO.getSerialNo());
         BookLoan bookLoan = bookLoanRepository.findByBookAndStatus(returnBook, BookLoan.LoanStatus.ISSUED);
         if (bookLoan == null){
             throw new NotFoundException();

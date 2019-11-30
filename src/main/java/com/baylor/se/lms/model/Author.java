@@ -21,8 +21,6 @@ public class Author implements Serializable {
     private Boolean deleteFlag = false;
 
 
-
-
     public boolean isDeleteFlag() {
         return deleteFlag;
     }
