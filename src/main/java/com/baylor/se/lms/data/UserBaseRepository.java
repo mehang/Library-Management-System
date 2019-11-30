@@ -9,4 +9,5 @@ import java.util.Optional;
 @NoRepositoryBean
 public interface UserBaseRepository<T> extends Repository<T, Long> {
     Optional<T> findByUsername(String username);
+    Optional<T> findByEmail(String email);
 }
