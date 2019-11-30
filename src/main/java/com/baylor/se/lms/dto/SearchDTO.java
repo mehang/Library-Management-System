@@ -1,25 +1,29 @@
 package com.baylor.se.lms.dto;
 
+import com.baylor.se.lms.model.Author;
+import com.baylor.se.lms.model.BookCategory;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BookDTO {
-    private Long librarianId;
+public class SearchDTO {
+
+    private Long id;
     private String name;
     private String publication;
     private String edition;
     private String language;
     private String isbn;
-    private Long authorId;
-    private Set<Long> bookCategory =  new HashSet<>();
+    private Author author;
+    private Set<BookCategory> bookCategorySet = new HashSet<>();
 
+    private Set<Long> bookIds = new HashSet<>();
 
-    public long getLibrarianId() {
-        return librarianId;
+    public Long getId() {
+        return id;
     }
 
-    public void setLibrarianId(long librarianId) {
-        this.librarianId = librarianId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -54,6 +58,8 @@ public class BookDTO {
         this.language = language;
     }
 
+
+
     public String getIsbn() {
         return isbn;
     }
@@ -62,19 +68,28 @@ public class BookDTO {
         this.isbn = isbn;
     }
 
-    public long getAuthorId() {
-        return authorId;
+    public Author getAuthor() {
+        return author;
     }
 
-    public void setAuthorId(long authorId) {
-        this.authorId = authorId;
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
-    public Set<Long> getBookCategory() {
-        return bookCategory;
+    public Set<BookCategory> getBookCategorySet() {
+        return bookCategorySet;
     }
 
-    public void setBookCategory(Set<Long> bookCategory) {
-        this.bookCategory = bookCategory;
+    public void setBookCategorySet(Set<BookCategory> bookCategorySet) {
+        this.bookCategorySet = bookCategorySet;
+    }
+
+
+    public Set<Long> getBookIds() {
+        return bookIds;
+    }
+
+    public void setBookIds(Set<Long> bookIds) {
+        this.bookIds = bookIds;
     }
 }
