@@ -27,39 +27,8 @@ public class PasswordForgotController {
     private UserService userService;
     @Autowired
     private PasswordResetTokenRepository tokenRepository;
-    @Autowired
-    private EmailService emailService;
 
-    @PostMapping
-    public ResponseEntity processForgotPasswordForm(@RequestBody PasswordForgotDTO passwordForgotDTO) {
 
-        Optional<User> optionalUser = userService.findByEmail(passwordForgotDTO.getEmail());
-        if (optionalUser.isEmpty()){
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Invalid email address.");
-        }
-        User user = optionalUser.get();
-        PasswordResetToken token = new PasswordResetToken();
-        token.setToken(UUID.randomUUID().toString());
-        token.setUser(user);
-        token.setExpiryDate(30);
-        tokenRepository.save(token);
 
-        Mail mail = new Mail();
-        mail.setFrom("mehang_rai1@baylor.com");
-        mail.setTo(user.getEmail());
-        mail.setSubject("Password reset request");
-
-        Map<String, Object> model = new HashMap<>();
-        model.put("token", token);
-        model.put("user", user);
-        model.put("signature", "http://lms.com");
-        model.put("resetUrl", "http://localhost:3000" + "/reset-password?token=" + token.getToken());
-        mail.setModel(model);
-        emailService.sendEmail(mail);
-
-        return ResponseEntity.status(HttpStatus.OK).body("Password reset link sent to the email address.");
-    }
 
 }

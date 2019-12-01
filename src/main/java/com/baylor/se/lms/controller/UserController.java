@@ -1,8 +1,7 @@
 package com.baylor.se.lms.controller;
 
-import com.baylor.se.lms.dto.PasswordChangeDTO;
-import com.baylor.se.lms.dto.UserDTO;
-import com.baylor.se.lms.dto.UserUpdateDTO;
+import com.baylor.se.lms.data.PasswordResetTokenRepository;
+import com.baylor.se.lms.dto.*;
 import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -31,8 +28,15 @@ public class UserController {
 
     @Autowired
     AdminService adminService;
+
     @Autowired
     BookLoanService bookLoanService;
+
+    @Autowired
+    PasswordResetTokenRepository tokenRepository;
+
+    @Autowired
+    EmailService emailService;
 
 //    @GetMapping(path="/users", produces = "application/json")
 //    public ResponseEntity<User> getUserByUsername(){
@@ -65,6 +69,44 @@ public class UserController {
             adminService.changePassword(id, newPassword);
         }
         return ResponseEntity.ok().body(true);
+    }
+
+    @PostMapping(path = "/users/forgot-password", consumes = "application/json")
+    public ResponseEntity sendResetLink(@RequestBody PasswordForgotDTO passwordForgotDTO) {
+        Optional<User> optionalUser = userService.findByEmail(passwordForgotDTO.getEmail());
+        if (optionalUser.isEmpty()){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid email address.");
+        }
+        User user = optionalUser.get();
+        PasswordResetToken token = userService.createPasswordResetToken(user);
+
+        Mail mail = new Mail();
+        mail.setFrom("mehang.rai007@gmail.com");
+        mail.setTo(user.getEmail());
+        mail.setSubject("Password reset request");
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("token", token);
+        model.put("user", user);
+        model.put("signature", "http://lms.com");
+        model.put("resetUrl", "http://localhost:3000" + "/reset-password?token=" + token.getToken());
+        mail.setModel(model);
+        emailService.sendEmail(mail);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Password reset link sent to the email address.");
+    }
+
+    @PostMapping(path="/users/reset-password", consumes = "application/json")
+    public ResponseEntity resetPassword(@RequestBody PasswordResetDTO passwordResetDTO) {
+        if (!passwordResetDTO.getPassword1().equals(passwordResetDTO.getPassword2())) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Password1 and password2 don't match with each other.");
+        }
+        userService.resetPassword(passwordResetDTO.getResetToken(),passwordResetDTO.getPassword1());
+        return ResponseEntity.ok().body("Password has ben reset.");
     }
 
     //    @PreAuthorize("hasAnyRole('STUDENT','ROLE_STUDENT')")
