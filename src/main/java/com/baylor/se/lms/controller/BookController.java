@@ -11,6 +11,9 @@ import com.baylor.se.lms.service.impl.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +30,9 @@ public class BookController {
 
     @Autowired
     BookCategoryService bookCategoryService;
+
+    @Autowired
+    SimpMessagingTemplate simpMessagingTemplate;
 
     @GetMapping(path="/books", produces="application/json")
     public ResponseEntity<List<Book>> getBooks(){
@@ -65,11 +71,14 @@ public class BookController {
     @ResponseBody
     public ResponseEntity<BookLoan> requestBook(@RequestBody BookRequestDTO bookRequestDTO){
         BookLoan bookLoan = bookService.requestForBook(bookRequestDTO);
+        simpMessagingTemplate.convertAndSend("/lms/requested", bookRequestDTO.getBookId());
         return  ResponseEntity.ok().body(bookLoan);
     }
 
     @GetMapping(path = "books/search",produces = "application/json")
     @ResponseBody
+//    @MessageMapping("/books/search")
+//    @SendTo("/lms/requested")
     public ResponseEntity<List<SearchDTO>> searchBooks(@RequestParam(required = true) String q){
         List<SearchDTO> bookList = bookService.searchBooks(q);
         return ResponseEntity.ok().body(bookList);
@@ -81,6 +90,7 @@ public class BookController {
         BookLoan bookLoan =  bookService.issueBook(bookIssueDTO);
         return ResponseEntity.ok().body(bookLoan);
     }
+
     @PostMapping(path = "books/return",consumes = "application/json",produces = "application/json")
     @ResponseBody
     public ResponseEntity<BookLoan> returnBook(@RequestBody BookReturnDTO bookReturnDTO){
