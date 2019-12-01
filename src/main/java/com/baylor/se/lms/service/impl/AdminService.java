@@ -8,9 +8,13 @@ import com.baylor.se.lms.model.User;
 import com.baylor.se.lms.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +28,9 @@ public class AdminService implements IUserService {
 
     @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
+
+    @Autowired
+    JmsTemplate jmsTemplate;
 
 
     @Override
@@ -62,6 +69,16 @@ public class AdminService implements IUserService {
         Admin admin =   adminRepository.findById(id).orElseThrow(NotFoundException::new);
         log.info("Deleting Admin: " + admin.getUsername());
         admin.setDeleteFlag(true);
+        adminRepository.save(admin);
+        jmsTemplate.convertAndSend("post-admin-delete", admin);
+    }
+
+    @JmsListener(destination = "post-admin-delete", containerFactory = "postDeleteFactory")
+    public void postDelete(Admin admin) {
+        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        admin.setUsername(admin.getUsername()+timeStamp);
+        admin.setPhoneNumber(String.format ("%010d", admin.getId()));
+        admin.setEmail("deleted"+admin.getId()+"@gmail.com");
         adminRepository.save(admin);
     }
 

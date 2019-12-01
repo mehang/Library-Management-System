@@ -230,8 +230,8 @@ public class BookService implements IBookService {
         bookLog.setTimeStamp(date.getTime());
         bookLog.setBookLoan(bookLoan);
         return bookLog;
-
     }
+
     private String generateNewSerial(String isbn, int counter){
         String serialNumber = isbn.concat("Book");
         return  serialNumber.concat(String.valueOf(counter));

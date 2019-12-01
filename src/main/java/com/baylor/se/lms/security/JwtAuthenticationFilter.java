@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.baylor.se.lms.model.Consants.HEADER_STRING;
-import static com.baylor.se.lms.model.Consants.TOKEN_PREFIX;
+import static com.baylor.se.lms.model.Constants.HEADER_STRING;
+import static com.baylor.se.lms.model.Constants.TOKEN_PREFIX;
 
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
