@@ -16,7 +16,6 @@ public class Author implements Serializable {
     @Column(unique = true)
     private String name;
 
-    @JsonIgnore
     @Column(columnDefinition = "BOOLEAN")
     private Boolean deleteFlag = false;
 

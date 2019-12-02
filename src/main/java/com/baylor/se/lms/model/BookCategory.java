@@ -21,7 +21,6 @@ public class BookCategory implements Serializable {
     @ManyToMany
     private Set<BookSpecification> bookSpecificationSet = new HashSet<>();
 
-    @JsonIgnore
     @Column(columnDefinition = "BOOLEAN")
     private boolean deleteFlag = false;
 
