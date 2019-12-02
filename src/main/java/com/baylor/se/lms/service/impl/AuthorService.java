@@ -6,9 +6,13 @@ import com.baylor.se.lms.model.Author;
 import com.baylor.se.lms.service.IAuthorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 @Service
 @Slf4j
@@ -16,6 +20,10 @@ public class AuthorService implements IAuthorService {
 
     @Autowired
     AuthorRepository authorRepository;
+
+    @Autowired
+    JmsTemplate jmsTemplate;
+
     @Override
     public Author registerAuthor(Author author) {
         log.info("Registering Author : " + author.getName());
@@ -47,5 +55,13 @@ public class AuthorService implements IAuthorService {
         Author author = getAuthor(id);
         author.setDeleteFlag(true);
         updateAuthor(author);
+        jmsTemplate.convertAndSend("post-author-delete", author);
+    }
+
+    @JmsListener(destination = "post-author-delete", containerFactory = "postDeleteFactory")
+    public void postDelete(Author author) {
+        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        author.setName(author.getName()+timeStamp);
+        authorRepository.save(author);
     }
 }

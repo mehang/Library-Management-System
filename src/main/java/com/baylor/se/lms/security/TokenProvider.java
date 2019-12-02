@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.baylor.se.lms.model.Consants.*;
+import static com.baylor.se.lms.model.Constants.*;
 
 @Component
 public class TokenProvider implements Serializable {

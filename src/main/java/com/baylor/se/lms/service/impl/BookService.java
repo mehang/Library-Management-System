@@ -47,6 +47,7 @@ public class BookService implements IBookService {
         bookSpecification.setName(book.getName());
         bookSpecification.setPublication(book.getPublication());
         bookSpecification.setIsbn(book.getIsbn());
+        bookSpecification.setEdition(book.getEdition());
         bookSpecification.setLanguage(book.getLanguage());
         bookSpecification.setEdition(book.getEdition());
         bookSpecification.setAuthor(authorRepo.findAuthorById(book.getAuthorId()).orElseThrow(NotFoundException::new));
@@ -72,6 +73,11 @@ public class BookService implements IBookService {
         return book;
     }
 
+    public Book getBookBySerialNumber(String serialNo){
+        Book book = bookRepository.findBookBySerialNo(serialNo).orElseThrow(NotFoundException::new);
+        return book;
+    }
+
     @Override
     public List<Book> getBooks(){
         log.info("All Book Id");
@@ -85,7 +91,6 @@ public class BookService implements IBookService {
         log.info("Update book  records:" + book.getSpecification().getName());
         return bookRepository.save(book);
     }
-
 
     @Override
     public Book increaseBook(String isbn, long librarianId){
@@ -189,7 +194,7 @@ public class BookService implements IBookService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public BookLoan returnBook(BookReturnDTO bookReturnDTO){
-        Book returnBook =getBook(bookReturnDTO.getBookId());
+        Book returnBook =getBookBySerialNumber(bookReturnDTO.getSerialNo());
         BookLoan bookLoan = bookLoanRepository.findByBookAndStatus(returnBook, BookLoan.LoanStatus.ISSUED);
         if (bookLoan == null){
             throw new NotFoundException();
@@ -225,8 +230,8 @@ public class BookService implements IBookService {
         bookLog.setTimeStamp(date.getTime());
         bookLog.setBookLoan(bookLoan);
         return bookLog;
-
     }
+
     private String generateNewSerial(String isbn, int counter){
         String serialNumber = isbn.concat("Book");
         return  serialNumber.concat(String.valueOf(counter));

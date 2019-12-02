@@ -1,5 +1,7 @@
 package com.baylor.se.lms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -20,6 +22,8 @@ public class BookSpecification implements Serializable {
     private String publication;
     private String edition;
     private String language;
+
+    @JsonIgnore
     @Column(columnDefinition = "BOOLEAN")
     private boolean deleteFlag = false;
 

@@ -3,6 +3,7 @@ package com.baylor.se.lms.controller;
 import com.baylor.se.lms.dto.PasswordChangeDTO;
 import com.baylor.se.lms.dto.UserDTO;
 import com.baylor.se.lms.dto.UserUpdateDTO;
+import com.baylor.se.lms.dto.UserVerifyDTO;
 import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -193,6 +197,32 @@ public class UserController {
     public ResponseEntity<List<BookLoan>> getBookLoans(@PathVariable String username) {
         List<BookLoan> bookLoans = bookLoanService.getBookLoanByUser(username);
         return ResponseEntity.ok().body(bookLoans);
+    }
+
+    @GetMapping(path = "/users/students/verify/{id:[0-9][0-9]*}", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<UserVerifyDTO> verifyStudent(@PathVariable Long id){
+        BufferedReader reader;
+        UserVerifyDTO verifyDTO =  new UserVerifyDTO();
+        verifyDTO.setUserId(id);
+        try {
+            reader =  new BufferedReader(new FileReader("src\\main\\resources\\students.txt"));
+            String line = reader.readLine();
+            while(null != line){
+                if (line.equals(id.toString())){
+                    verifyDTO.setVerified(true);
+                    return ResponseEntity.ok().body(verifyDTO);
+                }
+                line =  reader.readLine();
+            }
+        } catch (Exception e) {
+            verifyDTO.setVerified(false);
+            return ResponseEntity.ok().body(verifyDTO);
+
+        }
+        verifyDTO.setVerified(false);
+        return  ResponseEntity.ok().body(verifyDTO);
+
     }
 
     private User convertDTOtoUser(UserDTO userDTO, User user) {

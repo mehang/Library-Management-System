@@ -6,8 +6,12 @@ import com.baylor.se.lms.model.BookCategory;
 import com.baylor.se.lms.service.IBookCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -15,6 +19,9 @@ import java.util.List;
 public class BookCategoryService implements IBookCategoryService {
     @Autowired
     BookCategoryRepository bookCategoryRepository;
+
+    @Autowired
+    JmsTemplate jmsTemplate;
 
     @Override
     public BookCategory registerBookCategory(BookCategory category) {
@@ -50,5 +57,13 @@ public class BookCategoryService implements IBookCategoryService {
         BookCategory category = getBookCategory(id);
         category.setDeleteFlag(true);
         updateBookCategory(category);
+        jmsTemplate.convertAndSend("post-category-delete", category);
+    }
+
+    @JmsListener(destination = "post-category-delete", containerFactory = "postDeleteFactory")
+    public void postDelete(BookCategory category) {
+        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        category.setName(category.getName()+timeStamp);
+        bookCategoryRepository.save(category);
     }
 }

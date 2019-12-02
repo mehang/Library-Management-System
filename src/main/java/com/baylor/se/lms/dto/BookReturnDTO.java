@@ -1,13 +1,13 @@
 package com.baylor.se.lms.dto;
 
 public class BookReturnDTO {
-    private Long bookId;
+    private String serialNo;
 
-    public Long getBookId() {
-        return bookId;
+    public String getSerialNo() {
+        return serialNo;
     }
 
-    public void setBookId(Long bookId) {
-        this.bookId = bookId;
+    public void setSerialNo(String serialNo) {
+        this.serialNo = serialNo;
     }
 }

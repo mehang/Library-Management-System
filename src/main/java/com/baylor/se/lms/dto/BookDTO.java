@@ -4,13 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BookDTO {
-    private long librarianId;
+    private Long librarianId;
     private String name;
     private String publication;
     private String edition;
     private String language;
     private String isbn;
-    private long authorId;
+    private Long authorId;
     private Set<Long> bookCategory =  new HashSet<>();
 
 
