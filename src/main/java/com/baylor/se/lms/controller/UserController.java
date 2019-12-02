@@ -1,7 +1,9 @@
 package com.baylor.se.lms.controller;
 
-import com.baylor.se.lms.data.PasswordResetTokenRepository;
-import com.baylor.se.lms.dto.*;
+import com.baylor.se.lms.dto.PasswordChangeDTO;
+import com.baylor.se.lms.dto.UserDTO;
+import com.baylor.se.lms.dto.UserUpdateDTO;
+import com.baylor.se.lms.dto.UserVerifyDTO;
 import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -28,15 +35,8 @@ public class UserController {
 
     @Autowired
     AdminService adminService;
-
     @Autowired
     BookLoanService bookLoanService;
-
-    @Autowired
-    PasswordResetTokenRepository tokenRepository;
-
-    @Autowired
-    EmailService emailService;
 
 //    @GetMapping(path="/users", produces = "application/json")
 //    public ResponseEntity<User> getUserByUsername(){
@@ -69,44 +69,6 @@ public class UserController {
             adminService.changePassword(id, newPassword);
         }
         return ResponseEntity.ok().body(true);
-    }
-
-    @PostMapping(path = "/users/forgot-password", consumes = "application/json")
-    public ResponseEntity sendResetLink(@RequestBody PasswordForgotDTO passwordForgotDTO) {
-        Optional<User> optionalUser = userService.findByEmail(passwordForgotDTO.getEmail());
-        if (optionalUser.isEmpty()){
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Invalid email address.");
-        }
-        User user = optionalUser.get();
-        PasswordResetToken token = userService.createPasswordResetToken(user);
-
-        Mail mail = new Mail();
-        mail.setFrom("mehang.rai007@gmail.com");
-        mail.setTo(user.getEmail());
-        mail.setSubject("Password reset request");
-
-        Map<String, Object> model = new HashMap<>();
-        model.put("token", token);
-        model.put("user", user);
-        model.put("signature", "http://lms.com");
-        model.put("resetUrl", "http://localhost:3000" + "/reset-password?token=" + token.getToken());
-        mail.setModel(model);
-        emailService.sendEmail(mail);
-
-        return ResponseEntity.status(HttpStatus.OK).body("Password reset link sent to the email address.");
-    }
-
-    @PostMapping(path="/users/reset-password", consumes = "application/json")
-    public ResponseEntity resetPassword(@RequestBody PasswordResetDTO passwordResetDTO) {
-        if (!passwordResetDTO.getPassword1().equals(passwordResetDTO.getPassword2())) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Password1 and password2 don't match with each other.");
-        }
-        userService.resetPassword(passwordResetDTO.getResetToken(),passwordResetDTO.getPassword1());
-        return ResponseEntity.ok().body("Password has ben reset.");
     }
 
     //    @PreAuthorize("hasAnyRole('STUDENT','ROLE_STUDENT')")
@@ -235,6 +197,32 @@ public class UserController {
     public ResponseEntity<List<BookLoan>> getBookLoans(@PathVariable String username) {
         List<BookLoan> bookLoans = bookLoanService.getBookLoanByUser(username);
         return ResponseEntity.ok().body(bookLoans);
+    }
+
+    @GetMapping(path = "/users/students/verify/{id:[0-9][0-9]*}", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<UserVerifyDTO> verifyStudent(@PathVariable Long id){
+        BufferedReader reader;
+        UserVerifyDTO verifyDTO =  new UserVerifyDTO();
+        verifyDTO.setUserId(id);
+        try {
+            reader =  new BufferedReader(new FileReader("src\\main\\resources\\students.txt"));
+            String line = reader.readLine();
+            while(null != line){
+                if (line.equals(id.toString())){
+                    verifyDTO.setVerified(true);
+                    return ResponseEntity.ok().body(verifyDTO);
+                }
+                line =  reader.readLine();
+            }
+        } catch (Exception e) {
+            verifyDTO.setVerified(false);
+            return ResponseEntity.ok().body(verifyDTO);
+
+        }
+        verifyDTO.setVerified(false);
+        return  ResponseEntity.ok().body(verifyDTO);
+
     }
 
     private User convertDTOtoUser(UserDTO userDTO, User user) {

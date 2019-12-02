@@ -5,6 +5,7 @@ import com.baylor.se.lms.model.AuthToken;
 import com.baylor.se.lms.model.User;
 import com.baylor.se.lms.security.TokenProvider;
 import com.baylor.se.lms.service.impl.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
+@Slf4j
 //@RequestMapping("/authenticate")
 public class AuthenticationController {
 
@@ -36,7 +38,7 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody LoginDTO loginUser) throws AuthenticationException {
-
+        log.info("Authenticate:  " + loginUser.getUsername());
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginUser.getUsername(),
