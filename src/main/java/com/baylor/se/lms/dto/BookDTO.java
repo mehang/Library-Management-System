@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BookDTO {
+    private Long bookId;
     private Long librarianId;
     private String name;
     private String publication;
@@ -13,6 +14,21 @@ public class BookDTO {
     private Long authorId;
     private Set<Long> bookCategory =  new HashSet<>();
 
+    public Long getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
+    }
+
+    public void setLibrarianId(Long librarianId) {
+        this.librarianId = librarianId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
 
     public long getLibrarianId() {
         return librarianId;

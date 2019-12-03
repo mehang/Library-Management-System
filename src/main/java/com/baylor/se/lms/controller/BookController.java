@@ -61,8 +61,10 @@ public class BookController {
 
     @PutMapping(path="/books/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<Book> updateBook(@RequestBody Book book) {
-        Book updatedBook = bookService.updateBook(book);
+    public ResponseEntity<Book> updateBook(@RequestBody BookDTO bookDTO) {
+        log.info("Updating Book");
+
+        Book updatedBook = bookService.updateBook(bookDTO);
         log.info("Book updated: "+ updatedBook.getSpecification().getName());
         return ResponseEntity.ok().body(updatedBook);
     }
