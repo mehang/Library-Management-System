@@ -87,7 +87,45 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Book updateBook(Book book){
+    public Book updateBook(BookDTO bookDTO){
+
+        Book book =  getBook(bookDTO.getBookId());
+        if (book == null){
+            log.info("Book Record Not Found");
+            throw  new NotFoundException();
+        }
+        if(bookDTO.getName() != null){
+            log.info("Book Name changed");
+            book.getSpecification().setName(bookDTO.getName());
+        }
+
+        if(bookDTO.getPublication() != null) {
+            log.info("Book publication changed");
+            book.getSpecification().setPublication(bookDTO.getPublication());
+        }
+        if(bookDTO.getIsbn() != null) {
+            log.info("Book ISBN changed");
+            book.getSpecification().setIsbn(bookDTO.getIsbn());
+        }
+        if(bookDTO.getEdition() != null) {
+            log.info("Book Edition changed");
+            book.getSpecification().setEdition(bookDTO.getEdition());
+        }
+        if(bookDTO.getLanguage() !=null) {
+            log.info("Book Language changed");
+            book.getSpecification().setLanguage(bookDTO.getLanguage());
+        }
+        if(bookDTO.getAuthorId() == 0){
+            log.info("Book Author Changed");
+            book.getSpecification().setAuthor(authorRepo.findAuthorById(bookDTO.getAuthorId()).orElseThrow(NotFoundException::new));
+        }
+        if (bookDTO.getBookCategory()  != null){
+            log.info("Book Category changed");
+            Set<BookCategory> bookCategorySet =  new HashSet<>();
+            bookDTO.getBookCategory().forEach( s -> bookCategorySet.add(bookCategoryRepo.findById(s).orElseThrow(NotFoundException::new)));
+            book.getSpecification().setBookCategorySet(bookCategorySet);
+        }
+        bookSpecificationService.updateBookSpec(book.getSpecification());
         log.info("Update book  records:" + book.getSpecification().getName());
         return bookRepository.save(book);
     }
@@ -260,5 +298,8 @@ public class BookService implements IBookService {
             searchDTOS.add(searchDTO);
         }
         return searchDTOS;
+    }
+    private Book updateBook(Book book){
+        return bookRepository.save(book);
     }
 }
