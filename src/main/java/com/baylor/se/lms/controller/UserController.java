@@ -4,25 +4,19 @@ import com.baylor.se.lms.dto.PasswordChangeDTO;
 import com.baylor.se.lms.dto.UserDTO;
 import com.baylor.se.lms.dto.UserUpdateDTO;
 import com.baylor.se.lms.dto.UserVerifyDTO;
-import com.baylor.se.lms.dto.converter.AdminDTOConverter;
-import com.baylor.se.lms.dto.converter.LibrarianDTOConverter;
-import com.baylor.se.lms.dto.converter.StudentDTOConverter;
+import com.baylor.se.lms.dto.factory.AdminFactory;
+import com.baylor.se.lms.dto.factory.LibrarianFactory;
+import com.baylor.se.lms.dto.factory.StudentFactory;
 import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -90,15 +84,8 @@ public class UserController {
     @PostMapping(path = "/users/students", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity addStudent(@RequestBody UserDTO userDTO) {
-        if (!userDTO.getPassword1().equals(userDTO.getPassword2())) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Password1 and password2 don't match with each other.");
-        }
-        StudentDTOConverter converter = new StudentDTOConverter();
-        Student student = (Student) converter.convert(userDTO);
-        User registeredStudent = studentService.registerUser(student);
-        return ResponseEntity.ok().body(registeredStudent);
+        Student student=(Student) studentService.registerUser(userDTO);
+        return ResponseEntity.ok().body(student);
     }
 
     @PutMapping(path = "/users/students/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
@@ -130,14 +117,7 @@ public class UserController {
     @PostMapping(path = "/users/librarians", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity addLibrarian(@RequestBody UserDTO userDTO) {
-        if (!userDTO.getPassword1().equals(userDTO.getPassword2())) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Password1 and password2 don't match with each other.");
-        }
-        LibrarianDTOConverter converter = new LibrarianDTOConverter();
-        Librarian librarian = (Librarian) converter.convert(userDTO);
-        librarianService.registerUser(librarian);
+        Librarian librarian=(Librarian) librarianService.registerUser(userDTO);
         return ResponseEntity.ok().body(librarian);
     }
 
@@ -170,15 +150,8 @@ public class UserController {
     @PostMapping(path = "/users/admins", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity addAdmin(@RequestBody UserDTO userDTO) {
-        if (!userDTO.getPassword1().equals(userDTO.getPassword2())) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Password1 and password2 don't match with each other.");
-        }
-        AdminDTOConverter converter = new AdminDTOConverter();
-        Admin admin = (Admin) converter.convert(userDTO);
-        User registeredAdmin = adminService.registerUser(admin);
-        return ResponseEntity.ok().body(registeredAdmin);
+        Admin admin=(Admin) adminService.registerUser(userDTO);
+        return ResponseEntity.ok().body(admin);
     }
 
     @PutMapping(path = "/users/admins/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")

@@ -1,7 +1,10 @@
 package com.baylor.se.lms.service.impl;
 
 import com.baylor.se.lms.data.AdminRepository;
+import com.baylor.se.lms.dto.UserDTO;
+import com.baylor.se.lms.dto.factory.AdminFactory;
 import com.baylor.se.lms.exception.NotFoundException;
+import com.baylor.se.lms.exception.UnmatchingPasswordException;
 import com.baylor.se.lms.model.Admin;
 import com.baylor.se.lms.model.Role;
 import com.baylor.se.lms.model.User;
@@ -27,6 +30,9 @@ public class AdminService implements IUserService {
     AdminRepository adminRepository;
 
     @Autowired
+    AdminFactory adminFactory;
+
+    @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
 
     @Autowired
@@ -34,28 +40,24 @@ public class AdminService implements IUserService {
 
 
     @Override
-    public User registerUser(User user)
+    public User registerUser(UserDTO userDTO)
     {
-        log.info("Registering Admin: " + user.getUsername());
-        user.setPassword(bcryptEncoder.encode(user.getPassword()));
-        Role role = new Role();
-        log.info("Setting Role to Admin");
-        role.setRole("ADMIN");
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        user.setRoles(roles);
+        if (!userDTO.getPassword1().equals(userDTO.getPassword2())) {
+            throw new UnmatchingPasswordException("Password 1 and password 2 don't match with each other.");
+        }
+        log.info("Registering Admin: " + userDTO.getUsername());
+       User user = adminFactory.getUser(userDTO);
+        log.info("Saving admin : " + user.getUsername());
         return adminRepository.save((Admin)user);
     }
 
     @Override
     public User getUser(Long id){
-        Admin admin =   adminRepository.findAdminById(id).orElseThrow(NotFoundException::new);
-        return admin;
+        return adminRepository.findAdminById(id).orElseThrow(NotFoundException::new);
     }
 
     public List<Admin> getAll(){
-        List<Admin> admins = (List<Admin>) adminRepository.findAll();
-        return admins;
+        return (List<Admin>) adminRepository.findAll();
     }
 
     @Override

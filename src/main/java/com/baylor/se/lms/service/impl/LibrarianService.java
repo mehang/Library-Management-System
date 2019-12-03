@@ -1,5 +1,8 @@
 package com.baylor.se.lms.service.impl;
 
+import com.baylor.se.lms.dto.UserDTO;
+import com.baylor.se.lms.dto.factory.LibrarianFactory;
+import com.baylor.se.lms.exception.UnmatchingPasswordException;
 import com.baylor.se.lms.model.Author;
 import com.baylor.se.lms.model.Librarian;
 import com.baylor.se.lms.model.Role;
@@ -30,19 +33,20 @@ public class LibrarianService implements IUserService {
     private BCryptPasswordEncoder bcryptEncoder;
 
     @Autowired
+    LibrarianFactory librarianFactory;
+
+    @Autowired
     JmsTemplate jmsTemplate;
 
     @Override
-    public User registerUser(User user)
+    public User registerUser(UserDTO userDTO)
     {
-        log.info("Registering Librarian: " + user.getUsername());
-        user.setPassword(bcryptEncoder.encode(user.getPassword()));
-        Role role = new Role();
-        role.setRole("LIBRARIAN");
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        user.setRoles(roles);
-        log.info("Creating  Librarian....");
+        if (!userDTO.getPassword1().equals(userDTO.getPassword2())) {
+            throw new UnmatchingPasswordException("Password 1 and password 2 don't match with each other.");
+        }
+        log.info("Registering Student: "+ userDTO.getUsername());
+        User user = librarianFactory.getUser(userDTO);
+        log.info("Saving student : " + user.getUsername());
         return librarianRepository.save((Librarian) user);
     }
 

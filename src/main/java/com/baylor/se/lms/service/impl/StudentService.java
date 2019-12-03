@@ -1,5 +1,8 @@
 package com.baylor.se.lms.service.impl;
 
+import com.baylor.se.lms.dto.UserDTO;
+import com.baylor.se.lms.dto.factory.StudentFactory;
+import com.baylor.se.lms.exception.UnmatchingPasswordException;
 import com.baylor.se.lms.model.Role;
 import com.baylor.se.lms.model.Student;
 import com.baylor.se.lms.model.User;
@@ -26,27 +29,27 @@ public class StudentService implements IUserService {
     StudentRepository studentRepository;
 
     @Autowired
+    StudentFactory studentFactory;
+
+    @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
 
     @Autowired
     JmsTemplate jmsTemplate;
 
     @Override
-    public User registerUser(User user){
-        log.info("Registering Student: "+ user.getUsername());
-        user.setPassword(bcryptEncoder.encode(user.getPassword()));
-        Role role = new Role();
-        role.setRole("STUDENT");
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        user.setRoles(roles);
+    public User registerUser(UserDTO userDTO){
+        if (!userDTO.getPassword1().equals(userDTO.getPassword2())) {
+            throw new UnmatchingPasswordException("Password 1 and password 2 don't match with each other.");
+        }
+        log.info("Registering Student: "+ userDTO.getUsername());
+        User user = studentFactory.getUser(userDTO);
         log.info("Saving student : " + user.getUsername());
        return studentRepository.save((Student) user);
     }
 
     @Override
     public User getUser(Long id){
-
         log.info("Get student by id: " +id);
         Student student =   studentRepository.findById(id).orElseThrow(NotFoundException::new);
         return student;
