@@ -4,11 +4,10 @@ import com.baylor.se.lms.dto.UserDTO;
 import com.baylor.se.lms.model.User;
 
 public abstract class UserDTOConverter {
-    private User user;
-
-    public abstract User convertingTo();
+    public abstract User getUser();
 
     public User convert(UserDTO userDTO){
+        User user = getUser();
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword1());

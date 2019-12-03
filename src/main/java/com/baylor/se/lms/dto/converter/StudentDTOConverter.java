@@ -5,7 +5,7 @@ import com.baylor.se.lms.model.User;
 
 public class StudentDTOConverter extends UserDTOConverter{
     @Override
-    public User convertingTo() {
+    public User getUser() {
         return new Student();
     }
 }
