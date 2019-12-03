@@ -4,6 +4,9 @@ import com.baylor.se.lms.dto.PasswordChangeDTO;
 import com.baylor.se.lms.dto.UserDTO;
 import com.baylor.se.lms.dto.UserUpdateDTO;
 import com.baylor.se.lms.dto.UserVerifyDTO;
+import com.baylor.se.lms.dto.converter.AdminDTOConverter;
+import com.baylor.se.lms.dto.converter.LibrarianDTOConverter;
+import com.baylor.se.lms.dto.converter.StudentDTOConverter;
 import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +95,8 @@ public class UserController {
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Password1 and password2 don't match with each other.");
         }
-        Student student = (Student) convertDTOtoUser(userDTO, new Student());
+        StudentDTOConverter converter = new StudentDTOConverter();
+        Student student = (Student) converter.convert(userDTO);
         User registeredStudent = studentService.registerUser(student);
         return ResponseEntity.ok().body(registeredStudent);
     }
@@ -131,7 +135,8 @@ public class UserController {
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Password1 and password2 don't match with each other.");
         }
-        Librarian librarian = (Librarian) convertDTOtoUser(userDTO, new Librarian());
+        LibrarianDTOConverter converter = new LibrarianDTOConverter();
+        Librarian librarian = (Librarian) converter.convert(userDTO);
         librarianService.registerUser(librarian);
         return ResponseEntity.ok().body(librarian);
     }
@@ -170,7 +175,8 @@ public class UserController {
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Password1 and password2 don't match with each other.");
         }
-        Admin admin = (Admin) convertDTOtoUser(userDTO, new Admin());
+        AdminDTOConverter converter = new AdminDTOConverter();
+        Admin admin = (Admin) converter.convert(userDTO);
         User registeredAdmin = adminService.registerUser(admin);
         return ResponseEntity.ok().body(registeredAdmin);
     }
@@ -223,14 +229,5 @@ public class UserController {
         verifyDTO.setVerified(false);
         return  ResponseEntity.ok().body(verifyDTO);
 
-    }
-
-    private User convertDTOtoUser(UserDTO userDTO, User user) {
-        user.setUsername(userDTO.getUsername());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword1());
-        user.setName(userDTO.getName());
-        user.setPhoneNumber(userDTO.getPhoneNumber());
-        return user;
     }
 }
