@@ -4,6 +4,7 @@ public class UserVerifyDTO {
     Long userId;
     Boolean  verified;
 
+
     public Long getUserId() {
         return userId;
     }

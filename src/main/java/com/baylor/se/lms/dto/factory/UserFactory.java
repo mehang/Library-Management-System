@@ -16,9 +16,9 @@ public abstract class UserFactory {
     public User getUser(UserDTO userDTO){
         User user = createUser();
         user.setUsername(userDTO.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword1()));
         user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword1());
+        //user.setPassword(userDTO.getPassword1());
         user.setName(userDTO.getName());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         Role role = getRole();
