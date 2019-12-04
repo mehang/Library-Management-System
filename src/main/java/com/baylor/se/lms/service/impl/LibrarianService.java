@@ -1,6 +1,7 @@
 package com.baylor.se.lms.service.impl;
 
 import com.baylor.se.lms.dto.UserDTO;
+import com.baylor.se.lms.dto.UserUpdateDTO;
 import com.baylor.se.lms.dto.factory.LibrarianFactory;
 import com.baylor.se.lms.exception.UnmatchingPasswordException;
 import com.baylor.se.lms.model.Author;
@@ -64,9 +65,14 @@ public class LibrarianService implements IUserService {
     }
 
     @Override
-    public User updateUser(User user) {
-        log.info("Updating Librarian: " +user.getUsername());
-        return librarianRepository.save((Librarian) user);
+    public User updateUser(UserUpdateDTO userUpdateDTO) {
+        Librarian librarian = (Librarian) getUser(userUpdateDTO.getId());
+        log.info("Updating Librarian: " +librarian.getUsername());
+        librarian.setUsername(userUpdateDTO.getUsername());
+        librarian.setEmail(userUpdateDTO.getEmail());
+        librarian.setName(userUpdateDTO.getName());
+        librarian.setPhoneNumber(userUpdateDTO.getPhoneNumber());
+        return librarianRepository.save(librarian);
     }
 
     @Override

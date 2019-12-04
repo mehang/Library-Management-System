@@ -1,6 +1,7 @@
 package com.baylor.se.lms.service.impl;
 
 import com.baylor.se.lms.dto.UserDTO;
+import com.baylor.se.lms.dto.UserUpdateDTO;
 import com.baylor.se.lms.dto.factory.StudentFactory;
 import com.baylor.se.lms.exception.UnmatchingPasswordException;
 import com.baylor.se.lms.model.Role;
@@ -62,9 +63,14 @@ public class StudentService implements IUserService {
     }
 
     @Override
-    public User updateUser(User user){
-        log.info("Update student: " + user.getUsername());
-        return studentRepository.save((Student) user);
+    public User updateUser(UserUpdateDTO userUpdateDTO){
+        Student student = (Student) getUser(userUpdateDTO.getId());
+        log.info("Update student: " + student.getUsername());
+        student.setUsername(userUpdateDTO.getUsername());
+        student.setEmail(userUpdateDTO.getEmail());
+        student.setName(userUpdateDTO.getName());
+        student.setPhoneNumber(userUpdateDTO.getPhoneNumber());
+        return studentRepository.save(student);
     }
 
     @Override

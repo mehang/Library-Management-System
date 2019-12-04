@@ -93,12 +93,7 @@ public class UserController {
     @PutMapping(path = "/users/students/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity updateStudent(@RequestBody UserUpdateDTO userUpdateDTO, @PathVariable Long id) {
-        Student student = (Student) studentService.getUser(userUpdateDTO.getId());
-        student.setUsername(userUpdateDTO.getUsername());
-        student.setEmail(userUpdateDTO.getEmail());
-        student.setName(userUpdateDTO.getName());
-        student.setPhoneNumber(userUpdateDTO.getPhoneNumber());
-        User updatedStudent = studentService.updateUser(student);
+        User updatedStudent = studentService.updateUser(userUpdateDTO);
         return ResponseEntity.ok().body(updatedStudent);
     }
 
@@ -126,12 +121,7 @@ public class UserController {
     @PutMapping(path = "/users/librarians/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity updateLibrarian(@RequestBody UserUpdateDTO userUpdateDTO, @PathVariable Long id) {
-        Librarian librarian = (Librarian) librarianService.getUser(userUpdateDTO.getId());
-        librarian.setUsername(userUpdateDTO.getUsername());
-        librarian.setEmail(userUpdateDTO.getEmail());
-        librarian.setName(userUpdateDTO.getName());
-        librarian.setPhoneNumber(userUpdateDTO.getPhoneNumber());
-        User updatedLibrarian = librarianService.updateUser(librarian);
+        User updatedLibrarian = librarianService.updateUser(userUpdateDTO);
         return ResponseEntity.ok().body(updatedLibrarian);
     }
 
@@ -159,12 +149,7 @@ public class UserController {
     @PutMapping(path = "/users/admins/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity updateAdmin(@RequestBody UserUpdateDTO userUpdateDTO, @PathVariable Long id) {
-        Admin admin = (Admin) adminService.getUser(userUpdateDTO.getId());
-        admin.setUsername(userUpdateDTO.getUsername());
-        admin.setEmail(userUpdateDTO.getEmail());
-        admin.setName(userUpdateDTO.getName());
-        admin.setPhoneNumber(userUpdateDTO.getPhoneNumber());
-        User updatedAdmin = studentService.updateUser(admin);
+        User updatedAdmin = studentService.updateUser(userUpdateDTO);
         return ResponseEntity.ok().body(updatedAdmin);
     }
 

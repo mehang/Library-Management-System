@@ -2,6 +2,7 @@ package com.baylor.se.lms.service.impl;
 
 import com.baylor.se.lms.data.AdminRepository;
 import com.baylor.se.lms.dto.UserDTO;
+import com.baylor.se.lms.dto.UserUpdateDTO;
 import com.baylor.se.lms.dto.factory.AdminFactory;
 import com.baylor.se.lms.exception.NotFoundException;
 import com.baylor.se.lms.exception.UnmatchingPasswordException;
@@ -60,9 +61,14 @@ public class AdminService implements IUserService {
     }
 
     @Override
-    public User updateUser(User user){
-        log.info("Updating Admin : " + user.getUsername());
-        return adminRepository.save((Admin) user);
+    public User updateUser(UserUpdateDTO userUpdateDTO){
+        Admin admin = (Admin) getUser(userUpdateDTO.getId());
+        log.info("Updating Admin : " + admin.getUsername());
+        admin.setUsername(userUpdateDTO.getUsername());
+        admin.setEmail(userUpdateDTO.getEmail());
+        admin.setName(userUpdateDTO.getName());
+        admin.setPhoneNumber(userUpdateDTO.getPhoneNumber());
+        return adminRepository.save(admin);
     }
 
     @Override
