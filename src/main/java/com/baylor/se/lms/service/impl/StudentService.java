@@ -43,9 +43,9 @@ public class StudentService implements IUserService {
             throw new UnmatchingPasswordException("Password 1 and password 2 don't match with each other.");
         }
         log.info("Registering Student: "+ userDTO.getUsername());
-        User user = studentFactory.getUser(userDTO);
-        log.info("Saving student : " + user.getUsername());
-       return studentRepository.save((Student) user);
+        Student student= (Student) studentFactory.getUser(userDTO);
+        log.info("Saving student : " + student.getUsername());
+       return studentRepository.save(student);
     }
 
     @Override

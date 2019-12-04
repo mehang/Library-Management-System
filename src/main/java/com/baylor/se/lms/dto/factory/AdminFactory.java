@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AdminFactory extends UserFactory{
     @Override
-    public User getUser() {
+    public User createUser() {
         return new Admin();
     }
     @Override

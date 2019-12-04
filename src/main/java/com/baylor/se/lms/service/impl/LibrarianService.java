@@ -45,9 +45,9 @@ public class LibrarianService implements IUserService {
             throw new UnmatchingPasswordException("Password 1 and password 2 don't match with each other.");
         }
         log.info("Registering Student: "+ userDTO.getUsername());
-        User user = librarianFactory.getUser(userDTO);
-        log.info("Saving student : " + user.getUsername());
-        return librarianRepository.save((Librarian) user);
+        Librarian librarian = (Librarian) librarianFactory.getUser(userDTO);
+        log.info("Saving student : " + librarian.getUsername());
+        return librarianRepository.save(librarian);
     }
 
     @Override

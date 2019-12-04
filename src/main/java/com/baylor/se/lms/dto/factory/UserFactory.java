@@ -14,7 +14,7 @@ public abstract class UserFactory {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User getUser(UserDTO userDTO){
-        User user = getUser();
+        User user = createUser();
         user.setUsername(userDTO.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setEmail(userDTO.getEmail());
@@ -28,6 +28,6 @@ public abstract class UserFactory {
         return user;
     }
 
-    public abstract User getUser();
+    public abstract User createUser();
     public abstract Role getRole();
 }

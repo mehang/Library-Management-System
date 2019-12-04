@@ -7,6 +7,7 @@ import com.baylor.se.lms.dto.UserVerifyDTO;
 import com.baylor.se.lms.dto.factory.AdminFactory;
 import com.baylor.se.lms.dto.factory.LibrarianFactory;
 import com.baylor.se.lms.dto.factory.StudentFactory;
+import com.baylor.se.lms.exception.UnmatchingPasswordException;
 import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class UserController {
 
     @Autowired
     AdminService adminService;
+
     @Autowired
     BookLoanService bookLoanService;
 
@@ -84,8 +86,8 @@ public class UserController {
     @PostMapping(path = "/users/students", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity addStudent(@RequestBody UserDTO userDTO) {
-        Student student=(Student) studentService.registerUser(userDTO);
-        return ResponseEntity.ok().body(student);
+        User registeredStudent = studentService.registerUser(userDTO);
+        return ResponseEntity.ok().body(registeredStudent);
     }
 
     @PutMapping(path = "/users/students/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
@@ -117,8 +119,8 @@ public class UserController {
     @PostMapping(path = "/users/librarians", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity addLibrarian(@RequestBody UserDTO userDTO) {
-        Librarian librarian=(Librarian) librarianService.registerUser(userDTO);
-        return ResponseEntity.ok().body(librarian);
+        User registeredLibrarian = librarianService.registerUser(userDTO);
+        return ResponseEntity.ok().body(registeredLibrarian);
     }
 
     @PutMapping(path = "/users/librarians/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
@@ -150,8 +152,8 @@ public class UserController {
     @PostMapping(path = "/users/admins", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity addAdmin(@RequestBody UserDTO userDTO) {
-        Admin admin=(Admin) adminService.registerUser(userDTO);
-        return ResponseEntity.ok().body(admin);
+        User registeredAdmin = adminService.registerUser(userDTO);
+        return ResponseEntity.ok().body(registeredAdmin);
     }
 
     @PutMapping(path = "/users/admins/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
@@ -180,19 +182,19 @@ public class UserController {
 
     @GetMapping(path = "/users/students/verify/{id:[0-9][0-9]*}", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<UserVerifyDTO> verifyStudent(@PathVariable Long id){
+    public ResponseEntity<UserVerifyDTO> verifyStudent(@PathVariable Long id) {
         BufferedReader reader;
-        UserVerifyDTO verifyDTO =  new UserVerifyDTO();
+        UserVerifyDTO verifyDTO = new UserVerifyDTO();
         verifyDTO.setUserId(id);
         try {
-            reader =  new BufferedReader(new FileReader("src\\main\\resources\\students.txt"));
+            reader = new BufferedReader(new FileReader("src\\main\\resources\\students.txt"));
             String line = reader.readLine();
-            while(null != line){
-                if (line.equals(id.toString())){
+            while (null != line) {
+                if (line.equals(id.toString())) {
                     verifyDTO.setVerified(true);
                     return ResponseEntity.ok().body(verifyDTO);
                 }
-                line =  reader.readLine();
+                line = reader.readLine();
             }
         } catch (Exception e) {
             verifyDTO.setVerified(false);
@@ -200,7 +202,7 @@ public class UserController {
 
         }
         verifyDTO.setVerified(false);
-        return  ResponseEntity.ok().body(verifyDTO);
+        return ResponseEntity.ok().body(verifyDTO);
 
     }
 }

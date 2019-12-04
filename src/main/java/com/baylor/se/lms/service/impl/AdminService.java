@@ -38,7 +38,6 @@ public class AdminService implements IUserService {
     @Autowired
     JmsTemplate jmsTemplate;
 
-
     @Override
     public User registerUser(UserDTO userDTO)
     {
@@ -46,9 +45,9 @@ public class AdminService implements IUserService {
             throw new UnmatchingPasswordException("Password 1 and password 2 don't match with each other.");
         }
         log.info("Registering Admin: " + userDTO.getUsername());
-       User user = adminFactory.getUser(userDTO);
-        log.info("Saving admin : " + user.getUsername());
-        return adminRepository.save((Admin)user);
+        Admin admin = (Admin)adminFactory.getUser(userDTO);
+        log.info("Saving admin : " + admin.getUsername());
+        return adminRepository.save(admin);
     }
 
     @Override
