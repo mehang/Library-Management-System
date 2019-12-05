@@ -37,6 +37,12 @@ public class BookService implements IBookService {
     @Autowired
     BookLoanRepository bookLoanRepository;
 
+    /**
+     *  Creates new book with new specification.
+     *  This function adds new book along with the specification.
+     * @param book:  Book details
+     * @return Book: Created book
+     */
     @Override
     @Transactional(rollbackOn = Exception.class)
     public Book registerBook(BookDTO book){
@@ -49,9 +55,7 @@ public class BookService implements IBookService {
         bookSpecification.setLanguage(book.getLanguage());
         bookSpecification.setEdition(book.getEdition());
         bookSpecification.setAuthor(authorRepo.findAuthorById(book.getAuthorId()).orElseThrow(NotFoundException::new));
-        Set<BookCategory> bookCategorySet =  new HashSet<>();
-        book.getBookCategory().forEach( s -> bookCategorySet.add(bookCategoryRepo.findById(s).orElseThrow(NotFoundException::new)));
-        bookSpecification.setBookCategorySet(bookCategorySet);
+        bookSpecification.setBookCategorySet(createCategory(book));
         bookSpecification = bookSpecificationService.saveBookSpec(bookSpecification);
         Book newBook =  new Book();
         log.info("Book Name : " +  bookSpecification.getName());
@@ -64,6 +68,11 @@ public class BookService implements IBookService {
         return bookRepository.save(newBook);
     }
 
+    /**
+     * Returns non-deleted Book of provided id.
+     * @param id : Book id
+     * @return Book :  Book records
+     */
     @Override
     public Book getBook(Long id){
         log.info("Retrieving book by id " + id);
@@ -71,11 +80,20 @@ public class BookService implements IBookService {
         return book;
     }
 
+    /**
+     *  Returns book record of given serial number
+     * @param serialNo : Book Serial number
+     * @return Book : Non-deleted Book
+     */
     public Book getBookBySerialNumber(String serialNo){
         Book book = bookRepository.findBookBySerialNo(serialNo).orElseThrow(NotFoundException::new);
         return book;
     }
 
+    /**
+     *  Get all non-deleted books
+     * @return List of Books
+     */
     @Override
     public List<Book> getBooks(){
         log.info("All Book Id");
@@ -83,6 +101,7 @@ public class BookService implements IBookService {
         books.removeIf(Book::isDeleteFlag);
         return books;
     }
+
 
     @Override
     public BookSpecification updateBook(BookDTO bookDTO){
@@ -119,9 +138,7 @@ public class BookService implements IBookService {
         }
         if (bookDTO.getBookCategory()  != null){
             log.info("Book Category changed");
-            Set<BookCategory> bookCategories =  new HashSet<>();
-            bookDTO.getBookCategory().forEach( s -> bookCategories.add(bookCategoryRepo.findById(s).orElseThrow(NotFoundException::new)));
-            bookSpecification.setBookCategorySet(bookCategories);
+            bookSpecification.setBookCategorySet(createCategory(bookDTO));
         }
         log.info("Update book  records:" + bookSpecification.getName());
         return bookSpecificationService.updateBookSpec(bookSpecification);
@@ -303,5 +320,10 @@ public class BookService implements IBookService {
     }
     private Book updateBook(Book book){
         return bookRepository.save(book);
+    }
+    private  Set<BookCategory> createCategory(BookDTO bookDTO){
+        Set<BookCategory> bookCategories =  new HashSet<>();
+        bookDTO.getBookCategory().forEach( s -> bookCategories.add(bookCategoryRepo.findById(s).orElseThrow(NotFoundException::new)));
+        return bookCategories;
     }
 }

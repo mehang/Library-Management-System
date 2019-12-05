@@ -24,18 +24,32 @@ public class AuthorService implements IAuthorService {
     @Autowired
     JmsTemplate jmsTemplate;
 
+    /**
+     * Creates new author
+     * @param author
+     * @return Author : stored author with id
+     */
     @Override
     public Author registerAuthor(Author author) {
         log.info("Registering Author : " + author.getName());
         return authorRepository.save(author);
     }
 
+    /**
+     * Returns author with provided id
+     * @param id
+     * @return Author
+     */
     @Override
     public Author getAuthor(Long id) {
         log.info("Retrieving Author : " + id);
         return authorRepository.findAuthorById(id).orElseThrow(NotFoundException::new);
     }
 
+    /**
+     * Returns all authors with delete flag set false
+     * @return List <Author> : List of all non deleted authors
+     */
     @Override
     public List<Author> getAuthors() {
         log.info("Retrieving All Authors");
@@ -43,12 +57,22 @@ public class AuthorService implements IAuthorService {
         return authors;
     }
 
+    /**
+     * Update Author information
+     * @param author
+     * @return Author: Updated Author
+     */
     @Override
     public Author updateAuthor(Author author) {
         log.info("Updating Authors: "+ author.getName());
         return authorRepository.save(author);
     }
 
+    /**
+     * Deletes author of provided Id. Delete here is soft delete. JMS template calls to postDelete which appends
+     * on author name to preserve the uniqueness.
+     * @param id
+     */
     @Override
     public void deleteAuthor(Long id) {
         log.info("Deleting Author with id : "+ id );
@@ -58,6 +82,10 @@ public class AuthorService implements IAuthorService {
         jmsTemplate.convertAndSend("post-author-delete", author);
     }
 
+    /**
+     *  Appends author name with deleted timestamp to preserve uniqueness.
+     * @param author
+     */
     @JmsListener(destination = "post-author-delete", containerFactory = "postDeleteFactory")
     public void postDelete(Author author) {
         String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
