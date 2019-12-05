@@ -24,8 +24,7 @@ public class LibrarianService implements IUserService {
     @Autowired
     LibrarianRepository librarianRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder bcryptEncoder;
+
 
     @Autowired
     LibrarianFactory librarianFactory;
