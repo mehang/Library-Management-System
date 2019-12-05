@@ -218,6 +218,10 @@ public class BookService implements IBookService {
         }
 
         Librarian librarian= (Librarian) librarianService.getUser(bookIssueDTO.getUserId());
+        if (librarian == null){
+            log.info("Invalid Librarian");
+            throw  new NotFoundException();
+        }
         bookLoan.setIssuedBy(librarian);
         bookLoan.setStatus(BookLoan.LoanStatus.ISSUED);
         BookLog bookLog =createBookLog(BookLog.Action.ISSUED,bookLoan);

@@ -26,7 +26,7 @@ public abstract class User {
 
     //todo: add pattern according to frontend
     @Column(unique = true, nullable = false)
-//    @Pattern(regexp = "(d{3})d{3}-d{4}")
+    @Pattern(regexp = "[0-9]{10}")
     private String phoneNumber;
 
     @JsonIgnore
@@ -34,7 +34,7 @@ public abstract class User {
     private String password;
 
     @Column(unique = true, nullable = false)
-//    @Pattern(regexp = "[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}")
+    @Pattern(regexp = "[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}")
     private String email;
     @Column(columnDefinition = "BOOLEAN")
     private boolean deleteFlag = false;

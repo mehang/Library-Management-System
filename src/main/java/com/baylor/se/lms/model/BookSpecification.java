@@ -3,6 +3,8 @@ package com.baylor.se.lms.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -15,7 +17,9 @@ public class BookSpecification implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column
+    @NotNull
+    @Size(min = 2, max = 255)
     private String name;
 
 

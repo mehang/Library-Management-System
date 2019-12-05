@@ -26,17 +26,11 @@ public class BookDTO {
         this.librarianId = librarianId;
     }
 
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
-    }
 
     public long getLibrarianId() {
         return librarianId;
     }
 
-    public void setLibrarianId(long librarianId) {
-        this.librarianId = librarianId;
-    }
 
     public String getName() {
         return name;
