@@ -1,7 +1,6 @@
 package com.baylor.se.lms.service.impl;
 
 import com.baylor.se.lms.data.AdminRepository;
-import com.baylor.se.lms.dto.factory.AdminFactory;
 import com.baylor.se.lms.exception.NotFoundException;
 import com.baylor.se.lms.model.Admin;
 import com.baylor.se.lms.model.User;
@@ -10,12 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
