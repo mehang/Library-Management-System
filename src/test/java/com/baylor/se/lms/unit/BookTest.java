@@ -8,6 +8,7 @@ import com.baylor.se.lms.dto.BookReturnDTO;
 import com.baylor.se.lms.exception.NotFoundException;
 import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.model.BookLoan;
+import com.baylor.se.lms.model.BookLog;
 import com.baylor.se.lms.model.Librarian;
 import com.baylor.se.lms.service.impl.BookService;
 import com.baylor.se.lms.service.impl.LibrarianService;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -90,9 +92,15 @@ public class BookTest {
         BookRequestDTO bookRequestDTO = new BookRequestDTO();
         bookRequestDTO.setBookId(2L);
         bookRequestDTO.setUserId(6L);
-        bookService.requestForBook(bookRequestDTO);
+        BookLoan bookLoan = bookService.requestForBook(bookRequestDTO);
         Book book = bookService.getBook(2L);
+        //Assert Book Status is changed
         Assert.assertEquals(Book.BookStatus.NOT_AVAILABLE, book.getStatus());
+        //Assert Book Log is created
+        Assert.assertEquals(bookLoan.getLog().size(),1);
+        Set<BookLog> bookLogSet = bookLoan.getLog();
+        // Assert Book Log is set for REQUESTED
+        bookLogSet.forEach(s -> Assert.assertEquals(s.getAction(),BookLog.Action.REQUEST));
     }
 
     @Test
@@ -107,6 +115,9 @@ public class BookTest {
         bookIssueDTO.setUserId(4L);
         BookLoan bookLoan = bookService.issueBook(bookIssueDTO);
         Assert.assertEquals(bookLoan.getStatus(), BookLoan.LoanStatus.ISSUED);
+        //Assert Book Log is created
+        Assert.assertEquals(bookLoan.getLog().size(),2);
+
 
 
     }
@@ -127,6 +138,11 @@ public class BookTest {
         bookReturnDTO.setSerialNo("1120032Book1");
         BookLoan bookLoan = bookService.returnBook(bookReturnDTO);
         Assert.assertEquals(bookLoan.getStatus(), BookLoan.LoanStatus.RETURNED);
+        Assert.assertEquals(bookLoan.getLog().size(),3);
+
+        bookLoan.setLog(bookLoan.getLog().stream().filter(s -> s.getAction() == BookLog.Action.RETURN).collect(Collectors.toSet()));
+        // Assert Book Log is set for REQUESTED
+        Assert.assertEquals(bookLoan.getLog().size(),1);
     }
 
     @Test(expected = NotFoundException.class)
