@@ -3,6 +3,7 @@ package com.baylor.se.lms.controller;
 import com.baylor.se.lms.model.Author;
 import com.baylor.se.lms.service.impl.AuthorService;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +22,11 @@ public class AuthorController {
 
     @GetMapping(path = "/authors", produces="application/json")
     public ResponseEntity<List<Author>>getAuthors(){
-
-        List<Author> authors = authorService.getAuthors();
-        log.info(" Fetched all authors");
-        return ResponseEntity.ok().body(authors);
+            List<Author> authors = authorService.getAuthors();
+            log.info(" Fetched all authors");
+            return ResponseEntity.ok().body(authors);
     }
+
     @GetMapping(path="/authors/{id:[0-9][0-9]*}", produces="application/json")
     public ResponseEntity<Author> getAuthor(@PathVariable Long id) {
         Author author = authorService.getAuthor(id);

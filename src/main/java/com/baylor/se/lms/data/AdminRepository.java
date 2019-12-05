@@ -20,7 +20,6 @@ public interface AdminRepository extends UserBaseRepository<Admin>, CrudReposito
     @Query("select  A from Admin A where A.id = ?1 and A.deleteFlag = false")
     Optional<Admin> findAdminById(long id);
 
-
-    Optional <List<Admin>> findAllByDeleteFlagFalse();
+    List<Admin> findAllByDeleteFlagFalse();
 }
 

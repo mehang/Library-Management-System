@@ -1,12 +1,7 @@
 package com.baylor.se.lms.service.impl;
 
-import com.baylor.se.lms.dto.UserDTO;
-import com.baylor.se.lms.dto.UserUpdateDTO;
 import com.baylor.se.lms.dto.factory.LibrarianFactory;
-import com.baylor.se.lms.exception.UnmatchingPasswordException;
-import com.baylor.se.lms.model.Author;
 import com.baylor.se.lms.model.Librarian;
-import com.baylor.se.lms.model.Role;
 import com.baylor.se.lms.model.User;
 import com.baylor.se.lms.data.LibrarianRepository;
 import com.baylor.se.lms.exception.NotFoundException;
@@ -19,10 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Slf4j
@@ -40,38 +34,33 @@ public class LibrarianService implements IUserService {
     JmsTemplate jmsTemplate;
 
     @Override
-    public User registerUser(UserDTO userDTO)
+    public User registerUser(User user)
     {
-        if (!userDTO.getPassword1().equals(userDTO.getPassword2())) {
-            throw new UnmatchingPasswordException("Password 1 and password 2 don't match with each other.");
-        }
-        log.info("Registering Student: "+ userDTO.getUsername());
-        Librarian librarian = (Librarian) librarianFactory.getUser(userDTO);
-        log.info("Saving student : " + librarian.getUsername());
-        return librarianRepository.save(librarian);
+        return librarianRepository.save((Librarian) user);
     }
 
     @Override
     public User getUser(Long id) {
         log.info("Getting librarian id : "+ id);
-        Librarian librarian = librarianRepository.findById(id).orElseThrow(NotFoundException::new);
-        return librarian;
+        return librarianRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
-    public List<Librarian> getAll() {
-        log.info("Get All Librarians: ");
-        List<Librarian> librarians = (List<Librarian>) librarianRepository.findAll();
+    @Override
+    public List<User> getAll()
+    {
+        List<User> librarians = new ArrayList<>();
+        List<Librarian> allLibrarians =librarianRepository.findAllByDeleteFlagFalse();
+        librarians.addAll( allLibrarians);
         return librarians;
     }
 
     @Override
-    public User updateUser(UserUpdateDTO userUpdateDTO) {
-        Librarian librarian = (Librarian) getUser(userUpdateDTO.getId());
-        log.info("Updating Librarian: " +librarian.getUsername());
-        librarian.setUsername(userUpdateDTO.getUsername());
-        librarian.setEmail(userUpdateDTO.getEmail());
-        librarian.setName(userUpdateDTO.getName());
-        librarian.setPhoneNumber(userUpdateDTO.getPhoneNumber());
+    public User updateUser(User user, Long id){
+        Librarian librarian = (Librarian)getUser(id);
+        librarian.setEmail(user.getEmail());
+        librarian.setName(user.getName());
+        librarian.setUsername(user.getUsername());
+        librarian.setPhoneNumber(user.getPhoneNumber());
         return librarianRepository.save(librarian);
     }
 
@@ -93,11 +82,4 @@ public class LibrarianService implements IUserService {
         librarianRepository.save(librarian);
     }
 
-    public void changePassword(long id, String newPassword){
-
-        Librarian librarian = librarianRepository.findById(id).orElseThrow(NotFoundException::new);
-        log.info("Changing Password: " +  librarian.getUsername());
-        librarian.setPassword(bcryptEncoder.encode(newPassword));
-        librarianRepository.save(librarian);
-    }
 }

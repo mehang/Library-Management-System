@@ -1,4 +1,4 @@
-package com.baylor.se.lms.dto;
+package com.baylor.se.lms.dto.user.update;
 
 public class UserUpdateDTO {
     private Long id;

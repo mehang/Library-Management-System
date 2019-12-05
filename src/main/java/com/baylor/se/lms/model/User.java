@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "User")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "DISCRIMINATOR", discriminatorType = DiscriminatorType.STRING)
-public class User {
+public abstract class User {
     @Id
     @GeneratedValue
     private Long id;
@@ -63,6 +63,10 @@ public class User {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id){
+        this.id=id;
     }
 
     public String getUsername() {

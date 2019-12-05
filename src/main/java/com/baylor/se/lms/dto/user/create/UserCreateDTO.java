@@ -1,8 +1,6 @@
-package com.baylor.se.lms.dto;
+package com.baylor.se.lms.dto.user.create;
 
-import java.util.Set;
-
-public class UserDTO {
+public class UserCreateDTO {
     private Long id;
 
     private String username;

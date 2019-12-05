@@ -2,7 +2,7 @@ package com.baylor.se.lms.dto;
 
 public class PasswordChangeDTO {
     private Long id;
-    private String userType;
+//    private String userType;
     private String password1;
     private String password2;
 
@@ -14,13 +14,13 @@ public class PasswordChangeDTO {
         this.id = id;
     }
 
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
+//    public String getUserType() {
+//        return userType;
+//    }
+//
+//    public void setUserType(String userType) {
+//        this.userType = userType;
+//    }
 
     public String getPassword1() {
         return password1;

@@ -1,10 +1,6 @@
 package com.baylor.se.lms.service.impl;
 
-import com.baylor.se.lms.dto.UserDTO;
-import com.baylor.se.lms.dto.UserUpdateDTO;
 import com.baylor.se.lms.dto.factory.StudentFactory;
-import com.baylor.se.lms.exception.UnmatchingPasswordException;
-import com.baylor.se.lms.model.Role;
 import com.baylor.se.lms.model.Student;
 import com.baylor.se.lms.model.User;
 import com.baylor.se.lms.data.StudentRepository;
@@ -17,11 +13,10 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Slf4j
@@ -39,14 +34,8 @@ public class StudentService implements IUserService {
     JmsTemplate jmsTemplate;
 
     @Override
-    public User registerUser(UserDTO userDTO){
-        if (!userDTO.getPassword1().equals(userDTO.getPassword2())) {
-            throw new UnmatchingPasswordException("Password 1 and password 2 don't match with each other.");
-        }
-        log.info("Registering Student: "+ userDTO.getUsername());
-        Student student= (Student) studentFactory.getUser(userDTO);
-        log.info("Saving student : " + student.getUsername());
-       return studentRepository.save(student);
+    public User registerUser(User user){
+       return studentRepository.save((Student)user);
     }
 
     @Override
@@ -56,20 +45,25 @@ public class StudentService implements IUserService {
         return student;
     }
 
-    public List<Student> getAll(){
-        log.info("Get all students");
-        List<Student> students =(List<Student>) studentRepository.findAll();
+    @Override
+    public List<User> getAll()
+    {
+        List<User> students = new ArrayList<>();
+        List<Student> allStudents =studentRepository.findAllByDeleteFlagFalse();
+        students.addAll( allStudents);
         return students;
     }
 
     @Override
-    public User updateUser(UserUpdateDTO userUpdateDTO){
-        Student student = (Student) getUser(userUpdateDTO.getId());
+    public User updateUser(User user, Long id){
+        Student updatingStudent = (Student) user;
+        Student student = (Student) getUser(id);
         log.info("Update student: " + student.getUsername());
-        student.setUsername(userUpdateDTO.getUsername());
-        student.setEmail(userUpdateDTO.getEmail());
-        student.setName(userUpdateDTO.getName());
-        student.setPhoneNumber(userUpdateDTO.getPhoneNumber());
+        student.setUsername(updatingStudent.getUsername());
+        student.setEmail(updatingStudent.getEmail());
+        student.setName(updatingStudent.getName());
+        student.setPhoneNumber(updatingStudent.getPhoneNumber());
+        student.setDegree(updatingStudent.getDegree());
         return studentRepository.save(student);
     }
 

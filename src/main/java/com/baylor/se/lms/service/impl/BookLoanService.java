@@ -7,7 +7,6 @@ import com.baylor.se.lms.exception.BadRequestException;
 import com.baylor.se.lms.exception.NotFoundException;
 import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.model.BookLoan;
-import com.baylor.se.lms.model.Student;
 import com.baylor.se.lms.model.User;
 import com.baylor.se.lms.service.IBookLoanService;
 import lombok.extern.slf4j.Slf4j;
