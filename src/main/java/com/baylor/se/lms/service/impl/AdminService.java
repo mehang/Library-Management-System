@@ -34,20 +34,36 @@ public class AdminService implements IUserService {
         return adminRepository.save((Admin)user);
     }
 
+    /**
+     * Returns Admin with provided id
+     * @param id
+     * @return User
+     */
     @Override
     public User getUser(Long id){
         log.info("Getting admin id : "+ id);
         return adminRepository.findAdminById(id).orElseThrow(NotFoundException::new);
     }
 
+    /**
+     * Returns All Admins
+     * @return
+     */
     @Override
     public List<User> getAll()
     {
+        log.info("Get all admins");
         List<Admin> allAdmins =adminRepository.findAllByDeleteFlagFalse();
         List<User> admins = new ArrayList<>(allAdmins);
         return admins;
     }
 
+    /**
+     * Updates admin of given  id
+     * @param user
+     * @param id
+     * @return Admin
+     */
     @Override
     public User updateUser(User user, Long id){
         Admin admin = (Admin)getUser(id);
@@ -58,6 +74,10 @@ public class AdminService implements IUserService {
         return adminRepository.save(admin);
     }
 
+    /**
+     * Deletes admin of id. In our application, delete  means soft delete where we set the deletedFlag to true
+     * @param id
+     */
     @Override
     public void deleteUser(Long id){
         Admin admin =   adminRepository.findById(id).orElseThrow(NotFoundException::new);
@@ -67,6 +87,10 @@ public class AdminService implements IUserService {
         jmsTemplate.convertAndSend("post-admin-delete", admin);
     }
 
+    /**
+     * Adds timestamp for deleted  admin to make the username available after delete.
+     * @param admin
+     */
     @JmsListener(destination = "post-admin-delete", containerFactory = "postDeleteFactory")
     public void postDelete(Admin admin) {
         String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());

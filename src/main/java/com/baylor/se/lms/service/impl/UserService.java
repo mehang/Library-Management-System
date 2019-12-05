@@ -162,7 +162,7 @@ public class UserService implements UserDetailsService {
         } else {
             user = studentFactory.getUser(userCreateDTO);
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
-            return adminService.registerUser((Student) user);
+            return studentService.registerUser((Student) user);
         }
     }
 

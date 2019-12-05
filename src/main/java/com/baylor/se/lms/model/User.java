@@ -1,8 +1,10 @@
 package com.baylor.se.lms.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.jms.annotation.EnableJms;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Set;
@@ -34,7 +36,7 @@ public abstract class User {
     private String password;
 
     @Column(unique = true, nullable = false)
-    @Pattern(regexp = "[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}")
+    @Email
     private String email;
     @Column(columnDefinition = "BOOLEAN")
     private boolean deleteFlag = false;

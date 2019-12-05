@@ -27,6 +27,7 @@ public class StudentService implements IUserService {
 
     @Override
     public User registerUser(User user){
+
        return studentRepository.save((Student)user);
     }
 

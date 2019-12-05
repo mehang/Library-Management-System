@@ -5,6 +5,7 @@ import com.baylor.se.lms.dto.*;
 import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.model.BookCategory;
 import com.baylor.se.lms.model.BookLoan;
+import com.baylor.se.lms.model.BookSpecification;
 import com.baylor.se.lms.service.impl.BookCategoryService;
 import com.baylor.se.lms.service.impl.BookLoanService;
 import com.baylor.se.lms.service.impl.BookService;
@@ -60,11 +61,11 @@ public class BookController {
 
     @PutMapping(path="/books/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<Book> updateBook(@RequestBody BookDTO bookDTO) {
+    public ResponseEntity<BookSpecification> updateBook(@RequestBody BookDTO bookDTO) {
         log.info("Updating Book");
 
-        Book updatedBook = bookService.updateBook(bookDTO);
-        log.info("Book updated: "+ updatedBook.getSpecification().getName());
+        BookSpecification updatedBook = bookService.updateBook(bookDTO);
+        log.info("Book updated: "+ updatedBook.getName());
         return ResponseEntity.ok().body(updatedBook);
     }
 
