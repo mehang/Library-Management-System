@@ -14,6 +14,9 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+/**
+ *  Handles all CRUD operations for Book Category.
+ */
 @Service
 @Slf4j
 public class BookCategoryService implements IBookCategoryService {

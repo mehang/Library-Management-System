@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ *  Admin service handles all CRUD for Admins.
+ */
 
 @Service
 @Slf4j
@@ -67,10 +70,7 @@ public class AdminService implements IUserService {
     @Override
     public User updateUser(User user, Long id){
         Admin admin = (Admin)getUser(id);
-        admin.setEmail(user.getEmail());
-        admin.setName(user.getName());
-        admin.setUsername(user.getUsername());
-        admin.setPhoneNumber(user.getPhoneNumber());
+        admin = (Admin) updateValuesUser(user,admin);
         return adminRepository.save(admin);
     }
 
@@ -93,10 +93,7 @@ public class AdminService implements IUserService {
      */
     @JmsListener(destination = "post-admin-delete", containerFactory = "postDeleteFactory")
     public void postDelete(Admin admin) {
-        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-        admin.setUsername(admin.getUsername()+timeStamp);
-        admin.setPhoneNumber(String.format ("%010d", admin.getId()));
-        admin.setEmail("deleted"+admin.getId()+"@gmail.com");
+        admin = (Admin) convertAfterDelete(admin);
         adminRepository.save(admin);
     }
 

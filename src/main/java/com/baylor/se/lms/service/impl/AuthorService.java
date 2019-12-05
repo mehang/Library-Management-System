@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+/**
+ * Author service handles all the author requests.
+ */
 @Service
 @Slf4j
 public class AuthorService implements IAuthorService {

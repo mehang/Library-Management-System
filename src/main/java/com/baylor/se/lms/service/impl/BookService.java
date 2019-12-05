@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 
+/**
+ * Book Service handles all CRUD operations of Book. Additionally, it also handle request
+ * for Book Request, Issue and Return. It also creates BookLoan and BookLog records.
+ */
 @Service
 @Slf4j
 public class BookService implements IBookService {
