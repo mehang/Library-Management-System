@@ -85,47 +85,47 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Book updateBook(BookDTO bookDTO){
+    public BookSpecification updateBook(BookDTO bookDTO){
 
-        Book book =  getBook(bookDTO.getBookId());
-        if (book == null){
+        BookSpecification bookSpecification =  bookSpecificationService.getBookSpec(bookDTO.getBookId());
+        if (bookSpecification == null){
             log.info("Book Record Not Found");
             throw  new NotFoundException();
         }
         if(bookDTO.getName() != null){
             log.info("Book Name changed");
-            book.getSpecification().setName(bookDTO.getName());
+            bookSpecification.setName(bookDTO.getName());
         }
 
         if(bookDTO.getPublication() != null) {
             log.info("Book publication changed");
-            book.getSpecification().setPublication(bookDTO.getPublication());
+            bookSpecification.setPublication(bookDTO.getPublication());
         }
         if(bookDTO.getIsbn() != null) {
             log.info("Book ISBN changed");
-            book.getSpecification().setIsbn(bookDTO.getIsbn());
+            bookSpecification.setIsbn(bookDTO.getIsbn());
         }
         if(bookDTO.getEdition() != null) {
             log.info("Book Edition changed");
-            book.getSpecification().setEdition(bookDTO.getEdition());
+            bookSpecification.setEdition(bookDTO.getEdition());
         }
         if(bookDTO.getLanguage() !=null) {
             log.info("Book Language changed");
-            book.getSpecification().setLanguage(bookDTO.getLanguage());
+            bookSpecification.setLanguage(bookDTO.getLanguage());
         }
         if(bookDTO.getAuthorId() == 0){
             log.info("Book Author Changed");
-            book.getSpecification().setAuthor(authorRepo.findAuthorById(bookDTO.getAuthorId()).orElseThrow(NotFoundException::new));
+            bookSpecification.setAuthor(authorRepo.findAuthorById(bookDTO.getAuthorId()).orElseThrow(NotFoundException::new));
         }
         if (bookDTO.getBookCategory()  != null){
             log.info("Book Category changed");
-            Set<BookCategory> bookCategorySet =  new HashSet<>();
-            bookDTO.getBookCategory().forEach( s -> bookCategorySet.add(bookCategoryRepo.findById(s).orElseThrow(NotFoundException::new)));
-            book.getSpecification().setBookCategorySet(bookCategorySet);
+            Set<BookCategory> bookCategories =  new HashSet<>();
+            bookDTO.getBookCategory().forEach( s -> bookCategories.add(bookCategoryRepo.findById(s).orElseThrow(NotFoundException::new)));
+            bookSpecification.setBookCategorySet(bookCategories);
         }
-        bookSpecificationService.updateBookSpec(book.getSpecification());
-        log.info("Update book  records:" + book.getSpecification().getName());
-        return bookRepository.save(book);
+        log.info("Update book  records:" + bookSpecification.getName());
+        return bookSpecificationService.updateBookSpec(bookSpecification);
+
     }
 
     @Override

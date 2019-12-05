@@ -23,7 +23,6 @@ import java.util.List;
 public class LibrarianService implements IUserService {
     @Autowired
     LibrarianRepository librarianRepository;
-
     @Autowired
     JmsTemplate jmsTemplate;
 
