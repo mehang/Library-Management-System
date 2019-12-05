@@ -23,7 +23,6 @@ import java.util.List;
 @Slf4j
 public class BookController {
 
-
     @Autowired
     BookService bookService;
 

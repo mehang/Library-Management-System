@@ -1,6 +1,5 @@
 package com.baylor.se.lms.service.impl;
 
-import com.baylor.se.lms.dto.factory.StudentFactory;
 import com.baylor.se.lms.model.Student;
 import com.baylor.se.lms.model.User;
 import com.baylor.se.lms.data.StudentRepository;
@@ -10,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,12 +21,6 @@ import java.util.List;
 public class StudentService implements IUserService {
     @Autowired
     StudentRepository studentRepository;
-
-    @Autowired
-    StudentFactory studentFactory;
-
-    @Autowired
-    private BCryptPasswordEncoder bcryptEncoder;
 
     @Autowired
     JmsTemplate jmsTemplate;
@@ -48,9 +40,8 @@ public class StudentService implements IUserService {
     @Override
     public List<User> getAll()
     {
-        List<User> students = new ArrayList<>();
         List<Student> allStudents =studentRepository.findAllByDeleteFlagFalse();
-        students.addAll( allStudents);
+        List<User> students = new ArrayList<>(allStudents);
         return students;
     }
 
@@ -85,10 +76,4 @@ public class StudentService implements IUserService {
         studentRepository.save(student);
     }
 
-    public void changePassword(long id, String newPassword){
-        Student student = studentRepository.findById(id).orElseThrow(NotFoundException::new);
-        log.info("Changing Password: " +  student.getUsername());
-        student.setPassword(bcryptEncoder.encode(newPassword));
-        studentRepository.save(student);
-    }
 }

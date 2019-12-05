@@ -41,26 +41,12 @@ public class UserController {
     @Autowired
     PasswordResetTokenRepository tokenRepository;
 
-
-
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
     private TokenProvider jwtTokenUtil;
 
-//    @GetMapping(path="/users", produces = "application/json")
-//    public ResponseEntity<User> getUserByUsername(){
-//        //todo: check this all
-////        User user = userService.getUserByUsername("abc");
-//        return ResponseEntity.ok().body(user);
-//    }
-//
-//    @GetMapping(path="/users/{id:[0-9][0-9]*}", produces = "application/json")
-//    public ResponseEntity<User> getUserById(@PathVariable Long id){
-////        User user = userService.getUserByUsername("abc");
-//        return ResponseEntity.ok().body(user);
-//    }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody LoginDTO loginUser) throws AuthenticationException {
@@ -206,12 +192,12 @@ public class UserController {
     /**
      * Get BookLoan services according to user
      */
-    @GetMapping(path = "/users/{username}/bookloans", produces = "application/json")
-    @ResponseBody
-    public ResponseEntity<List<BookLoan>> getBookLoans(@PathVariable String username) {
-        List<BookLoan> bookLoans = bookLoanService.getBookLoanByUser(username);
-        return ResponseEntity.ok().body(bookLoans);
-    }
+//    @GetMapping(path = "/users/{username}/bookloans", produces = "application/json")
+//    @ResponseBody
+//    public ResponseEntity<List<BookLoan>> getBookLoans(@PathVariable String username) {
+//        List<BookLoan> bookLoans = bookLoanService.getBookLoanByUser(username);
+//        return ResponseEntity.ok().body(bookLoans);
+//    }
 
     @GetMapping(path = "/users/students/verify/{id:[0-9][0-9]*}", produces = "application/json")
     @ResponseBody

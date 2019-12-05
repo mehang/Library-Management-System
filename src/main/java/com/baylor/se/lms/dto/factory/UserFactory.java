@@ -11,13 +11,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class UserFactory {
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User getUser(UserCreateDTO userCreateDTO){
         User user = createUser();
         user.setUsername(userCreateDTO.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(userCreateDTO.getPassword1()));
+        user.setPassword(userCreateDTO.getPassword1());
         user.setEmail(userCreateDTO.getEmail());
         user.setName(userCreateDTO.getName());
         user.setPhoneNumber(userCreateDTO.getPhoneNumber());

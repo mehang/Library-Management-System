@@ -153,12 +153,15 @@ public class UserService implements UserDetailsService {
         log.info("Registering: " + userCreateDTO.getUsername());
         if (userType == UserType.ADMIN) {
             user = adminFactory.getUser(userCreateDTO);
+            user.setPassword(bcryptEncoder.encode(user.getPassword()));
             return adminService.registerUser((Admin) user);
         } else if (userType == UserType.LIBRARIAN) {
             user = librarianFactory.getUser(userCreateDTO);
+            user.setPassword(bcryptEncoder.encode(user.getPassword()));
             return librarianService.registerUser((Librarian) user);
         } else {
             user = studentFactory.getUser(userCreateDTO);
+            user.setPassword(bcryptEncoder.encode(user.getPassword()));
             return adminService.registerUser((Student) user);
         }
     }

@@ -25,12 +25,6 @@ public class LibrarianService implements IUserService {
     LibrarianRepository librarianRepository;
 
     @Autowired
-    private BCryptPasswordEncoder bcryptEncoder;
-
-    @Autowired
-    LibrarianFactory librarianFactory;
-
-    @Autowired
     JmsTemplate jmsTemplate;
 
     @Override
@@ -48,9 +42,8 @@ public class LibrarianService implements IUserService {
     @Override
     public List<User> getAll()
     {
-        List<User> librarians = new ArrayList<>();
         List<Librarian> allLibrarians =librarianRepository.findAllByDeleteFlagFalse();
-        librarians.addAll( allLibrarians);
+        List<User> librarians = new ArrayList<>(allLibrarians);
         return librarians;
     }
 

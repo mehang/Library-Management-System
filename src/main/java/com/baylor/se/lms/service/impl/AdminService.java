@@ -26,12 +26,6 @@ public class AdminService implements IUserService {
     AdminRepository adminRepository;
 
     @Autowired
-    AdminFactory adminFactory;
-
-    @Autowired
-    private BCryptPasswordEncoder bcryptEncoder;
-
-    @Autowired
     JmsTemplate jmsTemplate;
 
     @Override
@@ -49,9 +43,8 @@ public class AdminService implements IUserService {
     @Override
     public List<User> getAll()
     {
-        List<User> admins = new ArrayList<>();
         List<Admin> allAdmins =adminRepository.findAllByDeleteFlagFalse();
-        admins.addAll( allAdmins);
+        List<User> admins = new ArrayList<>(allAdmins);
         return admins;
     }
 

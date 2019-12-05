@@ -20,8 +20,6 @@ public class BookService implements IBookService {
     BookRepository bookRepository;
 
     @Autowired
-    LibrarianRepository librarianRepo;
-    @Autowired
     AuthorRepository authorRepo;
 
     @Autowired
