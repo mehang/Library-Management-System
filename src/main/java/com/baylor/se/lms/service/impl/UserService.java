@@ -68,7 +68,7 @@ public class UserService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Get user by username " + username);
-        Optional<User> user = userRepository.findByUsername(username);
+        Optional<User> user = userRepository.findUserByUsername(username);
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
@@ -77,11 +77,11 @@ public class UserService implements UserDetailsService {
     }
 
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findUserByUsername(username);
     }
 
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findUserByEmail(email);
     }
 
     private Set<SimpleGrantedAuthority> getAuthority(User user) {

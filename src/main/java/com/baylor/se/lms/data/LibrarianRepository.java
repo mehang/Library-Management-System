@@ -8,7 +8,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface LibrarianRepository extends UserBaseRepository<Librarian>, CrudRepository<Librarian, Long> {
+public interface LibrarianRepository extends CrudRepository<Librarian, Long> {
     @Query("select  L from Librarian L where L.id = ?1 and L.deleteFlag = false")
     Optional<Librarian> findLibrarianById(double id);
 

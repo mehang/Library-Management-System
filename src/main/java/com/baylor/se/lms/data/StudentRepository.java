@@ -6,6 +6,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-public interface StudentRepository extends UserBaseRepository<Student>, CrudRepository<Student, Long> {
+public interface StudentRepository extends CrudRepository<Student, Long> {
     List<Student> findAllByDeleteFlagFalse() ;
 }
