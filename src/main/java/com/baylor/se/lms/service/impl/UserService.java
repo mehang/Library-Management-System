@@ -198,15 +198,15 @@ public class UserService implements UserDetailsService {
         if (userType == UserType.ADMIN) {
             user = adminFactory.getUser(userCreateDTO);
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
-            return adminService.registerUser((Admin) user);
+            return adminService.registerUser(user);
         } else if (userType == UserType.LIBRARIAN) {
             user = librarianFactory.getUser(userCreateDTO);
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
-            return librarianService.registerUser((Librarian) user);
+            return librarianService.registerUser(user);
         } else {
             user = studentFactory.getUser(userCreateDTO);
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
-            return studentService.registerUser((Student) user);
+            return studentService.registerUser(user);
         }
     }
 
