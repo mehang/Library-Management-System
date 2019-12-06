@@ -1,10 +1,13 @@
 package com.baylor.se.lms.service.impl;
 
-import com.baylor.se.lms.data.*;
+import com.baylor.se.lms.data.AuthorRepository;
+import com.baylor.se.lms.data.BookCategoryRepository;
+import com.baylor.se.lms.data.BookLoanRepository;
+import com.baylor.se.lms.data.BookRepository;
 import com.baylor.se.lms.dto.*;
 import com.baylor.se.lms.exception.BadRequestException;
-import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.exception.NotFoundException;
+import com.baylor.se.lms.model.*;
 import com.baylor.se.lms.service.IBookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,10 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 
+/**
+ * Book Service handles all CRUD operations of Book. Additionally, it also handle request
+ * for Book Request, Issue and Return. It also creates BookLoan and BookLog records.
+ */
 @Service
 @Slf4j
 public class BookService implements IBookService {
@@ -37,6 +44,12 @@ public class BookService implements IBookService {
     @Autowired
     BookLoanRepository bookLoanRepository;
 
+    /**
+     *  Creates new book with new specification.
+     *  This function adds new book along with the specification.
+     * @param book:  Book details
+     * @return Book: Created book
+     */
     @Override
     @Transactional(rollbackOn = Exception.class)
     public Book registerBook(BookDTO book){
@@ -49,9 +62,7 @@ public class BookService implements IBookService {
         bookSpecification.setLanguage(book.getLanguage());
         bookSpecification.setEdition(book.getEdition());
         bookSpecification.setAuthor(authorRepo.findAuthorById(book.getAuthorId()).orElseThrow(NotFoundException::new));
-        Set<BookCategory> bookCategorySet =  new HashSet<>();
-        book.getBookCategory().forEach( s -> bookCategorySet.add(bookCategoryRepo.findById(s).orElseThrow(NotFoundException::new)));
-        bookSpecification.setBookCategorySet(bookCategorySet);
+        bookSpecification.setBookCategorySet(createCategory(book));
         bookSpecification = bookSpecificationService.saveBookSpec(bookSpecification);
         Book newBook =  new Book();
         log.info("Book Name : " +  bookSpecification.getName());
@@ -64,6 +75,11 @@ public class BookService implements IBookService {
         return bookRepository.save(newBook);
     }
 
+    /**
+     * Returns non-deleted Book of provided id.
+     * @param id : Book id
+     * @return Book :  Book records
+     */
     @Override
     public Book getBook(Long id){
         log.info("Retrieving book by id " + id);
@@ -71,11 +87,20 @@ public class BookService implements IBookService {
         return book;
     }
 
+    /**
+     *  Returns book record of given serial number
+     * @param serialNo : Book Serial number
+     * @return Book : Non-deleted Book
+     */
     public Book getBookBySerialNumber(String serialNo){
         Book book = bookRepository.findBookBySerialNo(serialNo).orElseThrow(NotFoundException::new);
         return book;
     }
 
+    /**
+     *  Get all non-deleted books
+     * @return List of Books
+     */
     @Override
     public List<Book> getBooks(){
         log.info("All Book Id");
@@ -84,6 +109,11 @@ public class BookService implements IBookService {
         return books;
     }
 
+    /**
+     *  Updates Book. Here, the book updated means updating  specification.
+     * @param bookDTO:  Book information to be updated.
+     * @return BookSpecification: updated Book Specification
+     */
     @Override
     public BookSpecification updateBook(BookDTO bookDTO){
 
@@ -119,15 +149,19 @@ public class BookService implements IBookService {
         }
         if (bookDTO.getBookCategory()  != null){
             log.info("Book Category changed");
-            Set<BookCategory> bookCategories =  new HashSet<>();
-            bookDTO.getBookCategory().forEach( s -> bookCategories.add(bookCategoryRepo.findById(s).orElseThrow(NotFoundException::new)));
-            bookSpecification.setBookCategorySet(bookCategories);
+            bookSpecification.setBookCategorySet(createCategory(bookDTO));
         }
         log.info("Update book  records:" + bookSpecification.getName());
         return bookSpecificationService.updateBookSpec(bookSpecification);
 
     }
 
+    /**
+     * Increase the count of already inserted book
+     * @param isbn : Isbn of book
+     * @param librarianId : Updating Librarian Id
+     * @return Book: Book records of newly increased book
+     */
     @Override
     public Book increaseBook(String isbn, long librarianId){
         log.info("Increasing Book .... ");
@@ -147,6 +181,13 @@ public class BookService implements IBookService {
         return  newBook;
     }
 
+    /**
+     * Handles all book request,  Each request consist of book id and student id. It checks
+     * book availability and creates new book loan record and book log records. The function
+     * also changes the book availability.
+     * @param bookRequestDTO : DTO for book request consist book id and user id
+     * @return BookLoan : Book Loan created after request is successful
+     */
     @Override
     @Transactional(rollbackOn = Exception.class)
     public BookLoan requestForBook(BookRequestDTO bookRequestDTO) {
@@ -186,6 +227,13 @@ public class BookService implements IBookService {
         return bookLoan;
 
     }
+
+    /**
+     * Searches book by name. Returns all list of book specification
+     * with list of all available book ids.
+     * @param bookName : Search query
+     * @return List of BookSpecification
+     */
     @Override
     public List<SearchDTO> searchBooks(String bookName){
         log.info("Searching Book by name ->  " + bookName);
@@ -195,6 +243,12 @@ public class BookService implements IBookService {
 
     }
 
+    /**
+     *  Issues book which was requested previously by the user. It changes bookloan record
+     *  and creates a new book log record.
+     * @param bookIssueDTO : Dto with book Id and Librarian Id
+     * @return BookLoan record
+     */
     @Override
     @Transactional(rollbackOn = Exception.class)
     public BookLoan issueBook(BookIssueDTO bookIssueDTO){
@@ -231,6 +285,11 @@ public class BookService implements IBookService {
         return bookLoan;
     }
 
+    /**
+     *  Handles return book request. It changes book status to Available, creates new book log record
+     * @param bookReturnDTO : DTO with bookId
+     * @return BookLoan record
+     */
     @Override
     @Transactional(rollbackOn = Exception.class)
     public BookLoan returnBook(BookReturnDTO bookReturnDTO){
@@ -261,7 +320,12 @@ public class BookService implements IBookService {
     }
 
 
-
+    /**
+     * Creates Book Log of given action.
+     * @param bookStatus : Status of action performed: Return, Request, Isssue
+     * @param bookLoan : BookLoan
+     * @return BookLog: log record for given action
+     */
     private BookLog createBookLog(BookLog.Action bookStatus, BookLoan bookLoan){
         Calendar date = Calendar.getInstance();
         date.setTimeZone(TimeZone.getTimeZone("CST"));
@@ -272,17 +336,35 @@ public class BookService implements IBookService {
         return bookLog;
     }
 
+    /**
+     * Generates new serial number for books. It counts total books in a specification
+     * and appends Book with count number  to create new book serial number.
+     * @param isbn : Book Isbn
+     * @param counter : Current Book Coonter
+     * @return String: new serial number
+     */
     private String generateNewSerial(String isbn, int counter){
         String serialNumber = isbn.concat("Book");
         return  serialNumber.concat(String.valueOf(counter));
 
     }
+
+    /**
+     *  Counts active request for the user.
+     * @param user : Student
+     * @return int : total number of active request
+     */
     private int totalBookCount(User user){
         List<BookLoan> bookLoans = bookLoanRepository.findAllByRequestedByAndActualDateOfReturnIsNull(user);
         return  bookLoans.size();
 
     }
 
+    /**
+     * Converts SpecificationDTO to SearchDTO. It adds  list of available book ids  is search DTP
+     * @param bookSpecList :  List of BookSpec
+     * @return List of SearchDTO
+     */
     private List<SearchDTO> convertSpecificationToSearchDTO(List<BookSpecification> bookSpecList){
         List<SearchDTO> searchDTOS = new ArrayList<>();
         for( BookSpecification bookSpec : bookSpecList){
@@ -301,7 +383,24 @@ public class BookService implements IBookService {
         }
         return searchDTOS;
     }
+
+    /**
+     * Updates book.
+     * @param book : Book to be updated
+     * @return Updated Book
+     */
     private Book updateBook(Book book){
         return bookRepository.save(book);
+    }
+
+    /**
+     * Creates  category from BookDTO ids
+     * @param bookDTO : DTO with ids for category
+     * @return Set of BookCategory
+     */
+    private  Set<BookCategory> createCategory(BookDTO bookDTO){
+        Set<BookCategory> bookCategories =  new HashSet<>();
+        bookDTO.getBookCategory().forEach( s -> bookCategories.add(bookCategoryRepo.findById(s).orElseThrow(NotFoundException::new)));
+        return bookCategories;
     }
 }

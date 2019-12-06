@@ -14,6 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+/**
+ * Book Loan service only provides read request.
+ * It provides service to read by user, read by book.
+ * To create book loan, it must come through book service
+ */
 @Service
 @Slf4j
 public class BookLoanService implements IBookLoanService {
@@ -27,6 +33,11 @@ public class BookLoanService implements IBookLoanService {
     @Autowired
     BookRepository bookRepo;
 
+    /**
+     *  Returns Book Loan record of given id  whose delete flag is set false. If not found, throws not found exception.
+     * @param id : Book Loan id
+     * @return BookLoan : fetched book loan record from database
+     */
     @Override
     public BookLoan getBookLoan(Long id) {
         log.info("Getting  Bookloan  id :  " + id);
@@ -34,6 +45,11 @@ public class BookLoanService implements IBookLoanService {
         return bookLoan;
     }
 
+    /**
+     * Returns all book loan records of given user. If user is not found or user is not a student, throw exception
+     * @param username : student username
+     * @return List<BookLoan> : List of all bookloan records
+     */
     @Override
     public List<BookLoan> getBookLoanByUser(String username){
         log.info("Get  All BookLoan by Username: ");
@@ -45,6 +61,11 @@ public class BookLoanService implements IBookLoanService {
         return bookLoanRepository.findAllByRequestedBy(student);
     }
 
+    /**
+     * Returns all book loan record of given book. Throws exception if book is not found.
+     * @param bookId : Book id
+     * @return List <BookLoan>: All book loan records for the given book id.
+     */
     @Override
     public List<BookLoan> getBookLoanByBook(long bookId) {
         log.info("Get BookLoan by book");

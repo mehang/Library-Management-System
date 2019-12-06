@@ -24,10 +24,11 @@ public class UserTest {
 //    @Autowired
 //    private UserService userService;
 //
+
 //    @Autowired
 //    private LibrarianRepository librarianRepository;
-
-//    @Test(expected = DataIntegrityViolationException.class)
+//
+//    @Test(expected = ConstraintViolationException.class)
 //    public void testLibrarianNotUniqueNumber(){
 //        Librarian librarian = new Librarian();
 //        librarian.setUsername("Arun");
@@ -41,7 +42,7 @@ public class UserTest {
 //        if (librarianList.contains(librarian)) fail("Not Here");
 //
 //    }
-//    @Test(expected = DataIntegrityViolationException.class)
+//    @Test(expected = ConstraintViolationException.class)
 //    public void testLibrarianNoUniqueEmail(){
 //        Librarian librarian = new Librarian();
 //        librarian.setUsername("Arun");
@@ -54,7 +55,7 @@ public class UserTest {
 //        if (librarianList.contains(librarian)) fail("Should not be saved");
 //    }
 //
-//    @Test(expected = DataIntegrityViolationException.class)
+//    @Test(expected = ConstraintViolationException.class)
 //    public void testLibrarianNoUniqueUsername(){
 //        Librarian librarian = new Librarian();
 //        librarian.setUsername("asanjel"); // Not Unique
@@ -91,4 +92,5 @@ public class UserTest {
 //        List<Librarian> librarianList = librarianRepository.findAllByDeleteFlagFalse();
 //        if (librarianList.contains(librarian)) fail("Should not be saved");
 //    }
+
 }

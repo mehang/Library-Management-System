@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Handles all CRUD operation for book specification. Additionally, can search book by name.
+ */
 @Service
 @Slf4j
 public class BookSpecificationService implements IBookSpecificationService {

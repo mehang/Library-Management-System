@@ -1,13 +1,15 @@
 package com.baylor.se.lms.service.impl;
 
-import com.baylor.se.lms.data.*;
+import com.baylor.se.lms.data.PasswordResetTokenRepository;
+import com.baylor.se.lms.data.UserRepository;
 import com.baylor.se.lms.dto.PasswordChangeDTO;
 import com.baylor.se.lms.dto.PasswordForgotDTO;
 import com.baylor.se.lms.dto.PasswordResetDTO;
+import com.baylor.se.lms.dto.factory.AdminFactory;
+import com.baylor.se.lms.dto.factory.LibrarianFactory;
+import com.baylor.se.lms.dto.factory.StudentFactory;
 import com.baylor.se.lms.dto.user.create.UserCreateDTO;
 import com.baylor.se.lms.dto.user.update.UserUpdateDTO;
-import com.baylor.se.lms.dto.factory.AdminFactory;
-import com.baylor.se.lms.dto.factory.StudentFactory;
 import com.baylor.se.lms.exception.InvalidEmailException;
 import com.baylor.se.lms.exception.NotFoundException;
 import com.baylor.se.lms.exception.UnmatchingPasswordException;
@@ -21,11 +23,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.baylor.se.lms.dto.factory.LibrarianFactory;
 
 import javax.transaction.Transactional;
 import java.util.*;
 
+/**
+ *  User Services handles all the authentication, login and security issues.
+ *  It also creates token. Provides service to changes and reset password.
+ */
 @Service
 @Slf4j
 public class UserService implements UserDetailsService {
@@ -66,6 +71,12 @@ public class UserService implements UserDetailsService {
     @Autowired
     AdminService adminService;
 
+    /**
+     * Loads user with given username in the spring security
+     * @param username : username
+     * @return UserDetails
+     * @throws UsernameNotFoundException : if user is not found
+     */
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Get user by username " + username);
         Optional<User> user = userRepository.findUserByUsername(username);
@@ -76,24 +87,44 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(userObj.getUsername(), userObj.getPassword(), getAuthority(userObj));
     }
 
+    /**
+     * Get user with given username
+     * @param username : username
+     * @return User
+     */
     public Optional<User> findByUsername(String username) {
         return userRepository.findUserByUsername(username);
     }
 
+    /**
+     * Get user by email
+     * @param email : User email
+     * @return User
+     */
     public Optional<User> findByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
 
+    /**
+     * Checks authority by Role for the given user.
+     * @param user : User for authority
+     * @return Set of Granted Authority
+     */
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
         log.info("Role Authority of " + user.getUsername());
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        user.getRoles().forEach(role -> {
+        user.getRoles().forEach(role ->
+        {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRole()));
         });
         return authorities;
         //return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
+    /**
+     * Using UUID creates password reset token and send email to the user.
+     * @param passwordForgotDTO : Information of User
+     */
     public void createPasswordResetToken(PasswordForgotDTO passwordForgotDTO) {
         Optional<User> optionalUser = findByEmail(passwordForgotDTO.getEmail());
         if (optionalUser.isEmpty()){
@@ -120,6 +151,11 @@ public class UserService implements UserDetailsService {
         emailService.sendEmail(mail);
     }
 
+    /**
+     * Changes password and also encrypts it.
+     * @param id : User id
+     * @param newPassword :  new password
+     */
     private void changePassword(long id, String newPassword) {
         User user = userRepository.findUserById(id).orElseThrow(NotFoundException::new);
         log.info("Change Password: " + user.getUsername());
@@ -127,6 +163,10 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    /**
+     * Sends request to change password, initially checks if both password match or not.
+     * @param passwordChangeDTO : Contains both passowrd
+     */
     public void changePassword(PasswordChangeDTO passwordChangeDTO){
         if (!passwordChangeDTO.getPassword1().equals(passwordChangeDTO.getPassword2())) {
             throw new UnmatchingPasswordException("Password 1 and password 2 does not match with each other.");
@@ -134,6 +174,10 @@ public class UserService implements UserDetailsService {
         changePassword(passwordChangeDTO.getId(), passwordChangeDTO.getPassword1());
     }
 
+    /**
+     * Reset password  checks for correct token then sends request to change password.
+     * @param passwordResetDTO : contains both password
+     */
     @Transactional
     public void resetPassword(PasswordResetDTO passwordResetDTO) {
         if (!passwordResetDTO.getPassword1().equals(passwordResetDTO.getPassword2())) {
@@ -162,16 +206,25 @@ public class UserService implements UserDetailsService {
         } else {
             user = studentFactory.getUser(userCreateDTO);
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
-            return adminService.registerUser((Student) user);
+            return studentService.registerUser((Student) user);
         }
     }
 
+    /**
+     * Return user by id
+     * @param id : User id
+     * @return fetched User Information
+     */
     public User getUser(Long id) {
         log.info("Get student by id: " + id);
         return userRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
-
+    /**
+     * Return all  user by User Type
+     * @param userType : Admin, Librarian, Student
+     * @return  List of requested type user
+     */
     public List<User> getAll(UserType userType) {
         if (userType == UserType.ADMIN) {
             log.info("Get all admins");
@@ -185,6 +238,12 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Updates user according type. Calls  specific service for each type
+     * @param userUpdateDTO : User Details
+     * @param userType : User Type [Student, Librarian, Admin]
+     * @return Updated User
+     */
     public User updateUser(UserUpdateDTO userUpdateDTO, UserType userType) {
         User updatingUser;
         log.info("Updating : " + userUpdateDTO.getUsername());
@@ -200,6 +259,11 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Soft delete by type. Calls  specific delete service for each type
+     * @param id : User Id
+     * @param userType : User type
+     */
     @JmsListener(destination = "post-user-delete", containerFactory = "postDeleteFactory")
     public void deleteUser(Long id, UserType userType) {
         if (userType == UserType.ADMIN) {

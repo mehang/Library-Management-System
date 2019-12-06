@@ -11,6 +11,9 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
 
+/**
+ *  Email Service sends email for our reset password feature.
+ */
 @Service
 public class EmailService{
 
@@ -20,6 +23,10 @@ public class EmailService{
     @Autowired
     private SpringTemplateEngine templateEngine;
 
+    /**
+     * Sends email for reset password token.
+     * @param mail: Mail object with all mail details
+     */
     public void sendEmail(Mail mail) {
         try {
             MimeMessage message = emailSender.createMimeMessage();
