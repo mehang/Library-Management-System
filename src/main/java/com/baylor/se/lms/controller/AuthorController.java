@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Controller for Author Entity. Uses author service for all requests.
  */
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="*")
 @RestController
 @Slf4j
 public class AuthorController {
