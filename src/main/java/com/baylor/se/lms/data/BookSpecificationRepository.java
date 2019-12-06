@@ -12,7 +12,7 @@ import java.util.Optional;
  */
 public interface BookSpecificationRepository extends CrudRepository<BookSpecification,Long> {
 
-    List<BookSpecification> findAllByNameContainingAAndDeleteFlagFalse(String bookName);
+    List<BookSpecification> findAllByNameContainingAndDeleteFlagFalse(String bookName);
     @Query("select  B from BookSpecification B where B.id = ?1 and B.deleteFlag = false")
     Optional<BookSpecification> findById(Long id);
 }

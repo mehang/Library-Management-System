@@ -69,6 +69,6 @@ public class BookSpecificationService implements IBookSpecificationService {
 
     public List<BookSpecification> searchByBookName(String bookName){
         log.info("Search Book by name: "+ bookName);
-        return bookSpecificationRepository.findAllByNameContainingAAndDeleteFlagFalse(bookName);
+        return bookSpecificationRepository.findAllByNameContainingAndDeleteFlagFalse(bookName);
     }
 }
