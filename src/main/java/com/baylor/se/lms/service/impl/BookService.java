@@ -94,7 +94,7 @@ public class BookService implements IBookService {
      * @return Book : Non-deleted Book
      */
     public Book getBookBySerialNumber(String serialNo){
-        Book book = bookRepository.findBookBySerialNo(serialNo).orElseThrow(NotFoundException::new);
+        Book book = bookRepository.findBookBySerialNo(serialNo).orElseThrow(() ->new NotFoundException("Book Not found!"));
         return book;
     }
 
@@ -295,6 +295,9 @@ public class BookService implements IBookService {
     @Transactional(rollbackOn = Exception.class)
     public BookLoan returnBook(BookReturnDTO bookReturnDTO){
         Book returnBook =getBookBySerialNumber(bookReturnDTO.getSerialNo());
+        if(returnBook == null){
+            throw new NotFoundException("Book not found!");
+        }
         BookLoan bookLoan = bookLoanRepository.findByBookAndStatus(returnBook, BookLoan.LoanStatus.ISSUED);
         if (bookLoan == null){
             throw new NotFoundException("Book record not found");
