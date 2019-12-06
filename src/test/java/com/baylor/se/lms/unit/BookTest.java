@@ -6,7 +6,9 @@ import com.baylor.se.lms.dto.BookIssueDTO;
 import com.baylor.se.lms.dto.BookRequestDTO;
 import com.baylor.se.lms.dto.BookReturnDTO;
 import com.baylor.se.lms.exception.NotFoundException;
-import com.baylor.se.lms.model.*;
+import com.baylor.se.lms.model.Book;
+import com.baylor.se.lms.model.BookLoan;
+import com.baylor.se.lms.model.BookLog;
 import com.baylor.se.lms.service.impl.BookService;
 import com.baylor.se.lms.service.impl.LibrarianService;
 import org.junit.Assert;
@@ -17,14 +19,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-//@SpringBootTest
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@Transactional
+@SpringBootTest
+@RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class BookTest {
     @Autowired
     BookService bookService;
