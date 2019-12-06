@@ -196,7 +196,7 @@ public class BookService implements IBookService {
         Book requestBook = getBook(bookRequestDTO.getBookId());
         log.info("Book requested: " + requestBook.getSpecification().getName());
         if (requestBook.getStatus() == Book.BookStatus.NOT_AVAILABLE){
-            throw new BadRequestException();
+            throw new BadRequestException("Book Not Available");
         }
         requestBook.setStatus(Book.BookStatus.NOT_AVAILABLE);
         updateBook(requestBook);
@@ -204,7 +204,7 @@ public class BookService implements IBookService {
         int requestedBookCount = totalBookCount(student);
 
         if (requestedBookCount >= 10){
-            throw  new BadRequestException();
+            throw  new BadRequestException("Book Request Limit reached!");
         }
         Calendar date = Calendar.getInstance();
         date.setTimeZone(TimeZone.getTimeZone("CST"));
@@ -258,22 +258,22 @@ public class BookService implements IBookService {
 
         if (issueBook == null){
             log.info("Issue Book not found");
-            throw new NotFoundException();
+            throw new NotFoundException("Book not found");
         }
         BookLoan bookLoan = bookLoanRepository.findByBookAndStatus(issueBook,BookLoan.LoanStatus.REQUESTED);
         if (bookLoan == null){
             log.info("No Record Found for this book");
-            throw new NotFoundException();
+            throw new NotFoundException("Book has not been requested");
         }
         else if (bookLoan.getIssuedBy() != null) {
             log.info("Already Issued ");
-            throw new BadRequestException();
+            throw new BadRequestException("Book Already issued");
         }
 
         Librarian librarian= (Librarian) librarianService.getUser(bookIssueDTO.getUserId());
         if (librarian == null){
             log.info("Invalid Librarian");
-            throw  new NotFoundException();
+            throw  new NotFoundException("Invalid Librarian");
         }
         bookLoan.setIssuedBy(librarian);
         bookLoan.setStatus(BookLoan.LoanStatus.ISSUED);
@@ -297,10 +297,10 @@ public class BookService implements IBookService {
         Book returnBook =getBookBySerialNumber(bookReturnDTO.getSerialNo());
         BookLoan bookLoan = bookLoanRepository.findByBookAndStatus(returnBook, BookLoan.LoanStatus.ISSUED);
         if (bookLoan == null){
-            throw new NotFoundException();
+            throw new NotFoundException("Book record not found");
         }
         else if (bookLoan.getIssuedBy() == null) {
-            throw new BadRequestException();
+            throw new BadRequestException("Book has not been issued");
         }
 
         bookLoan.setStatus(BookLoan.LoanStatus.RETURNED);

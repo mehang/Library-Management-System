@@ -10,6 +10,7 @@ import com.baylor.se.lms.dto.user.create.StudentCreateDTO;
 import com.baylor.se.lms.dto.user.create.UserCreateDTO;
 import com.baylor.se.lms.dto.user.update.StudentUpdateDTO;
 import com.baylor.se.lms.dto.user.update.UserUpdateDTO;
+import com.baylor.se.lms.model.BookLoan;
 import com.baylor.se.lms.model.User;
 import com.baylor.se.lms.security.TokenProvider;
 import com.baylor.se.lms.service.impl.BookLoanService;

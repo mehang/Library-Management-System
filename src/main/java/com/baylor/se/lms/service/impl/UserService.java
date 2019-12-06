@@ -202,6 +202,7 @@ public class UserService implements UserDetailsService {
         }
         User user;
         log.info("Registering: " + userCreateDTO.getUsername());
+
         if (userType == UserType.ADMIN) {
             user = adminFactory.getUser(userCreateDTO);
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
