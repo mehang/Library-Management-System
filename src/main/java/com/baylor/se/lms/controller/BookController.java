@@ -126,8 +126,6 @@ public class BookController {
      */
     @GetMapping(path = "books/search",produces = "application/json")
     @ResponseBody
-//    @MessageMapping("/books/search")
-//    @SendTo("/lms/requested")
     public ResponseEntity<List<SearchDTO>> searchBooks(@RequestParam(required = true) String q){
         List<SearchDTO> bookList = bookService.searchBooks(q);
         log.info("Book Searched  for query: " + q);

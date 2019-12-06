@@ -11,8 +11,8 @@ import java.util.Optional;
  * Repository for Book Specification
  */
 public interface BookSpecificationRepository extends CrudRepository<BookSpecification,Long> {
-    @Query("select  B from BookSpecification B where B.name = ?1 and B.deleteFlag = false")
-    List<BookSpecification> findAllByNameContaining(String bookName);
+
+    List<BookSpecification> findAllByNameContainingAAndDeleteFlagFalse(String bookName);
     @Query("select  B from BookSpecification B where B.id = ?1 and B.deleteFlag = false")
     Optional<BookSpecification> findById(Long id);
 }
