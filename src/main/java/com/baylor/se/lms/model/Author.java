@@ -1,11 +1,12 @@
 package com.baylor.se.lms.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Data model for Author. This class is mapped as Author table is the database.
+ */
 @Entity
 @Table(name="Author")
 public class Author implements Serializable {

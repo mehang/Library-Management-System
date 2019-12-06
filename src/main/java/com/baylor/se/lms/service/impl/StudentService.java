@@ -16,7 +16,9 @@ import java.util.List;
 
 /**
  * Student service performs all CRUD operation for student entity.
+ * Implements IUserService interface
  */
+
 @Service
 @Slf4j
 public class StudentService implements IUserService {

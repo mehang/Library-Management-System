@@ -19,6 +19,7 @@ import java.util.*;
 /**
  * Book Service handles all CRUD operations of Book. Additionally, it also handle request
  * for Book Request, Issue and Return. It also creates BookLoan and BookLog records.
+ * Implements IBookService interface
  */
 @Service
 @Slf4j

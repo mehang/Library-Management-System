@@ -6,7 +6,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
-
+/**
+ * Data model for book log entity. Maps as  book_log in the database.
+ */
 @Entity
 @Table(name="Book_Log")
 public class BookLog implements Serializable {

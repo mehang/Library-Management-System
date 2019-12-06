@@ -67,7 +67,7 @@ public class UserController {
      *  Handles user authentication
      * @param loginUser : contains username and password
      * @return Authorization model
-     * @throws AuthenticationException
+     * @throws AuthenticationException when token does not match
      */
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody LoginDTO loginUser) throws AuthenticationException {
@@ -116,8 +116,8 @@ public class UserController {
 
     /**
      *  handles reset password
-     * @param passwordResetDTO
-     * @return JSON Message
+     * @param passwordResetDTO :  Contain token, password1 and password2
+     * @return JSON Message with success message
      */
     @PostMapping(path="/users/reset-password", consumes = "application/json")
     public ResponseEntity resetPassword(@RequestBody PasswordResetDTO passwordResetDTO) {
@@ -150,7 +150,7 @@ public class UserController {
 
     /**
      * Handles POST request create student.
-     * @param studentCreateDTO
+     * @param studentCreateDTO : Student create details
      * @return JSON response
      */
     @PostMapping(path = "/users/students", consumes = "application/json", produces = "application/json")
@@ -162,7 +162,7 @@ public class UserController {
 
     /**
      * Handle PUT request to update student.
-     * @param studentUpdateDTO
+     * @param studentUpdateDTO contains student information to be updated
      * @param id : student id
      * @return JSON response with updated student
      */
@@ -277,7 +277,7 @@ public class UserController {
     }
 
     /**
-     * Handle PUT request to update amdmin.
+     * Handle PUT request to update admin.
      * @param userUpdateDTO : Update admin details
      * @param id : id of admin to be updated
      * @return Updated admin as JSON Response

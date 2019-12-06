@@ -4,6 +4,9 @@ import com.baylor.se.lms.model.BookCategory;
 
 import java.util.List;
 
+/**
+ * Interface for Book Category Services
+ */
 public interface IBookCategoryService {
     BookCategory registerBookCategory(BookCategory category);
     BookCategory getBookCategory(Long id);

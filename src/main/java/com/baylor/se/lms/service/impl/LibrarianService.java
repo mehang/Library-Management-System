@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * Librarian Service class handles all CRUD operation for Librarian.
+ * Implements IUserService interface
  */
 @Service
 @Slf4j

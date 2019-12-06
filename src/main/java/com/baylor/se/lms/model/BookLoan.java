@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Data model for book loan entity. Maps as  book_loan in the database.
+ */
 @Entity
 @Table(name="Book_Loan")
 public class BookLoan implements Serializable {

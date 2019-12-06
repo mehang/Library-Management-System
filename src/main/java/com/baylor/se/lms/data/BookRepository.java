@@ -9,6 +9,10 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository for Book Entity. Contains few custom query
+ */
+
 public interface BookRepository extends CrudRepository<Book,Long> {
 
     @Query("select  B from Book B where B.id = ?1 and B.deleteFlag = false")

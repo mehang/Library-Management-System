@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Author service handles all the author requests.
+ * Author service handles all the author requests. Implements IAuthorService interface
  */
 @Service
 @Slf4j
@@ -29,7 +29,7 @@ public class AuthorService implements IAuthorService {
 
     /**
      * Creates new author
-     * @param author
+     * @param author : Author detaols
      * @return Author : stored author with id
      */
     @Override
@@ -40,8 +40,8 @@ public class AuthorService implements IAuthorService {
 
     /**
      * Returns author with provided id
-     * @param id
-     * @return Author
+     * @param id : author id
+     * @return Fetched Author
      */
     @Override
     public Author getAuthor(Long id) {
@@ -51,7 +51,7 @@ public class AuthorService implements IAuthorService {
 
     /**
      * Returns all authors with delete flag set false
-     * @return List <Author> : List of all non deleted authors
+     * @return List of Author: List of all non deleted authors
      */
     @Override
     public List<Author> getAuthors() {
@@ -62,7 +62,7 @@ public class AuthorService implements IAuthorService {
 
     /**
      * Update Author information
-     * @param author
+     * @param author Update author detials
      * @return Author: Updated Author
      */
     @Override
@@ -74,7 +74,7 @@ public class AuthorService implements IAuthorService {
     /**
      * Deletes author of provided Id. Delete here is soft delete. JMS template calls to postDelete which appends
      * on author name to preserve the uniqueness.
-     * @param id
+     * @param id Author Id
      */
     @Override
     public void deleteAuthor(Long id) {
@@ -87,7 +87,7 @@ public class AuthorService implements IAuthorService {
 
     /**
      *  Appends author name with deleted timestamp to preserve uniqueness.
-     * @param author
+     * @param author : Deleted Author
      */
     @JmsListener(destination = "post-author-delete", containerFactory = "postDeleteFactory")
     public void postDelete(Author author) {

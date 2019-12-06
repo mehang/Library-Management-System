@@ -1,9 +1,8 @@
 package com.baylor.se.lms.dto;
 
-import com.baylor.se.lms.model.User;
-
-
-
+/**
+ * Book Addition DTO. Used for increasing the quantity of  a specified book.
+ */
 public class BookAddDTO {
     private String isbn;
     //private User Librarian;

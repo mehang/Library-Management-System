@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Interface for User Service
+ */
 public interface IUserService {
     User registerUser(User user);
     User getUser(Long id);

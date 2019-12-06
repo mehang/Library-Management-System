@@ -1,5 +1,8 @@
 package com.baylor.se.lms.dto;
 
+/**
+ * DTO for Book Return
+ */
 public class BookReturnDTO {
     private String serialNo;
 

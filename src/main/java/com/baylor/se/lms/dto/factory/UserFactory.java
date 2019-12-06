@@ -10,6 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Class UserFactory uses factory design pattern to convert userDTO to specific user type.
+ * Abstract class extended by each user type factory classes
+ */
 public abstract class UserFactory {
 
     public User getUser(UserCreateDTO userCreateDTO){

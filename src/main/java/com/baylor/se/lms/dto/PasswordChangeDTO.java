@@ -1,5 +1,8 @@
 package com.baylor.se.lms.dto;
 
+/**
+ * DTO for password change
+ */
 public class PasswordChangeDTO {
     private Long id;
 //    private String userType;

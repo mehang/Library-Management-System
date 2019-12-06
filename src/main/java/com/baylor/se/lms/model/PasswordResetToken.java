@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Data model for Password reset token. Reset token is used for each user for password reset
+ */
 @Entity
 public class PasswordResetToken {
 

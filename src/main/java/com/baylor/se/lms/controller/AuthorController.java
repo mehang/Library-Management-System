@@ -1,5 +1,5 @@
-package com.baylor.se.lms.controller;
 
+package com.baylor.se.lms.controller;
 import com.baylor.se.lms.model.Author;
 import com.baylor.se.lms.service.impl.AuthorService;
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +77,7 @@ public class AuthorController {
     /**
      * Handle DELETE request to soft delete author with id.
      * @param id :  Author id
-     * @return
+     * @return HTTP.ok
      */
     @DeleteMapping(path="/authors/{id:[0-9][0-9]*}")
     public ResponseEntity deleteAuthor(@PathVariable Long id){

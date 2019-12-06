@@ -1,5 +1,8 @@
 package com.baylor.se.lms.dto.user.create;
 
+/**
+ * User Creatation DTO
+ */
 public class UserCreateDTO {
     private Long id;
 

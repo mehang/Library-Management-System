@@ -9,6 +9,9 @@ import com.baylor.se.lms.model.Student;
 import com.baylor.se.lms.model.User;
 import org.springframework.stereotype.Component;
 
+/**
+ * Student factory to convert userDTO to student
+ */
 @Component
 public class StudentFactory extends UserFactory{
     @Override

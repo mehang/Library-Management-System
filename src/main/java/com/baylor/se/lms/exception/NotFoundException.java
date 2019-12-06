@@ -4,6 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Class for handling  Not found exception
+ */
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class NotFoundException extends RuntimeException  {
     public NotFoundException(){}

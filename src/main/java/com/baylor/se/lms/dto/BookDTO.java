@@ -3,6 +3,9 @@ package com.baylor.se.lms.dto;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Book DTO for creation and update of books.
+ */
 public class BookDTO {
     private Long bookId;
     private Long librarianId;

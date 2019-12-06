@@ -1,5 +1,8 @@
 package com.baylor.se.lms.dto.user.create;
 
+/**
+ * Student Creation DTO
+ */
 public class StudentCreateDTO extends UserCreateDTO {
     private String degree;
 

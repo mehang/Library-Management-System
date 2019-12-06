@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  Admin service handles all CRUD for Admins.
+ *  Admin service handles all CRUD for Admins. Implements IUserService interface
  */
 
 @Service
@@ -35,7 +35,7 @@ public class AdminService implements IUserService {
 
     /**
      * Returns Admin with provided id
-     * @param id
+     * @param id: admin id
      * @return User
      */
     @Override
@@ -46,7 +46,7 @@ public class AdminService implements IUserService {
 
     /**
      * Returns All Admins
-     * @return
+     * @return List of all admins
      */
     @Override
     public List<User> getAll()
@@ -59,9 +59,9 @@ public class AdminService implements IUserService {
 
     /**
      * Updates admin of given  id
-     * @param user
-     * @param id
-     * @return Admin
+     * @param user :  admin details
+     * @param id : id
+     * @return updated Admin
      */
     @Override
     public User updateUser(User user, Long id){
@@ -72,7 +72,7 @@ public class AdminService implements IUserService {
 
     /**
      * Deletes admin of id. In our application, delete  means soft delete where we set the deletedFlag to true
-     * @param id
+     * @param id :  admin id
      */
     @Override
     public void deleteUser(Long id){
@@ -85,7 +85,7 @@ public class AdminService implements IUserService {
 
     /**
      * Adds timestamp for deleted  admin to make the username available after delete.
-     * @param admin
+     * @param admin :  deleted admin
      */
     @JmsListener(destination = "post-admin-delete", containerFactory = "postDeleteFactory")
     public void postDelete(Admin admin) {
