@@ -305,6 +305,8 @@ public class UserController {
 
     /**
      * Get BookLoan services according to user
+     * @param username username to get bookloans
+     * @return All book loan records
      */
     @GetMapping(path = "/users/{username}/bookloans", produces = "application/json")
     @ResponseBody
@@ -314,6 +316,8 @@ public class UserController {
     }
     /**
      * Get BookLoan services according to user
+     * @param username username to get active bookloans
+     * @return All active book loan records
      */
     @GetMapping(path = "/users/{username}/activeloans", produces = "application/json")
     @ResponseBody
