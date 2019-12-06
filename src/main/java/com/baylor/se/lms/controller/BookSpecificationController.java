@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Book Specification Controller that handles all CRUD opeartions for BookSpecification entity
+ */
 @CrossOrigin(origins="http://localhost:3000")
 @RestController
 public class BookSpecificationController {
