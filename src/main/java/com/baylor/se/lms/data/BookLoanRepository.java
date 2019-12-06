@@ -20,5 +20,6 @@ public interface BookLoanRepository extends CrudRepository<BookLoan, Long> {
     List<BookLoan> findAllByBook(Book book);
     List<BookLoan> findAllByRequestedBy(User user);
     List<BookLoan> findAllByRequestedByAndActualDateOfReturnIsNull(User user);
+    List<BookLoan> findAllByRequestedByAndStatus(User user, BookLoan.LoanStatus status);
 
 }

@@ -76,4 +76,14 @@ public class BookLoanService implements IBookLoanService {
 
         return bookLoans;
     }
+    public List<BookLoan> getOnlyActiveRequest(String username){
+        log.info("Get  All Requested BookLoan by Username: ");
+        User student =  userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new);
+
+        log.info("Getting  Bookloan  of username:  " + student.getUsername());
+        if (!student.getDiscriminatorValue().equalsIgnoreCase("student")){
+            throw new BadRequestException();
+        }
+        return bookLoanRepository.findAllByRequestedByAndStatus(student, BookLoan.LoanStatus.REQUESTED);
+    }
 }

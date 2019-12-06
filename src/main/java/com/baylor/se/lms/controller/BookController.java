@@ -172,6 +172,7 @@ public class BookController {
         return ResponseEntity.ok().body(bookList);
     }
 
+
     /**
      * Handle GET  request to fetch all categories.
      * @return All categories
