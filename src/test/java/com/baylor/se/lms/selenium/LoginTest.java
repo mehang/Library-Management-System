@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 //@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 //@RunWith(SpringRunner.class)
 @Ignore
-public class LoginTest {
+public class    LoginTest {
 
 
     private WebDriver driver;

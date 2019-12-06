@@ -1,5 +1,8 @@
 package com.baylor.se.lms.dto;
 
+/**
+ * DTO for Book issue
+ */
 public class BookIssueDTO {
     private Long bookId;
     private Long userId;

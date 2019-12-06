@@ -19,6 +19,7 @@ import java.util.List;
  * Book Loan service only provides read request.
  * It provides service to read by user, read by book.
  * To create book loan, it must come through book service
+ * Implements IBookLoanService  interface
  */
 @Service
 @Slf4j
@@ -48,7 +49,7 @@ public class BookLoanService implements IBookLoanService {
     /**
      * Returns all book loan records of given user. If user is not found or user is not a student, throw exception
      * @param username : student username
-     * @return List<BookLoan> : List of all bookloan records
+     * @return List of bookLoan : List of all bookloan records
      */
     @Override
     public List<BookLoan> getBookLoanByUser(String username){
@@ -64,7 +65,7 @@ public class BookLoanService implements IBookLoanService {
     /**
      * Returns all book loan record of given book. Throws exception if book is not found.
      * @param bookId : Book id
-     * @return List <BookLoan>: All book loan records for the given book id.
+     * @return List of BookLoan: All book loan records for the given book id.
      */
     @Override
     public List<BookLoan> getBookLoanByBook(long bookId) {

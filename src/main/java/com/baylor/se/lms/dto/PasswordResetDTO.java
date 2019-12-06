@@ -1,5 +1,8 @@
 package com.baylor.se.lms.dto;
 
+/**
+ * DTO for Password reset
+ */
 public class PasswordResetDTO {
     private String resetToken;
     private String password1;

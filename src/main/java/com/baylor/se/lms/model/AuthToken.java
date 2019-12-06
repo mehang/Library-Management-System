@@ -2,6 +2,9 @@ package com.baylor.se.lms.model;
 
 import java.io.Serializable;
 
+/**
+ * Class AuthToken is used for storing authtoken for login.
+ */
 public class AuthToken implements Serializable {
 
     private String token;

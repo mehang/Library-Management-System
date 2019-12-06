@@ -16,6 +16,10 @@ import java.util.Optional;
 //    Optional <List<Admin>> findAllByDeleteFlagFalse();
 //}
 
+/**
+ * Admin repository
+ */
+
 public interface AdminRepository extends  CrudRepository<Admin, Long> {
     @Query("select  A from Admin A where A.id = ?1 and A.deleteFlag = false")
     Optional<Admin> findAdminById(long id);

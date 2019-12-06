@@ -5,6 +5,9 @@ import com.baylor.se.lms.model.BookCategory;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * DTO for return search results.
+ */
 public class SearchDTO {
 
     private Long id;

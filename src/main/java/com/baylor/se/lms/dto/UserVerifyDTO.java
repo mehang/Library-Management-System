@@ -1,5 +1,8 @@
 package com.baylor.se.lms.dto;
 
+/**
+ * DTO for verifying student
+ */
 public class UserVerifyDTO {
     Long userId;
     Boolean  verified;

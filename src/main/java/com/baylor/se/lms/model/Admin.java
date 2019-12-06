@@ -1,9 +1,15 @@
 package com.baylor.se.lms.model;
 
-import javax.persistence.*;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Data model for Admin Entity. It extends User entity. This class is mapped as table  admin  in the database.
+ *
+ */
 @Entity
 @Table(name="Admin")
 @DiscriminatorValue("ADMIN")

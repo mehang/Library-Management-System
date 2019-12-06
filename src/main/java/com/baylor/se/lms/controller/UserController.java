@@ -1,15 +1,20 @@
 package com.baylor.se.lms.controller;
 
 import com.baylor.se.lms.data.PasswordResetTokenRepository;
-import com.baylor.se.lms.dto.*;
+import com.baylor.se.lms.dto.UserVerifyDTO;
+import com.baylor.se.lms.dto.LoginDTO;
+import com.baylor.se.lms.dto.PasswordChangeDTO;
+import com.baylor.se.lms.dto.PasswordForgotDTO;
+import com.baylor.se.lms.dto.PasswordResetDTO;
 import com.baylor.se.lms.dto.user.create.StudentCreateDTO;
 import com.baylor.se.lms.dto.user.create.UserCreateDTO;
 import com.baylor.se.lms.dto.user.update.StudentUpdateDTO;
 import com.baylor.se.lms.dto.user.update.UserUpdateDTO;
-import com.baylor.se.lms.exception.UnmatchingPasswordException;
-import com.baylor.se.lms.model.*;
+import com.baylor.se.lms.model.BookLoan;
+import com.baylor.se.lms.model.User;
 import com.baylor.se.lms.security.TokenProvider;
-import com.baylor.se.lms.service.impl.*;
+import com.baylor.se.lms.service.impl.BookLoanService;
+import com.baylor.se.lms.service.impl.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +24,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.HashMap;
@@ -28,6 +42,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * User Controller  handles all the functions for CRUD . Additionally, it also handles user login, password reset and token management. It
+ */
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @Slf4j
@@ -47,7 +64,12 @@ public class UserController {
     @Autowired
     private TokenProvider jwtTokenUtil;
 
-
+    /**
+     *  Handles user authentication
+     * @param loginUser : contains username and password
+     * @return Authorization model
+     * @throws AuthenticationException when token does not match
+     */
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody LoginDTO loginUser) throws AuthenticationException {
         log.info("Authenticate:  " + loginUser.getUsername());
@@ -71,18 +93,33 @@ public class UserController {
         return ResponseEntity.ok(authModel);
     }
 
+    /**
+     * Handles change password request
+     * @param passwordChangeDTO : contains two passwords
+     * @return Successful response
+     */
     @PostMapping(path = "/users/change-password", consumes = "application/json", produces = "application/json")
     public ResponseEntity changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO) {
         userService.changePassword(passwordChangeDTO);
         return ResponseEntity.ok().body("Password has been changed successfully.");
     }
 
+    /**
+     * Creates password reset token and sends emaik
+     * @param passwordForgotDTO : passwordForget
+     * @return Response message
+     */
     @PostMapping(path = "/users/forgot-password", consumes = "application/json")
     public ResponseEntity sendResetLink(@RequestBody PasswordForgotDTO passwordForgotDTO) {
         userService.createPasswordResetToken(passwordForgotDTO);
         return ResponseEntity.status(HttpStatus.OK).body("Password reset link sent to the email address.");
     }
 
+    /**
+     *  handles reset password
+     * @param passwordResetDTO :  Contain token, password1 and password2
+     * @return JSON Message with success message
+     */
     @PostMapping(path="/users/reset-password", consumes = "application/json")
     public ResponseEntity resetPassword(@RequestBody PasswordResetDTO passwordResetDTO) {
         userService.resetPassword(passwordResetDTO);
@@ -90,18 +127,33 @@ public class UserController {
     }
 
     //    @PreAuthorize("hasAnyRole('STUDENT','ROLE_STUDENT')")
+
+    /**
+     * Handles GET all students
+     * @return List all students in JSON
+     */
     @GetMapping(path = "/users/students", produces = "application/json")
     public ResponseEntity getStudents() {
         List<User> students = userService.getAll(UserService.UserType.STUDENT);
         return ResponseEntity.ok().body(students);
     }
 
+    /**
+     * GET specific student.
+     * @param id : Student ID
+     * @return JSON response
+     */
     @GetMapping(path = "/users/students/{id:[0-9][0-9]*}", produces = "application/json")
     public ResponseEntity getStudentById(@PathVariable Long id) {
         User student = userService.getUser(id);
         return ResponseEntity.ok().body(student);
     }
 
+    /**
+     * Handles POST request create student.
+     * @param studentCreateDTO : Student create details
+     * @return JSON response
+     */
     @PostMapping(path = "/users/students", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity addStudent(@RequestBody StudentCreateDTO studentCreateDTO) {
@@ -109,6 +161,12 @@ public class UserController {
         return ResponseEntity.ok().body(registeredStudent);
     }
 
+    /**
+     * Handle PUT request to update student.
+     * @param studentUpdateDTO contains student information to be updated
+     * @param id : student id
+     * @return JSON response with updated student
+     */
     @PutMapping(path = "/users/students/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity updateStudent(@RequestBody StudentUpdateDTO studentUpdateDTO, @PathVariable Long id) {
@@ -116,6 +174,11 @@ public class UserController {
         return ResponseEntity.ok().body(updatedStudent);
     }
 
+    /**
+     * Handle Delete student
+     * @param id:
+     * @return Successful delete message
+     */
     @DeleteMapping(path = "/users/students/{id:[0-9][0-9]*}")
     @ResponseBody
     public ResponseEntity deleteStudent( @PathVariable Long id) {
@@ -123,18 +186,32 @@ public class UserController {
         return ResponseEntity.ok().body("Deleted student successfully.");
     }
 
+    /**
+     * Handle GET all librarians request
+     * @return Librarians List as JSON response
+     */
     @GetMapping(path = "/users/librarians", produces = "application/json")
     public ResponseEntity getLibrarians() {
         List<User> librarians = userService.getAll(UserService.UserType.LIBRARIAN);
         return ResponseEntity.ok().body(librarians);
     }
 
+    /**
+     * Handle GET specific librarians.
+     * @param id : Librarian ID
+     * @return JSON response with librarian object
+     */
     @GetMapping(path = "/users/librarians/{id:[0-9][0-9]*}", produces = "application/json")
     public ResponseEntity getLibrarianById(@PathVariable Long id) {
         User librarian = userService.getUser(id);
         return ResponseEntity.ok().body(librarian);
     }
 
+    /**
+     * Handle POST  request to create librarian. It consumes JSON with User structure.
+     * @param userCreateDTO : Librarian Details
+     * @return Created Librarian as JSON response
+     */
     @PostMapping(path = "/users/librarians", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity addLibrarian(@RequestBody UserCreateDTO userCreateDTO) {
@@ -142,6 +219,12 @@ public class UserController {
         return ResponseEntity.ok().body(registeredLibrarian);
     }
 
+    /**
+     * Handle PUT request to update librarians.
+     * @param userUpdateDTO :  Librarian update details
+     * @param id: librarian id
+     * @return JSON response with updated librarian
+     */
     @PutMapping(path = "/users/librarians/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity updateLibrarian(@RequestBody UserUpdateDTO userUpdateDTO, @PathVariable Long id) {
@@ -149,6 +232,11 @@ public class UserController {
         return ResponseEntity.ok().body(updatedLibrarian);
     }
 
+    /**
+     * Handle DELETE request of librarians
+     * @param id : Librarian id
+     * @return JSON response with successful message
+     */
     @DeleteMapping(path = "/users/librarians/{id:[0-9][0-9]*}")
     @ResponseBody
     public ResponseEntity deleteLibrarian( @PathVariable Long id) {
@@ -156,18 +244,32 @@ public class UserController {
         return ResponseEntity.ok().body("Deleted librarian successfully.");
     }
 
+    /**
+     * Handle GET request to fetch admins.
+     * @return JSON response with all admins
+     */
     @GetMapping(path = "/users/admins", produces = "application/json")
     public ResponseEntity getAdmins() {
         List<User> admins = userService.getAll(UserService.UserType.ADMIN);
         return ResponseEntity.ok().body(admins);
     }
 
+    /**
+     * Handle GET request  for specific admins
+     * @param id : Admin Id
+     * @return JSON response with all admin
+     */
     @GetMapping(path = "/users/admins/{id:[0-9][0-9]*}", produces = "application/json")
     public ResponseEntity getAdminById(@PathVariable Long id) {
         User librarian = userService.getUser(id);
         return ResponseEntity.ok().body(librarian);
     }
 
+    /**
+     * Handle POST request for admin creation. Consumes JSON stucture of admin detials.
+     * @param userCreateDTO : Admin Details
+     * @return Saved admin as JSON response
+     */
     @PostMapping(path = "/users/admins", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity addAdmin(@RequestBody UserCreateDTO userCreateDTO) {
@@ -175,6 +277,12 @@ public class UserController {
         return ResponseEntity.ok().body(registeredAdmin);
     }
 
+    /**
+     * Handle PUT request to update admin.
+     * @param userUpdateDTO : Update admin details
+     * @param id : id of admin to be updated
+     * @return Updated admin as JSON Response
+     */
     @PutMapping(path = "/users/admins/{id:[0-9][0-9]*}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity updateAdmin(@RequestBody UserUpdateDTO userUpdateDTO, @PathVariable Long id) {
@@ -182,6 +290,11 @@ public class UserController {
         return ResponseEntity.ok().body(updatedAdmin);
     }
 
+    /**
+     * Handle DELETE request of admin
+     * @param id :  Admin id
+     * @return Successful admin delete message
+     */
     @DeleteMapping(path = "/users/admins/{id:[0-9][0-9]*}")
     @ResponseBody
     public ResponseEntity deleteAdmin( @PathVariable Long id) {
@@ -198,6 +311,13 @@ public class UserController {
         List<BookLoan> bookLoans = bookLoanService.getBookLoanByUser(username);
         return ResponseEntity.ok().body(bookLoans);
     }
+
+    /**
+     * This is mock verification api that verifies student. Currently uses text file to verify student.
+     * @param id :  Student id
+     * @return Verification message
+     *
+     */
 
     @GetMapping(path = "/users/students/verify/{id:[0-9][0-9]*}", produces = "application/json")
     @ResponseBody

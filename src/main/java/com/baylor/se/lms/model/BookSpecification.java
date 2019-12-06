@@ -9,7 +9,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
+/**
+ * Data model for book specification entity. Maps as  book_specification in the database.
+ */
 @Entity
 @Table(name="Book_Specification")
 public class BookSpecification implements Serializable {

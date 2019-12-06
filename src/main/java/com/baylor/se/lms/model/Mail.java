@@ -1,8 +1,11 @@
 package com.baylor.se.lms.model;
 
-import java.util.List;
 import java.util.Map;
 
+/**
+ * Class mail stores all the information to send mail from our system.
+ * It is used to send reset password token.
+ */
 public class Mail {
 
     private String from;

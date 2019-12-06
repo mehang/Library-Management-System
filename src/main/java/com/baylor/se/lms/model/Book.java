@@ -1,11 +1,12 @@
 package com.baylor.se.lms.model;
 
-import org.hibernate.validator.constraints.UniqueElements;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Data model for Book Entity. Mapped as table "Book" in the database.
+ */
 @Entity
 @Table(name="Book")
 public class Book implements Serializable {

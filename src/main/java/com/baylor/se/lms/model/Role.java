@@ -3,6 +3,10 @@ package com.baylor.se.lms.model;
 
 import javax.persistence.*;
 
+/**
+ * Data model for Role entity. It maps as role table in the database.
+ * Role is used to separate permission in our application
+ */
 @Entity
 @Table(name = "Role")
 public class Role {

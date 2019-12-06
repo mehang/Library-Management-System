@@ -1,5 +1,8 @@
 package com.baylor.se.lms.dto;
 
+/**
+ * DTO for Book Request
+ */
 public class BookRequestDTO {
     private long bookId;
     private long userId;

@@ -1,5 +1,8 @@
 package com.baylor.se.lms.dto.user.update;
 
+/**
+ * DTO for Student Update
+ */
 public class StudentUpdateDTO extends UserUpdateDTO {
     private String degree;
 

@@ -5,6 +5,9 @@ import com.baylor.se.lms.model.Role;
 import com.baylor.se.lms.model.User;
 import org.springframework.stereotype.Component;
 
+/**
+ * Librarian Factory to convert User DTO to librarian
+ */
 @Component
 public class LibrarianFactory extends UserFactory{
     @Override

@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Handles all CRUD operation for book specification. Additionally, can search book by name.
+ * Implements IBookSepecificationService interface
  */
 @Service
 @Slf4j

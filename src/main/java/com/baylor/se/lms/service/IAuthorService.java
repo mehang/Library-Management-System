@@ -4,10 +4,13 @@ import com.baylor.se.lms.model.Author;
 
 import java.util.List;
 
+/**
+ * Interface for Author Services
+ */
 public interface IAuthorService {
-    public Author registerAuthor(Author author);
-    public Author getAuthor(Long id);
-    public List<Author> getAuthors();
-    public Author updateAuthor(Author author);
-    public void deleteAuthor(Long id);
+    Author registerAuthor(Author author);
+    Author getAuthor(Long id);
+    List<Author> getAuthors();
+    Author updateAuthor(Author author);
+    void deleteAuthor(Long id);
 }

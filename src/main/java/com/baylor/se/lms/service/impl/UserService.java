@@ -30,6 +30,7 @@ import java.util.*;
 /**
  *  User Services handles all the authentication, login and security issues.
  *  It also creates token. Provides service to changes and reset password.
+ *  Implements Spring security interface UserDetailService
  */
 @Service
 @Slf4j
@@ -189,24 +190,31 @@ public class UserService implements UserDetailsService {
         resetTokenRepository.delete(passwordResetToken);
     }
 
+    /**
+     * Creates user according to giving specific type.
+     * @param userCreateDTO: user Creation details
+     * @param userType :  type of user
+     * @return saved user
+     */
     public User registerUser(UserCreateDTO userCreateDTO, UserType userType) {
         if (!userCreateDTO.getPassword1().equals(userCreateDTO.getPassword2())) {
             throw new UnmatchingPasswordException("Password 1 and password 2 don't match with each other.");
         }
         User user;
         log.info("Registering: " + userCreateDTO.getUsername());
+
         if (userType == UserType.ADMIN) {
             user = adminFactory.getUser(userCreateDTO);
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
-            return adminService.registerUser((Admin) user);
+            return adminService.registerUser(user);
         } else if (userType == UserType.LIBRARIAN) {
             user = librarianFactory.getUser(userCreateDTO);
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
-            return librarianService.registerUser((Librarian) user);
+            return librarianService.registerUser(user);
         } else {
             user = studentFactory.getUser(userCreateDTO);
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
-            return studentService.registerUser((Student) user);
+            return studentService.registerUser(user);
         }
     }
 

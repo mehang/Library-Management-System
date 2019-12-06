@@ -1,5 +1,8 @@
 package com.baylor.se.lms.dto.user.update;
 
+/**
+ * User Update DTO
+ */
 public class UserUpdateDTO {
     private Long id;
     private String username;

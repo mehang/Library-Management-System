@@ -1,5 +1,8 @@
 package com.baylor.se.lms.model;
 
+/**
+ * Class to store all the constant used in our application.
+ */
 public class Constants {
     public static final long ACCESS_TOKEN_VALIDITY_SECONDS = 5*60*60;
     public static final String SIGNING_KEY = "softwareengineering";

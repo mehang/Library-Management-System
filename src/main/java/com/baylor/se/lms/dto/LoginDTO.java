@@ -2,6 +2,9 @@ package com.baylor.se.lms.dto;
 
 import java.io.Serializable;
 
+/**
+ * DTO for Login
+ */
 public class LoginDTO implements Serializable {
     private String username;
     private String password;

@@ -4,6 +4,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Data model for student entity. Maps as student table in the datanase.
+ * Extends User entity
+ */
 @Entity
 @Table(name="Student")
 @DiscriminatorValue("STUDENT")

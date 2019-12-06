@@ -6,9 +6,12 @@ import com.baylor.se.lms.model.BookLoan;
 import com.baylor.se.lms.model.Librarian;
 import com.baylor.se.lms.model.User;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
+
+/**
+ * Repository for Book Loan
+ */
 
 public interface BookLoanRepository extends CrudRepository<BookLoan, Long> {
 

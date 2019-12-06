@@ -6,12 +6,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Interface for User Service
+ */
 public interface IUserService {
-    public User registerUser(User user);
-    public User getUser(Long id);
-    public List<User> getAll();
-    public User updateUser(User user, Long id);
-    public void deleteUser(Long id);
+    User registerUser(User user);
+    User getUser(Long id);
+    List<User> getAll();
+    User updateUser(User user, Long id);
+    void deleteUser(Long id);
 
    default User updateValuesUser(User updated, User oldUser){
         oldUser.setEmail(updated.getEmail());

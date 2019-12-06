@@ -1,13 +1,14 @@
 package com.baylor.se.lms.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Data model for book category entity. It is mapped as book_category table in the database.
+ */
 @Entity
 @Table(name="Book_Category")
 public class BookCategory implements Serializable {

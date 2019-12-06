@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *  Handles all CRUD operations for Book Category.
+ *  Handles all CRUD operations for Book Category. Implements IBookCategoryService interface
  */
 @Service
 @Slf4j
@@ -50,7 +50,7 @@ public class BookCategoryService implements IBookCategoryService {
 
     /**
      * Get All Book Category
-     * @return List<BookCategory> : All bookCategory with delete flag false
+     * @return List of BookCategory : All bookCategory with delete flag false
      */
     @Override
     public List<BookCategory> getBookCategories() {
@@ -62,7 +62,7 @@ public class BookCategoryService implements IBookCategoryService {
 
     /**
      *  Update Book Category with given id
-     * @param category
+     * @param category : Update Detail of category
      * @return BookCategory: Updated BookCategory
      */
     @Override

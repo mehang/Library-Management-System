@@ -5,6 +5,9 @@ import com.baylor.se.lms.model.Role;
 import com.baylor.se.lms.model.User;
 import org.springframework.stereotype.Component;
 
+/**
+ * Factory to build admin from User DTO
+ */
 @Component
 public class AdminFactory extends UserFactory{
     @Override

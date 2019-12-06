@@ -7,6 +7,9 @@ import com.baylor.se.lms.model.BookSpecification;
 
 import java.util.List;
 
+/**
+ * Interface for book services
+ */
 public interface IBookService {
      Book registerBook(BookDTO book);
      Book getBook(Long id);
