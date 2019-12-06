@@ -26,6 +26,7 @@ import java.util.List;
 @Slf4j
 public class BookController {
 
+
     @Autowired
     BookService bookService;
 
@@ -97,7 +98,7 @@ public class BookController {
      */
     @PostMapping(path = "/books/increase",consumes = "application/json",produces = "application/json")
     @ResponseBody
-    public ResponseEntity<Book> increaseBook(@RequestBody BookAddDTO bookAddDTO){
+    public ResponseEntity increaseBook(@RequestBody BookAddDTO bookAddDTO){
         Book book = bookService.increaseBook(bookAddDTO.getIsbn(),bookAddDTO.getUserId());
         log.info("Book Increased " + book.getSpecification().getName());
         return  ResponseEntity.ok().body(book);

@@ -304,12 +304,12 @@ public class UserController {
     /**
      * Get BookLoan services according to user
      */
-//    @GetMapping(path = "/users/{username}/bookloans", produces = "application/json")
-//    @ResponseBody
-//    public ResponseEntity<List<BookLoan>> getBookLoans(@PathVariable String username) {
-//        List<BookLoan> bookLoans = bookLoanService.getBookLoanByUser(username);
-//        return ResponseEntity.ok().body(bookLoans);
-//    }
+    @GetMapping(path = "/users/{username}/bookloans", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<List<BookLoan>> getBookLoans(@PathVariable String username) {
+        List<BookLoan> bookLoans = bookLoanService.getBookLoanByUser(username);
+        return ResponseEntity.ok().body(bookLoans);
+    }
 
     /**
      * This is mock verification api that verifies student. Currently uses text file to verify student.

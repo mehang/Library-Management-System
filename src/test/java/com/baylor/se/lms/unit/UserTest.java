@@ -16,79 +16,81 @@ import java.util.List;
 
 import static org.junit.Assert.fail;
 
-@SpringBootTest
-@RunWith(SpringJUnit4ClassRunner.class)
-@Transactional
+//@SpringBootTest
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@Transactional
 public class UserTest {
 
-    @Autowired
-    private UserService userService;
+//    @Autowired
+//    private UserService userService;
+//
 
-    @Autowired
-    private LibrarianRepository librarianRepository;
+//    @Autowired
+//    private LibrarianRepository librarianRepository;
+//
+//    @Test(expected = ConstraintViolationException.class)
+//    public void testLibrarianNotUniqueNumber(){
+//        Librarian librarian = new Librarian();
+//        librarian.setUsername("Arun");
+//        librarian.setPassword("hello");
+//        //librarian.setPassword2("hello");
+//        librarian.setEmail("sanjelarun@gmail.com");
+//        librarian.setName("Arun Sanjel");
+//        librarian.setPhoneNumber("9063693028"); // Not Unique
+//        librarianRepository.save(librarian);
+//        List<Librarian> librarianList = librarianRepository.findAllByDeleteFlagFalse();
+//        if (librarianList.contains(librarian)) fail("Not Here");
+//
+//    }
+//    @Test(expected = ConstraintViolationException.class)
+//    public void testLibrarianNoUniqueEmail(){
+//        Librarian librarian = new Librarian();
+//        librarian.setUsername("Arun");
+//        librarian.setPassword("hello");
+//        librarian.setEmail("asanjel@mtu.edu"); // Not Unique
+//        librarian.setName("Arun Sanjel");
+//        librarian.setPhoneNumber("9063693028");
+//        librarianRepository.save(librarian);
+//        List<Librarian> librarianList = librarianRepository.findAllByDeleteFlagFalse();
+//        if (librarianList.contains(librarian)) fail("Should not be saved");
+//    }
+//
+//    @Test(expected = ConstraintViolationException.class)
+//    public void testLibrarianNoUniqueUsername(){
+//        Librarian librarian = new Librarian();
+//        librarian.setUsername("asanjel"); // Not Unique
+//        librarian.setPassword("hello");
+//        librarian.setEmail("rai_ji@mtu.edu");
+//        librarian.setName("Arun Sanjel");
+//        librarian.setPhoneNumber("1233693028");
+//        librarianRepository.save(librarian);
+//        List<Librarian> librarianList = librarianRepository.findAllByDeleteFlagFalse();
+//        if (librarianList.contains(librarian)) fail("Should not be saved");
+//    }
+//
+//    @Test(expected = ConstraintViolationException.class)
+//    public void testLibrarianInvalidPhoneNumber(){
+//        Librarian librarian = new Librarian();
+//        librarian.setUsername("rai_ji");
+//        librarian.setPassword("hello");
+//        librarian.setEmail("arun@mtu.edu");
+//        librarian.setName("Arun Sanjel");
+//        librarian.setPhoneNumber("90636930"); // Invalid Number
+//        librarianRepository.save(librarian);
+//        List<Librarian> librarianList = librarianRepository.findAllByDeleteFlagFalse();
+//        if (librarianList.contains(librarian)) fail("Should not be saved");
+//    }
+//    @Test(expected = ConstraintViolationException.class)
+//    public void testLibrarianInvalidEmail(){
+//        Librarian librarian = new Librarian();
+//        librarian.setUsername("rai_ji");
+//        librarian.setPassword("hello");
+//        librarian.setEmail("arun");
+//        librarian.setName("Arun Sanjel");
+//        librarian.setPhoneNumber("90636930"); // Invalid Number
+//        librarianRepository.save(librarian);
+//        List<Librarian> librarianList = librarianRepository.findAllByDeleteFlagFalse();
+//        if (librarianList.contains(librarian)) fail("Should not be saved");
+//    }
 
-    @Test(expected = ConstraintViolationException.class)
-    public void testLibrarianNotUniqueNumber(){
-        Librarian librarian = new Librarian();
-        librarian.setUsername("Arun");
-        librarian.setPassword("hello");
-        //librarian.setPassword2("hello");
-        librarian.setEmail("sanjelarun@gmail.com");
-        librarian.setName("Arun Sanjel");
-        librarian.setPhoneNumber("9063693028"); // Not Unique
-        librarianRepository.save(librarian);
-        List<Librarian> librarianList = librarianRepository.findAllByDeleteFlagFalse();
-        if (librarianList.contains(librarian)) fail("Not Here");
-
-    }
-    @Test(expected = ConstraintViolationException.class)
-    public void testLibrarianNoUniqueEmail(){
-        Librarian librarian = new Librarian();
-        librarian.setUsername("Arun");
-        librarian.setPassword("hello");
-        librarian.setEmail("asanjel@mtu.edu"); // Not Unique
-        librarian.setName("Arun Sanjel");
-        librarian.setPhoneNumber("9063693028");
-        librarianRepository.save(librarian);
-        List<Librarian> librarianList = librarianRepository.findAllByDeleteFlagFalse();
-        if (librarianList.contains(librarian)) fail("Should not be saved");
-    }
-
-    @Test(expected = ConstraintViolationException.class)
-    public void testLibrarianNoUniqueUsername(){
-        Librarian librarian = new Librarian();
-        librarian.setUsername("asanjel"); // Not Unique
-        librarian.setPassword("hello");
-        librarian.setEmail("rai_ji@mtu.edu");
-        librarian.setName("Arun Sanjel");
-        librarian.setPhoneNumber("1233693028");
-        librarianRepository.save(librarian);
-        List<Librarian> librarianList = librarianRepository.findAllByDeleteFlagFalse();
-        if (librarianList.contains(librarian)) fail("Should not be saved");
-    }
-
-    @Test(expected = ConstraintViolationException.class)
-    public void testLibrarianInvalidPhoneNumber(){
-        Librarian librarian = new Librarian();
-        librarian.setUsername("rai_ji");
-        librarian.setPassword("hello");
-        librarian.setEmail("arun@mtu.edu");
-        librarian.setName("Arun Sanjel");
-        librarian.setPhoneNumber("90636930"); // Invalid Number
-        librarianRepository.save(librarian);
-        List<Librarian> librarianList = librarianRepository.findAllByDeleteFlagFalse();
-        if (librarianList.contains(librarian)) fail("Should not be saved");
-    }
-    @Test(expected = ConstraintViolationException.class)
-    public void testLibrarianInvalidEmail(){
-        Librarian librarian = new Librarian();
-        librarian.setUsername("rai_ji");
-        librarian.setPassword("hello");
-        librarian.setEmail("arun");
-        librarian.setName("Arun Sanjel");
-        librarian.setPhoneNumber("90636930"); // Invalid Number
-        librarianRepository.save(librarian);
-        List<Librarian> librarianList = librarianRepository.findAllByDeleteFlagFalse();
-        if (librarianList.contains(librarian)) fail("Should not be saved");
-    }
 }
