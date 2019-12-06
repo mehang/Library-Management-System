@@ -147,7 +147,7 @@ public class UserService implements UserDetailsService {
         model.put("token", passwordResetToken);
         model.put("user", user);
         model.put("signature", "http://lms.com");
-        model.put("resetUrl", "http://localhost:3000" + "/reset-password?token=" + token.getToken());
+        model.put("resetUrl", "https://libear.herokuapp.com" + "/reset-password?token=" + token.getToken());
         mail.setModel(model);
         emailService.sendEmail(mail);
     }

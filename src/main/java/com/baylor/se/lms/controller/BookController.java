@@ -22,6 +22,7 @@ import java.util.List;
  * Book Controller handles all request concern with BOOK entity. All CRUD operation along with book request, issues and
  * return is handled by it. It uses various service like BookService, BookLoanService and BookCategoryService.
  */
+@CrossOrigin(origins="*")
 @RestController
 @Slf4j
 public class BookController {
