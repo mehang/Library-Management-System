@@ -16,7 +16,6 @@ import java.util.List;
 public interface BookLoanRepository extends CrudRepository<BookLoan, Long> {
 
     BookLoan findByBookAndStatus(Book book, BookLoan.LoanStatus status);
-    BookLoan findByBookAndIssuedBy(Book book, Librarian librarian);
     List<BookLoan> findAllByBook(Book book);
     List<BookLoan> findAllByRequestedBy(User user);
     List<BookLoan> findAllByRequestedByAndActualDateOfReturnIsNull(User user);

@@ -5,7 +5,6 @@ package com.baylor.se.lms.dto;
  */
 public class BookAddDTO {
     private String isbn;
-    //private User Librarian;
     private Long userId;
 
     public long getUserId() {

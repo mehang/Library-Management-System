@@ -46,7 +46,7 @@ public class StudentService implements IUserService {
     @Override
     public User getUser(Long id){
         log.info("Get student by id: " +id);
-        Student student =   studentRepository.findById(id).orElseThrow(() -> new NotFoundException("Student not find"));
+        Student student =   studentRepository.findById(id).orElseThrow(() -> new NotFoundException("Student not found"));
         return student;
     }
 

@@ -1,7 +1,6 @@
 package com.baylor.se.lms.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.jms.annotation.EnableJms;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -127,9 +126,6 @@ public abstract class User {
         this.roles = roles;
     }
 
-//    public String getType() {
-//        return type;
-//    }
 
     public String getDiscriminatorValue() {
         return this.getClass().getAnnotation(DiscriminatorValue.class).value();

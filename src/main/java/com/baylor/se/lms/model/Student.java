@@ -1,6 +1,9 @@
 package com.baylor.se.lms.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -12,7 +15,6 @@ import java.util.Objects;
 @Table(name="Student")
 @DiscriminatorValue("STUDENT")
 public class Student extends User implements Serializable {
-
 
     @Column
     private String degree;

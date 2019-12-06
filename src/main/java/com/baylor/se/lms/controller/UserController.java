@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,10 +69,10 @@ public class UserController {
      *  Handles user authentication
      * @param loginUser : contains username and password
      * @return Authorization model
-     * @throws AuthenticationException when token does not match
+     *
      */
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity register(@RequestBody LoginDTO loginUser) throws AuthenticationException {
+    @PostMapping(value = "/authenticate")
+    public ResponseEntity register(@RequestBody LoginDTO loginUser) {
         log.info("Authenticate:  " + loginUser.getUsername());
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -331,9 +332,11 @@ public class UserController {
     @GetMapping(path = "/users/students/verify/{id:[0-9][0-9]*}", produces = "application/json")
     @ResponseBody
     public ResponseEntity<UserVerifyDTO> verifyStudent(@PathVariable Long id) {
-        BufferedReader reader;
+
         UserVerifyDTO verifyDTO = new UserVerifyDTO();
         verifyDTO.setUserId(id);
+        verifyDTO.setVerified(false);
+        BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader("src\\main\\resources\\students.txt"));
             String line = reader.readLine();
@@ -344,11 +347,10 @@ public class UserController {
                 }
                 line = reader.readLine();
             }
-        } catch (Exception e) {
+            reader.close();
+        } catch (IOException e) {
             verifyDTO.setVerified(false);
-            return ResponseEntity.ok().body(verifyDTO);
         }
-        verifyDTO.setVerified(false);
         return ResponseEntity.ok().body(verifyDTO);
     }
 }

@@ -203,7 +203,7 @@ public class BookService implements IBookService {
         Student student  = (Student) studentService.getUser(bookRequestDTO.getUserId());
         int requestedBookCount = totalBookCount(student);
 
-        if (requestedBookCount >= 10){
+        if (requestedBookCount > 10){
             throw  new BadRequestException("Book Request Limit reached!");
         }
         Calendar date = Calendar.getInstance();
@@ -255,11 +255,6 @@ public class BookService implements IBookService {
     public BookLoan issueBook(BookIssueDTO bookIssueDTO){
         Book issueBook =  getBook(bookIssueDTO.getBookId());
         log.info("Issuing book for -> " + issueBook.getId());
-
-        if (issueBook == null){
-            log.info("Issue Book not found");
-            throw new NotFoundException("Book not found");
-        }
         BookLoan bookLoan = bookLoanRepository.findByBookAndStatus(issueBook,BookLoan.LoanStatus.REQUESTED);
         if (bookLoan == null){
             log.info("No Record Found for this book");

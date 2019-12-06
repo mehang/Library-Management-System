@@ -4,7 +4,6 @@ import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.model.BookSpecification;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 import java.util.Optional;
