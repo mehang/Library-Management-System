@@ -45,7 +45,7 @@ public class BookCategoryService implements IBookCategoryService {
     @Override
     public BookCategory getBookCategory(Long id) {
         log.info("Retrieving Category with id " + id);
-        return bookCategoryRepository.findById(id).orElseThrow(NotFoundException::new);
+        return bookCategoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Category Not Found!"));
     }
 
     /**

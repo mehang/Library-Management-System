@@ -84,7 +84,7 @@ public class BookService implements IBookService {
     @Override
     public Book getBook(Long id){
         log.info("Retrieving book by id " + id);
-        Book book =  bookRepository.findBookById(id).orElseThrow(NotFoundException::new);
+        Book book =  bookRepository.findBookById(id).orElseThrow(()->new NotFoundException("Book Not Found"));
         return book;
     }
 
@@ -94,7 +94,7 @@ public class BookService implements IBookService {
      * @return Book : Non-deleted Book
      */
     public Book getBookBySerialNumber(String serialNo){
-        Book book = bookRepository.findBookBySerialNo(serialNo).orElseThrow(() ->new NotFoundException("Book Not found!"));
+        Book book = bookRepository.findBookBySerialNo(serialNo).orElseThrow(() ->new NotFoundException("Book Not found! Invalid Serial Number"));
         return book;
     }
 
@@ -146,7 +146,7 @@ public class BookService implements IBookService {
         }
         if(bookDTO.getAuthorId() == 0){
             log.info("Book Author Changed");
-            bookSpecification.setAuthor(authorRepo.findAuthorById(bookDTO.getAuthorId()).orElseThrow(NotFoundException::new));
+            bookSpecification.setAuthor(authorRepo.findAuthorById(bookDTO.getAuthorId()).orElseThrow(() -> new NotFoundException("Author not found!")));
         }
         if (bookDTO.getBookCategory()  != null){
             log.info("Book Category changed");
@@ -404,7 +404,7 @@ public class BookService implements IBookService {
      */
     private  Set<BookCategory> createCategory(BookDTO bookDTO){
         Set<BookCategory> bookCategories =  new HashSet<>();
-        bookDTO.getBookCategory().forEach( s -> bookCategories.add(bookCategoryRepo.findById(s).orElseThrow(NotFoundException::new)));
+        bookDTO.getBookCategory().forEach( s -> bookCategories.add(bookCategoryRepo.findById(s).orElseThrow(()->new NotFoundException("Book Category Not found"))));
         return bookCategories;
     }
 }

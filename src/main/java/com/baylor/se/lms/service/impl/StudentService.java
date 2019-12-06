@@ -46,7 +46,7 @@ public class StudentService implements IUserService {
     @Override
     public User getUser(Long id){
         log.info("Get student by id: " +id);
-        Student student =   studentRepository.findById(id).orElseThrow(NotFoundException::new);
+        Student student =   studentRepository.findById(id).orElseThrow(() -> new NotFoundException("Student not find"));
         return student;
     }
 
@@ -89,7 +89,7 @@ public class StudentService implements IUserService {
     @Override
     public void deleteUser(Long id){
         log.info("Deleting student id: "+ id);
-        Student student =   studentRepository.findById(id).orElseThrow(NotFoundException::new);
+        Student student =   studentRepository.findById(id).orElseThrow(() -> new NotFoundException("Student not found"));
         student.setDeleteFlag(true);
         studentRepository.save(student);
         jmsTemplate.convertAndSend("post-student-delete", student);

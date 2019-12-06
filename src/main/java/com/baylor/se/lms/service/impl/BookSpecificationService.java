@@ -33,7 +33,7 @@ public class BookSpecificationService implements IBookSpecificationService {
     @Override
     public BookSpecification getBookSpec(Long id) {
         log.info("Get book specification by id: "+ id);
-        return bookSpecificationRepository.findById(id).orElseThrow(NotFoundException::new);
+        return bookSpecificationRepository.findById(id).orElseThrow(() -> new NotFoundException("Book Specification Not Found "));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class BookSpecificationService implements IBookSpecificationService {
     @Override
     public BookSpecification deleteBookSpec(Long id) {
         log.info("Deleting Book Specification: " + id);
-        BookSpecification bookSpecification = bookSpecificationRepository.findById(id).orElseThrow(NotFoundException::new);
+        BookSpecification bookSpecification = bookSpecificationRepository.findById(id).orElseThrow(() ->  new NotFoundException("Book Specification not found"));
         bookSpecification.setDeleteFlag(true);
         bookSpecificationRepository.save(bookSpecification);
         List<Book> bookList = bookRepo.findAllBySpecificationAndDeleteFlagFalse(bookSpecification);

@@ -46,7 +46,7 @@ public class AuthorService implements IAuthorService {
     @Override
     public Author getAuthor(Long id) {
         log.info("Retrieving Author : " + id);
-        return authorRepository.findAuthorById(id).orElseThrow(NotFoundException::new);
+        return authorRepository.findAuthorById(id).orElseThrow(()-> new NotFoundException("Author Not found!"));
     }
 
     /**

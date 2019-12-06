@@ -42,7 +42,7 @@ public class BookLoanService implements IBookLoanService {
     @Override
     public BookLoan getBookLoan(Long id) {
         log.info("Getting  Bookloan  id :  " + id);
-        BookLoan bookLoan = bookLoanRepository.findById(id).orElseThrow(NotFoundException::new);
+        BookLoan bookLoan = bookLoanRepository.findById(id).orElseThrow(() -> new NotFoundException("Invalid Id, Book not found"));
         return bookLoan;
     }
 
@@ -54,7 +54,7 @@ public class BookLoanService implements IBookLoanService {
     @Override
     public List<BookLoan> getBookLoanByUser(String username){
         log.info("Get  All BookLoan by Username: ");
-        User student =  userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new);
+        User student =  userRepository.findUserByUsername(username).orElseThrow(() ->  new NotFoundException("User not found! Invalid Username"));
         log.info("Getting  Bookloan  of username:  " + student.getUsername());
         if (!student.getDiscriminatorValue().equalsIgnoreCase("student")){
             throw new BadRequestException();
@@ -70,7 +70,7 @@ public class BookLoanService implements IBookLoanService {
     @Override
     public List<BookLoan> getBookLoanByBook(long bookId) {
         log.info("Get BookLoan by book");
-        Book book = bookRepo.findBookById(bookId).orElseThrow(NotFoundException::new);
+        Book book = bookRepo.findBookById(bookId).orElseThrow(() -> new NotFoundException("Book Not found! Invalid book id"));
         log.info("Book loan records of : "+ book.getSpecification().getName());
         List<BookLoan> bookLoans = bookLoanRepository.findAllByBook(book);
 
@@ -78,7 +78,7 @@ public class BookLoanService implements IBookLoanService {
     }
     public List<BookLoan> getOnlyActiveRequest(String username){
         log.info("Get  All Requested BookLoan by Username: ");
-        User student =  userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new);
+        User student =  userRepository.findUserByUsername(username).orElseThrow(() ->  new NotFoundException("Invalid username"));
 
         log.info("Getting  Bookloan  of username:  " + student.getUsername());
         if (!student.getDiscriminatorValue().equalsIgnoreCase("student")){

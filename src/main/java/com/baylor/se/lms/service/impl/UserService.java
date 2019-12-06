@@ -225,7 +225,7 @@ public class UserService implements UserDetailsService {
      */
     public User getUser(Long id) {
         log.info("Get student by id: " + id);
-        return userRepository.findById(id).orElseThrow(NotFoundException::new);
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("Student not found"));
     }
 
     /**

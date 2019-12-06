@@ -45,7 +45,7 @@ public class LibrarianService implements IUserService {
     @Override
     public User getUser(Long id) {
         log.info("Getting librarian id : "+ id);
-        return librarianRepository.findById(id).orElseThrow(NotFoundException::new);
+        return librarianRepository.findById(id).orElseThrow(() ->  new NotFoundException("Librarian not found! Invalid Id"));
     }
 
     /**
@@ -80,7 +80,7 @@ public class LibrarianService implements IUserService {
     @Override
     public void deleteUser(Long id) {
         log.info("Deleting Librarian: " + id);
-        Librarian librarian = librarianRepository.findById(id).orElseThrow(NotFoundException::new);
+        Librarian librarian = librarianRepository.findById(id).orElseThrow(() -> new NotFoundException("Librarian not found"));
         librarian.setDeleteFlag(true);
         librarianRepository.save(librarian);
         jmsTemplate.convertAndSend("post-librarian-delete", librarian);
