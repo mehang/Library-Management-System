@@ -9,6 +9,7 @@ import com.baylor.se.lms.exception.NotFoundException;
 import com.baylor.se.lms.model.Book;
 import com.baylor.se.lms.model.BookLoan;
 import com.baylor.se.lms.model.BookLog;
+import com.baylor.se.lms.model.BookSpecification;
 import com.baylor.se.lms.service.impl.BookService;
 import com.baylor.se.lms.service.impl.LibrarianService;
 import org.junit.Assert;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,23 +61,23 @@ public class BookTest {
         Assert.assertEquals(bookCounter + 1, newBookCounter);
     }
 
-//    @Test
-//    public void testUpdateBook() {
-//        BookDTO bookDTO = new BookDTO();
-//        bookDTO.setBookId(2L);
-//        bookDTO.setAuthorId(1);
-//        bookDTO.setLibrarianId(4L);
-//        bookDTO.setEdition("3rd");
-//        bookDTO.setIsbn("123456789");
-//        bookDTO.setLanguage("English");
-//        bookDTO.setPublication("1st");
-//        bookDTO.setName("Test Book 123");
-//        Set<Long> catSet = new HashSet<>();
-//        catSet.add(1L);
-//        bookDTO.setBookCategory(catSet);
-//        Book book = bookService.updateBook(bookDTO);
-//        Assert.assertEquals("Test Book 123", book.getSpecification().getName());
-//    }
+    @Test
+    public void testUpdateBook() {
+        BookDTO bookDTO = new BookDTO();
+        bookDTO.setBookId(2L);
+        bookDTO.setAuthorId(1);
+        bookDTO.setLibrarianId(4L);
+        bookDTO.setEdition("3rd");
+        bookDTO.setIsbn("123456789");
+        bookDTO.setLanguage("English");
+        bookDTO.setPublication("1st");
+        bookDTO.setName("Test Book 123");
+        Set<Long> catSet = new HashSet<>();
+        catSet.add(1L);
+        bookDTO.setBookCategory(catSet);
+        BookSpecification book = bookService.updateBook(bookDTO);
+        Assert.assertEquals("Test Book 123", book.getName());
+    }
 
     @Test(expected = NotFoundException.class)
     public void testUpdateBookWithInvalidBookId() {

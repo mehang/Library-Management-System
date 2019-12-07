@@ -55,6 +55,14 @@ public class    LoginTest {
     }
     @Test
     public  void testInvalid(){
-
+        driver.get("http://localhost:3000/login");
+        // driver.wait(2000);
+        WebElement username = driver.findElement(By.xpath("//*[@id=\"normal_login_username\"]"));
+        username.sendKeys("sanjelji");
+        WebElement password = driver.findElement(By.xpath("//*[@id=\"normal_login_password\"]"));
+        password.sendKeys("password");
+        WebElement button = driver.findElement(By.xpath("/html/body/div[1]/div/div/div/form/div[3]/div/div/span/button"));
+        button.click();
+        Assert.assertTrue(!driver.findElement(By.xpath("/html/body/div/div/div/div/form/div[4]/div/div/span/button")).isDisplayed());
     }
 }
